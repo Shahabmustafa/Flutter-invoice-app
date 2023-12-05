@@ -31,6 +31,7 @@ class _ItemListState extends State<ItemList> {
             context: context,
             builder: (context){
               return Form(
+                key: _key,
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   children: [
@@ -50,6 +51,9 @@ class _ItemListState extends State<ItemList> {
                     ),
                     InvoiceTextField(
                       title: "Item Name",
+                      validator: (value){
+                        return value!.isEmpty ? "Enter Your Item Name" : null;
+                      },
                     ),
                     SizedBox(
                       height: size.height * 0.02,
@@ -57,6 +61,9 @@ class _ItemListState extends State<ItemList> {
                     InvoiceTextField(
                       title: "Item Cost",
                       keyboardType: TextInputType.number,
+                      validator: (value){
+                        return value!.isEmpty ? "Enter Your Item Cost" : null;
+                      },
                     ),
                     SizedBox(
                       height: size.height * 0.02,
@@ -64,6 +71,9 @@ class _ItemListState extends State<ItemList> {
                     InvoiceTextField(
                       title: "Quality",
                       keyboardType: TextInputType.number,
+                      validator: (value){
+                        return value!.isEmpty ? "Enter Your Item Quality" : null;
+                      },
                     ),
                     SizedBox(
                       height: size.height * 0.02,
@@ -72,6 +82,11 @@ class _ItemListState extends State<ItemList> {
                       title: "Add Item",
                       height: size.height * 0.05,
                       width: size.width * 0.4,
+                      onTap: (){
+                        if(_key.currentState!.validate()){
+
+                        }
+                      },
                     ),
                   ],
                 ),

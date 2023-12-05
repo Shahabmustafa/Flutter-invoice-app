@@ -1,6 +1,3 @@
-
-
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/res/assets/assets_url.dart';
@@ -23,6 +20,7 @@ class ListOfInvoice extends StatefulWidget {
 class _ListOfInvoiceState extends State<ListOfInvoice> {
   @override
   Widget build(BuildContext context) {
+    final _key = GlobalKey<FormState>();
     var date = DateTime.now();
     var formattedDate = "${date.day}-${date.month}-${date.year}";
     final size = MediaQuery.sizeOf(context);
@@ -121,35 +119,46 @@ class _ListOfInvoiceState extends State<ListOfInvoice> {
                 showModalBottomSheet(
                   context: context,
                   builder: (context){
-                    return Column(
-                      children: [
-                        SizedBox(
-                          height: size.height * 0.04,
-                        ),
-                        Text(
-                          "Payment Instructions",
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: AppColor.primaryColor,
+                    return Form(
+                      key: _key,
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: size.height * 0.04,
                           ),
-                        ),
-                        SizedBox(
-                          height: size.height * 0.04,
-                        ),
-                        InvoiceTextField(
-                          title: "Note",
-                          maxLines: 6,
-                        ),
-                        SizedBox(
-                          height: size.height * 0.04,
-                        ),
-                        AppButton(
-                          height: size.height * 0.05,
-                          width: size.width * 0.5,
-                          title: "Save",
-                        ),
-                      ],
+                          Text(
+                            "Payment Instructions",
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: AppColor.primaryColor,
+                            ),
+                          ),
+                          SizedBox(
+                            height: size.height * 0.04,
+                          ),
+                          InvoiceTextField(
+                            title: "Note",
+                            maxLines: 6,
+                            validator: (value){
+                              return value!.isEmpty ? "Enter Your Payment Instructions" : null;
+                            },
+                          ),
+                          SizedBox(
+                            height: size.height * 0.04,
+                          ),
+                          AppButton(
+                            height: size.height * 0.05,
+                            width: size.width * 0.5,
+                            title: "Save",
+                            onTap: (){
+                              if(_key.currentState!.validate()){
+
+                              }
+                            },
+                          ),
+                        ],
+                      ),
                     );
                   },
                 );
