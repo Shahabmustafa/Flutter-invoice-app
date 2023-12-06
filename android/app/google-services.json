@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "69042973969",
+    "project_id": "invice-app-dbd3d",
+    "storage_bucket": "invice-app-dbd3d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:69042973969:android:f1026e2b284d9144c230b0",
+        "android_client_info": {
+          "package_name": "com.example.flutter_invoice_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWDM-ZMyxZINVcXxYEczNvHb3T5oTcNCw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

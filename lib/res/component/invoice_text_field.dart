@@ -23,7 +23,7 @@ class InvoiceTextField extends StatelessWidget {
   String? Function(String?)? validator;
   bool enabled;
   int? maxLines;
-  bool obscureText;
+  bool obscureText = false;
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +60,7 @@ class InvoiceTextField extends StatelessWidget {
               keyboardType: keyboardType,
               validator: validator,
               enabled: enabled,
-              maxLines: maxLines,
+              // maxLines: maxLines,
               decoration: InputDecoration(
                 fillColor: Colors.grey.shade300,
                 filled: true,

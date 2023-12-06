@@ -1,10 +1,16 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_invoice_app/res/colors/app_colors.dart';
 import 'package:flutter_invoice_app/res/routes/routes.dart';
+import 'package:flutter_invoice_app/res/theme_data/theme_data.dart';
 import 'package:flutter_invoice_app/view/splash/splash_screen.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'firebase_options.dart';
 
-void main() {
+void main()async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -16,29 +22,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        useMaterial3: true,
-        floatingActionButtonTheme: FloatingActionButtonThemeData(
-          backgroundColor: AppColor.primaryColor,
-          foregroundColor: AppColor.whiteColor,
-        ),
-        appBarTheme: AppBarTheme(
-          iconTheme: IconThemeData(
-            color: AppColor.whiteColor,
-          ),
-          titleTextStyle: TextStyle(
-            color: AppColor.whiteColor,
-            fontSize: 25,
-            fontWeight: FontWeight.w500,
-          ),
-          backgroundColor: AppColor.primaryColor,
-        ),
-        inputDecorationTheme: InputDecorationTheme(
-          prefixIconColor: AppColor.primaryColor,
-          suffixIconColor: AppColor.primaryColor,
-        ),
-      ),
+      title: 'Invoice App',
+      theme: AppThemeData.appTheme,
       home: SplashPage(),
       getPages: AppRoutes.appRoutes(),
     );

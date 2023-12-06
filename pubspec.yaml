@@ -39,9 +39,11 @@ dependencies:
   google_fonts: ^6.1.0
   intl: ^0.18.1
   signature: ^5.4.1
-#  flutter_signature_view: ^2.0.0
-#  flutter_signature_pad: ^3.0.1
   hand_signature: ^3.0.2
+  firebase_core: ^2.24.0
+  firebase_auth: ^4.15.0
+  cloud_firestore: ^4.13.3
+  fluttertoast: ^8.2.4
 
 
 dev_dependencies:
