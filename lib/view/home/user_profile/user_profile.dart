@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_invoice_app/res/component/image_convert_to_icons.dart';
+import 'package:flutter_invoice_app/res/routes/routes.dart';
+import 'package:get/get.dart';
 
 class UserProfile extends StatefulWidget {
   const UserProfile({Key? key}) : super(key: key);
@@ -19,7 +20,7 @@ class _UserProfileState extends State<UserProfile> {
             padding: const EdgeInsets.only(right: 10),
             child: GestureDetector(
               onTap: (){
-
+                Get.toNamed(AppRoutes.setting);
               },
               child: Icon(
                 Icons.settings,

@@ -13,6 +13,7 @@ class AppThemeData{
       backgroundColor: AppColor.whiteColor,
     ),
     appBarTheme: AppBarTheme(
+      centerTitle: true,
       iconTheme: IconThemeData(
         color: AppColor.whiteColor,
       ),
@@ -22,6 +23,14 @@ class AppThemeData{
         fontWeight: FontWeight.w500,
       ),
       backgroundColor: AppColor.primaryColor,
+    ),
+    cardTheme: CardTheme(
+      surfaceTintColor: AppColor.whiteColor,
+      color: AppColor.whiteColor,
+      elevation: 5,
+    ),
+    listTileTheme: ListTileThemeData(
+      iconColor: AppColor.primaryColor,
     ),
     inputDecorationTheme: InputDecorationTheme(
       prefixIconColor: AppColor.primaryColor,
