@@ -28,7 +28,7 @@ class _AddPayerState extends State<AddPayer> {
           child: Column(
             children: [
               SizedBox(
-                height: size.height * 0.02,
+                height: size.height * 0.2,
               ),
               InvoiceTextField(
                 title: "Payer Name",

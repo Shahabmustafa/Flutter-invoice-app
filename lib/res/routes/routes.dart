@@ -6,6 +6,7 @@ import 'package:flutter_invoice_app/view/home/invoice/list_of_invoice.dart';
 import 'package:flutter_invoice_app/view/home/invoice/signature_screen.dart';
 import 'package:flutter_invoice_app/view/home/invoice/your_details.dart';
 import 'package:flutter_invoice_app/view/home/list_invoice.dart';
+import 'package:flutter_invoice_app/view/home/user_profile/user_profile.dart';
 import 'package:flutter_invoice_app/view/splash/splash_screen.dart';
 import 'package:get/get.dart';
 
@@ -20,6 +21,7 @@ class AppRoutes{
   static const String addPayer = "/add_payer";
   static const String itemList = "/item_list";
   static const String signature = "/signature_screen";
+  static const String userProfile = "/user_profile";
 
   static appRoutes() => [
     GetPage(
@@ -73,6 +75,12 @@ class AppRoutes{
     GetPage(
       name: signature,
       page: () => SignaturePage(),
+      transition: Transition.rightToLeftWithFade,
+      transitionDuration: const Duration(microseconds: 250),
+    ),
+    GetPage(
+      name: userProfile,
+      page: () => UserProfile(),
       transition: Transition.rightToLeftWithFade,
       transitionDuration: const Duration(microseconds: 250),
     ),

@@ -8,6 +8,10 @@ class AppThemeData{
       backgroundColor: AppColor.primaryColor,
       foregroundColor: AppColor.whiteColor,
     ),
+    scaffoldBackgroundColor: AppColor.whiteColor,
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      backgroundColor: AppColor.whiteColor,
+    ),
     appBarTheme: AppBarTheme(
       iconTheme: IconThemeData(
         color: AppColor.whiteColor,

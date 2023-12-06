@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/res/assets/assets_url.dart';
+import 'package:flutter_invoice_app/res/colors/app_colors.dart';
 import 'package:flutter_invoice_app/view%20model/splash%20service/splash_service.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({Key? key}) : super(key: key);
@@ -21,7 +23,7 @@ class _SplashPageState extends State<SplashPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Center(
               child: Image.asset(
@@ -30,12 +32,24 @@ class _SplashPageState extends State<SplashPage> {
                 width: 150,
               ),
           ),
-          Text(
-            "Invoice",
-            style: TextStyle(
-              fontSize: 35,
-              fontWeight: FontWeight.bold,
-            ),
+          Column(
+            children: [
+              Text(
+                "Invoice",
+                style: GoogleFonts.abhayaLibre(
+                  fontSize: 40,
+                ),
+              ),
+              SizedBox(
+                height: 40,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 100),
+                child: LinearProgressIndicator(
+                  color: AppColor.primaryColor,
+                ),
+              ),
+            ],
           ),
         ],
       ),

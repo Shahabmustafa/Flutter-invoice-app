@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/res/colors/app_colors.dart';
+import 'package:flutter_invoice_app/view%20model/invoice%20service/add_item_service.dart';
+import 'package:get/get.dart';
 
 import '../../../res/component/app_button.dart';
 import '../../../res/component/invoice_text_field.dart';
@@ -13,6 +15,7 @@ class ItemList extends StatefulWidget {
 
 class _ItemListState extends State<ItemList> {
   final _key = GlobalKey<FormState>();
+  final invoiceItem = Get.put(AddItemService());
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
@@ -51,6 +54,7 @@ class _ItemListState extends State<ItemList> {
                     ),
                     InvoiceTextField(
                       title: "Item Name",
+                      controller: invoiceItem.itemName.value,
                       validator: (value){
                         return value!.isEmpty ? "Enter Your Item Name" : null;
                       },
@@ -61,6 +65,7 @@ class _ItemListState extends State<ItemList> {
                     InvoiceTextField(
                       title: "Item Cost",
                       keyboardType: TextInputType.number,
+                      controller: invoiceItem.itemCost.value,
                       validator: (value){
                         return value!.isEmpty ? "Enter Your Item Cost" : null;
                       },
@@ -69,24 +74,28 @@ class _ItemListState extends State<ItemList> {
                       height: size.height * 0.02,
                     ),
                     InvoiceTextField(
-                      title: "Quality",
+                      title: "Quantity",
                       keyboardType: TextInputType.number,
+                      controller: invoiceItem.quantity.value,
                       validator: (value){
-                        return value!.isEmpty ? "Enter Your Item Quality" : null;
+                        return value!.isEmpty ? "Enter Your Item Quantity" : null;
                       },
                     ),
                     SizedBox(
                       height: size.height * 0.02,
                     ),
-                    AppButton(
-                      title: "Add Item",
-                      height: size.height * 0.05,
-                      width: size.width * 0.4,
-                      onTap: (){
-                        if(_key.currentState!.validate()){
-
-                        }
-                      },
+                    Obx(() =>
+                        AppButton(
+                          title: "Add Item",
+                          height: size.height * 0.05,
+                          width: size.width * 0.94,
+                          loading: invoiceItem.loading.value,
+                          onTap: (){
+                            if(_key.currentState!.validate()){
+                              invoiceItem.addItem(context);
+                            }
+                          },
+                        ),
                     ),
                   ],
                 ),

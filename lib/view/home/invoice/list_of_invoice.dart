@@ -10,6 +10,8 @@ import 'package:flutter_invoice_app/res/fonts/app_fonts.dart';
 import 'package:flutter_invoice_app/res/routes/routes.dart';
 import 'package:get/get.dart';
 
+import '../../../res/component/user_card.dart';
+
 class ListOfInvoice extends StatefulWidget {
   const ListOfInvoice({Key? key}) : super(key: key);
 
@@ -47,34 +49,7 @@ class _ListOfInvoiceState extends State<ListOfInvoice> {
             SizedBox(
               height: size.height * 0.02,
             ),
-            Container(
-              height: size.height * 0.1,
-              width:  size.width * 1,
-              decoration: BoxDecoration(
-                color: AppColor.whiteColor,
-                borderRadius: BorderRadius.circular(30),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColor.grayColor,
-                    spreadRadius: 0.1,
-                    blurRadius: 1,
-                    offset: Offset(2,2)
-                  ),
-                ]
-              ),
-              child: ListTile(
-                title: Text(
-                  "INVOICE ID # 163434349458",
-                  style: AppFonts.mediumText,
-                ),
-                subtitle: Text(
-                  "Create on $formattedDate",
-                  style: TextStyle(
-                    color: AppColor.grayColor,
-                  ),
-                ),
-              ),
-            ),
+            UserCard(),
             SizedBox(
               height: size.height * 0.02,
             ),
@@ -103,7 +78,7 @@ class _ListOfInvoiceState extends State<ListOfInvoice> {
             InvoiceBox(
               title: "Items",
               subtitle: "add Items to your Invoice",
-              icon: Icons.shopping_cart,
+              icon: CupertinoIcons.shopping_cart,
               onTap: (){
                 Get.toNamed(AppRoutes.itemList);
               },

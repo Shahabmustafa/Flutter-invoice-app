@@ -62,7 +62,7 @@ class InvoiceTextField extends StatelessWidget {
               enabled: enabled,
               // maxLines: maxLines,
               decoration: InputDecoration(
-                fillColor: Colors.grey.shade300,
+                fillColor: Colors.grey.shade200,
                 filled: true,
                 border: InputBorder.none,
                 suffixIcon: suffixIcon,

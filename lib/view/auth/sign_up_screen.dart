@@ -1,6 +1,7 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:flutter_invoice_app/view%20model/auth%20service/signup_service.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
@@ -18,6 +19,7 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   final _key = GlobalKey<FormState>();
+  final signUpService = Get.put(SignUpService());
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
@@ -26,7 +28,7 @@ class _SignUpPageState extends State<SignUpPage> {
         child: Column(
           children: [
             SizedBox(
-              height: size.height * 0.05,
+              height: size.height * 0.1,
             ),
             Center(
               child: Image.asset(
@@ -44,6 +46,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 children: [
                   InvoiceTextField(
                     title: "User Name",
+                    controller: signUpService.userName.value,
                     prefixIcon: Icon(Icons.person),
                     validator: (value){
                       return value!.isEmpty ? "Please Enter Your User Name" : null;
@@ -54,6 +57,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                   InvoiceTextField(
                     title: "Email",
+                    controller: signUpService.email.value,
                     keyboardType: TextInputType.emailAddress,
                     prefixIcon: Icon(Icons.alternate_email),
                     validator: (value){
@@ -63,30 +67,52 @@ class _SignUpPageState extends State<SignUpPage> {
                   SizedBox(
                     height: size.height * 0.02,
                   ),
-                  InvoiceTextField(
-                    title: "Password",
-                    keyboardType: TextInputType.emailAddress,
-                    prefixIcon: Icon(Icons.key),
-                    suffixIcon: Icon(Icons.visibility_off_outlined),
-                    obscureText: false,
-                    validator: (value){
-                      return value!.isEmpty ? "Please Enter Password" :
-                      value.length < 8 ? "Please Enter Eight Digits code" : null;
-                    },
+                  Obx(() =>
+                      InvoiceTextField(
+                        title: "Password",
+                        controller: signUpService.password.value,
+                        prefixIcon: Icon(Icons.key),
+                        suffixIcon: GestureDetector(
+                          onTap: (){
+                            signUpService.Visibility.value =! signUpService.Visibility.value;
+                          },
+                          child: Icon(
+                            signUpService.Visibility.value ?
+                            Icons.visibility_off_outlined :
+                            Icons.visibility,
+                          ),
+                        ),
+                        obscureText: signUpService.Visibility.value,
+                        validator: (value){
+                          return value!.isEmpty ? "Please Enter Password" :
+                          value.length < 8 ? "Please Enter Eight Digits code" : null;
+                        },
+                      ),
                   ),
                   SizedBox(
                     height: size.height * 0.02,
                   ),
-                  InvoiceTextField(
-                    title: "Confirm Password",
-                    keyboardType: TextInputType.emailAddress,
-                    prefixIcon: Icon(Icons.key),
-                    suffixIcon: Icon(Icons.visibility_off_outlined),
-                    obscureText: false,
-                    validator: (value){
-                      return value!.isEmpty ? "Please Enter Password" :
-                      value.length < 8 ? "Please Enter Eight Digits code" : null;
-                    },
+                  Obx(() =>
+                      InvoiceTextField(
+                        title: "Confirm Password",
+                        controller: signUpService.conPassword.value,
+                        prefixIcon: Icon(Icons.key),
+                        suffixIcon: GestureDetector(
+                          onTap: (){
+                            signUpService.confirmVisibility.value =! signUpService.confirmVisibility.value;
+                          },
+                          child: Icon(
+                            signUpService.confirmVisibility.value ?
+                            Icons.visibility_off_outlined :
+                            Icons.visibility,
+                          ),
+                        ),
+                        obscureText: signUpService.confirmVisibility.value,
+                        validator: (value){
+                          return signUpService.conPassword.value.text.isEmpty ? "Please Enter Password" :
+                          signUpService.conPassword.value.text != signUpService.password.value.text ? "Your Confirm Password is not equal to Password" : null;
+                        },
+                      ),
                   ),
                   SizedBox(
                     height: size.height * 0.05,
@@ -95,9 +121,10 @@ class _SignUpPageState extends State<SignUpPage> {
                     title: "Sign Up",
                     height: size.height * 0.06,
                     width: size.width * 0.95,
+                    loading: signUpService.loading.value,
                     onTap: (){
                       if(_key.currentState!.validate()){
-                        
+                        signUpService.isSignUp(context);
                       }
                     },
                   ),

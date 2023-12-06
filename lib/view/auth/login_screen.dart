@@ -20,6 +20,12 @@ class _LoginPageState extends State<LoginPage> {
   final _key = GlobalKey<FormState>();
   final loginService = Get.put(LoginService());
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    loginService.email.value.dispose();
+    loginService.password.value.dispose();
+  }
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
     return Scaffold(

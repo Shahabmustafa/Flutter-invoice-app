@@ -20,7 +20,7 @@ class AppButton extends StatelessWidget {
           color: AppColor.primaryColor,
           borderRadius: BorderRadius.circular(8),
         ),
-        child: loading ? Center(child: CircularProgressIndicator()) : Center(
+        child: loading ? Center(child: CircularProgressIndicator(color: AppColor.whiteColor,)) : Center(
             child: Text(
               title,
               style: TextStyle(

@@ -13,4 +13,9 @@ class AppApiService{
 
   // FirebaseFirestore API
   static FirebaseFirestore firestore = FirebaseFirestore.instance;
+  static final add_item =
+  FirebaseFirestore.instance
+      .collection("users")
+      .doc(userId)
+      .collection("invoice");
 }

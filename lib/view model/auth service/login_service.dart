@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
+import 'package:flutter_invoice_app/res/routes/routes.dart';
 import 'package:flutter_invoice_app/utils/utils.dart';
 import 'package:get/get.dart';
 
@@ -22,7 +23,10 @@ class LoginService extends GetxController{
         password: password.value.text,
       ).then((value){
         setLoading(false);
+        Get.toNamed(AppRoutes.listInvoice);
         Utils.flutterToast("You have Sucessfully Login");
+        email.value.clear();
+        password.value.clear();
       }).onError((error, stackTrace){
         setLoading(false);
         Utils.flutterToast("Please Check Your Email and Password");
