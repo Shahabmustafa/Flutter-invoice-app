@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../colors/app_colors.dart';
 
 class AppThemeData{
-  static ThemeData appTheme = ThemeData(
+  static ThemeData lightTheme = ThemeData(
     useMaterial3: true,
     floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: AppColor.primaryColor,
@@ -37,4 +37,13 @@ class AppThemeData{
       suffixIconColor: AppColor.primaryColor,
     ),
   );
+
+  static ThemeData darkTheme = ThemeData(
+  hintColor: Colors.red,
+  brightness: Brightness.dark,
+  primaryColor: Colors.amber,
+  buttonTheme: ButtonThemeData(
+  buttonColor: Colors.amber,
+  disabledColor: Colors.grey,
+  ));
 }

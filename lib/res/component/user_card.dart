@@ -38,8 +38,8 @@ class UserCard extends StatelessWidget {
                 leading: ClipRRect(
                   borderRadius: BorderRadius.circular(100),
                   child: CachedNetworkImage(
-                    width: 40,
-                    height: 40,
+                    width: 50,
+                    height: 50,
                     imageUrl: data["profileImage"],
                     progressIndicatorBuilder: (context, url, downloadProgress) =>
                         CircularProgressIndicator(value: downloadProgress.progress),
@@ -47,9 +47,9 @@ class UserCard extends StatelessWidget {
                   ),
                 ),
                 title: Text(
-                  "ID #" + data['uid'],
+                  data['userName'],
                   style: TextStyle(
-                    fontSize: 15,
+                    fontSize: 20,
                     fontWeight: FontWeight.bold
                   ),
                 ),

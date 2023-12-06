@@ -117,16 +117,18 @@ class _SignUpPageState extends State<SignUpPage> {
                   SizedBox(
                     height: size.height * 0.05,
                   ),
-                  AppButton(
-                    title: "Sign Up",
-                    height: size.height * 0.06,
-                    width: size.width * 0.95,
-                    loading: signUpService.loading.value,
-                    onTap: (){
-                      if(_key.currentState!.validate()){
-                        signUpService.isSignUp(context);
-                      }
-                    },
+                  Obx(() =>
+                      AppButton(
+                        title: "Sign Up",
+                        height: size.height * 0.06,
+                        width: size.width * 0.95,
+                        loading: signUpService.loading.value,
+                        onTap: (){
+                          if(_key.currentState!.validate()){
+                            signUpService.isSignUp(context);
+                          }
+                        },
+                      ),
                   ),
                 ],
               ),

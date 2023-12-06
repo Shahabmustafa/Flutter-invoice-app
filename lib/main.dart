@@ -17,13 +17,16 @@ void main()async{
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Invoice App',
-      theme: AppThemeData.appTheme,
+      theme: AppThemeData.lightTheme,
+      darkTheme: AppThemeData.darkTheme,
+      themeMode: ThemeMode.system,
       home: SplashPage(),
       getPages: AppRoutes.appRoutes(),
     );

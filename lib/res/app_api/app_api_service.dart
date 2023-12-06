@@ -13,6 +13,7 @@ class AppApiService{
 
   // FirebaseFirestore API
   static FirebaseFirestore firestore = FirebaseFirestore.instance;
+  static DocumentReference<Map<String, dynamic>> userdb = firestore.collection("users").doc(userId);
   static final add_item =
   FirebaseFirestore.instance
       .collection("users")

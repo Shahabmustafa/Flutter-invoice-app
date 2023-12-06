@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 class SplashService{
 
   splashService(){
-    if(AppApiService.auth != null){
+    if(AppApiService.user != null){
       Timer(Duration(seconds: 5), () {
         Get.toNamed(AppRoutes.listInvoice);
       });
