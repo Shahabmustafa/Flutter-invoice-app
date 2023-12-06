@@ -46,6 +46,7 @@ dependencies:
   fluttertoast: ^8.2.4
   cached_network_image: ^3.3.0
   shared_preferences: ^2.2.2
+  data_table_2: ^2.5.9
 
 
 dev_dependencies:

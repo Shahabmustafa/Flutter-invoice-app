@@ -1,10 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
 import 'package:flutter_invoice_app/res/colors/app_colors.dart';
 import 'package:flutter_invoice_app/view%20model/invoice%20service/add_item_service.dart';
 import 'package:get/get.dart';
 
 import '../../../res/component/app_button.dart';
 import '../../../res/component/invoice_text_field.dart';
+import '../../../res/component/table_widget.dart';
 
 class ItemList extends StatefulWidget {
   const ItemList({Key? key}) : super(key: key);
@@ -23,10 +27,29 @@ class _ItemListState extends State<ItemList> {
       appBar: AppBar(
         title: Text("List of Item"),
       ),
-      body: Column(
-        children: [
-
-        ],
+      body: StreamBuilder(
+        stream: AppApiService.addItem.snapshots(),
+        builder: (context,snapshot){
+          if(snapshot.data != null){
+            return ListView.builder(
+              itemCount: snapshot.data!.docs.length,
+              itemBuilder: (context,index){
+                var data = snapshot.data!.docs[index];
+                return TableWidget(
+                    itemName: data["itemName"],
+                    itemCost: data["itemCost"],
+                    itemQuantity: data["quantity"],
+                    total: data["total"].toString(),
+                    onTap: (){
+                      AppApiService.addItem.doc(snapshot.data!.docs[index].id).delete();
+                    }
+                );
+              },
+            );
+          }else{
+            return CircularProgressIndicator();
+          }
+        },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: (){

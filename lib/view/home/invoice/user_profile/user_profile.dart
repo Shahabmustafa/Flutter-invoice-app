@@ -40,24 +40,54 @@ class _UserProfileState extends State<UserProfile> {
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Center(
-                  child: Container(
-                    width: 120,
-                    height: 120,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(100),
-                      border: Border.all(
-                        color: AppColor.primaryColor,
-                        width: 2.5,
+                GestureDetector(
+                  onTap: (){
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (context){
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            ListTile(
+                              leading: Icon(Icons.camera_alt),
+                              title: Text("Camera"),
+                              trailing: Icon(Icons.arrow_forward_ios),
+                              onTap: (){
+
+                              },
+                            ),
+                            ListTile(
+                              leading: Icon(Icons.photo),
+                              title: Text("Gallery"),
+                              trailing: Icon(Icons.arrow_forward_ios),
+                              onTap: (){
+
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                  child: Center(
+                    child: Container(
+                      width: 120,
+                      height: 120,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(100),
+                        border: Border.all(
+                          color: AppColor.primaryColor,
+                          width: 2.5,
+                        ),
                       ),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(100),
-                      child: CachedNetworkImage(
-                        imageUrl: data["profileImage"],
-                        progressIndicatorBuilder: (context, url, downloadProgress) =>
-                            CircularProgressIndicator(value: downloadProgress.progress),
-                        errorWidget: (context, url, error) => Icon(Icons.error),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(100),
+                        child: CachedNetworkImage(
+                          imageUrl: data["profileImage"],
+                          progressIndicatorBuilder: (context, url, downloadProgress) =>
+                              CircularProgressIndicator(value: downloadProgress.progress),
+                          errorWidget: (context, url, error) => Icon(Icons.error),
+                        ),
                       ),
                     ),
                   ),
@@ -85,7 +115,7 @@ class _UserProfileState extends State<UserProfile> {
                 ),
                 Card(
                   child: ListTile(
-                    leading: Icon(Icons.person),
+                    leading: Icon(Icons.alternate_email),
                     title: Text(data["email"]),
                   ),
                 ),

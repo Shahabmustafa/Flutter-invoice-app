@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
 import 'package:get/get.dart';
@@ -12,13 +13,20 @@ class AddItemService extends GetxController{
     loading.value = value;
   }
 
+
   addItem(BuildContext context){
+    var a = int.parse(itemCost.value.text);
+    var b = int.parse(quantity.value.text);
+    var date = DateTime.now();
+    var formattedDate = "${date.day}-${date.month}-${date.year}";
     setLoading(true);
     try{
-      AppApiService.add_item.add({
+      AppApiService.addItem.add({
         "itemName" : itemName.value.text,
         "itemCost" : itemCost.value.text,
         "quantity" : quantity.value.text,
+        "total" : a*b,
+
       }).then((value){
         setLoading(false);
         itemName.value.clear();

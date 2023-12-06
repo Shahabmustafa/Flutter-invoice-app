@@ -35,20 +35,6 @@ class _SignaturePageState extends State<SignaturePage> {
                 color: Colors.black,
                 control: HandSignatureControl(),
               ),
-              // SignatureView(
-              //   // canvas color
-              //   backgroundColor: Colors.white30,
-              //   penStyle: Paint()
-              //   // pen color
-              //     ..color = Color.fromARGB(255,0,0,0)
-              //   // type of pen point circular or rounded
-              //     ..strokeCap = StrokeCap.round
-              //   // pen pointer width
-              //     ..strokeWidth = 2.0,
-              //   // data of the canvas
-              //   onSigned: (data) {
-              //   },
-              // ),
             ),
           ),
           Row(

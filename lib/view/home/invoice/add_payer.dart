@@ -1,9 +1,11 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../../res/component/app_button.dart';
 import '../../../res/component/invoice_text_field.dart';
+import '../../../view model/invoice service/new_payer.dart';
 
 class AddPayer extends StatefulWidget {
   const AddPayer({Key? key}) : super(key: key);
@@ -13,7 +15,7 @@ class AddPayer extends StatefulWidget {
 }
 
 class _AddPayerState extends State<AddPayer> {
-
+  final payer = Get.put(NewPayerService());
   final _key = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -32,6 +34,7 @@ class _AddPayerState extends State<AddPayer> {
               ),
               InvoiceTextField(
                 title: "Payer Name",
+                controller: payer.payerName.value,
                 validator: (value){
                   return value!.isEmpty ? "Enter Your Payer Name" : null;
                 },
@@ -41,6 +44,7 @@ class _AddPayerState extends State<AddPayer> {
               ),
               InvoiceTextField(
                 title: "Email Address",
+                controller: payer.email.value,
                 keyboardType: TextInputType.emailAddress,
                 validator: (value){
                   return value!.isEmpty ? "Enter Your Email Address" : null;
@@ -50,6 +54,7 @@ class _AddPayerState extends State<AddPayer> {
                 height: size.height * 0.02,
               ),
               InvoiceTextField(
+                controller: payer.phoneNumber.value,
                 title: "Phone Number",
                 keyboardType: TextInputType.phone,
                 validator: (value){
@@ -61,6 +66,7 @@ class _AddPayerState extends State<AddPayer> {
               ),
               InvoiceTextField(
                 title: "Address",
+                controller: payer.address.value,
                 keyboardType: TextInputType.multiline,
                 maxLines: 5,
                 validator: (value){
@@ -70,15 +76,18 @@ class _AddPayerState extends State<AddPayer> {
               SizedBox(
                 height: size.height * 0.02,
               ),
-              AppButton(
-                title: "Save",
-                height: size.height * 0.05,
-                width: size.width * 0.4,
-                onTap: (){
-                  if(_key.currentState!.validate()){
-
-                  }
-                },
+              Obx(()=>
+                  AppButton(
+                    title: "Save",
+                    height: size.height * 0.05,
+                    width: size.width * 0.94,
+                    loading: payer.loading.value,
+                    onTap: (){
+                      if(_key.currentState!.validate()){
+                        payer.Payer(context);
+                      }
+                    },
+                  ),
               ),
             ],
           ),

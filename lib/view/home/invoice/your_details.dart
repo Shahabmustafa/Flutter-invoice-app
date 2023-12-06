@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/res/component/app_button.dart';
 import 'package:flutter_invoice_app/res/component/invoice_text_field.dart';
+import 'package:get/get.dart';
 
 import '../../../res/component/drop_down_image.dart';
+import '../../../view model/invoice service/new_business_service.dart';
 
 class YourDetails extends StatefulWidget {
   const YourDetails({Key? key}) : super(key: key);
@@ -13,6 +15,7 @@ class YourDetails extends StatefulWidget {
 
 class _YourDetailsState extends State<YourDetails> {
   final _key = GlobalKey<FormState>();
+  final business = Get.put(NewBusinessService());
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
@@ -30,6 +33,7 @@ class _YourDetailsState extends State<YourDetails> {
               ),
               InvoiceTextField(
                 title: "Business Name",
+                controller: business.businessName.value,
                 validator: (value){
                   return value!.isEmpty ? "Enter Your Business Name" : null;
                 },
@@ -39,6 +43,7 @@ class _YourDetailsState extends State<YourDetails> {
               ),
               InvoiceTextField(
                 title: "Email Address",
+                controller: business.email.value,
                 keyboardType: TextInputType.emailAddress,
                 validator: (value){
                   return value!.isEmpty ? "Please Enter Your Email" : null;
@@ -49,6 +54,7 @@ class _YourDetailsState extends State<YourDetails> {
               ),
               InvoiceTextField(
                 title: "Phone Number",
+                controller: business.phoneNumber.value,
                 keyboardType: TextInputType.phone,
                 validator: (value){
                   return value!.isEmpty ? "Enter Your Phone Number" : null;
@@ -59,6 +65,7 @@ class _YourDetailsState extends State<YourDetails> {
               ),
               InvoiceTextField(
                 title: "Address",
+                controller: business.address.value,
                 keyboardType: TextInputType.multiline,
                 maxLines: 5,
                 validator: (value){
@@ -76,15 +83,17 @@ class _YourDetailsState extends State<YourDetails> {
               SizedBox(
                 height: size.height * 0.02,
               ),
-              AppButton(
+              Obx(() => AppButton(
                 title: "Save",
                 height: size.height * 0.05,
-                width: size.width * 0.4,
+                width: size.width * 0.94,
+                loading: business.loading.value,
                 onTap: (){
                   if(_key.currentState!.validate()){
-
+                    business.newBusiness(context);
                   }
                 },
+              ),
               ),
             ],
           ),
