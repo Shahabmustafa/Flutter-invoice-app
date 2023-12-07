@@ -1,10 +1,7 @@
 
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/res/colors/app_colors.dart';
-
-import '../assets/assets_url.dart';
 
 class SocialMediaButton extends StatelessWidget {
   SocialMediaButton({Key? key,required this.onTap,required this.imageUrl}) : super(key: key);

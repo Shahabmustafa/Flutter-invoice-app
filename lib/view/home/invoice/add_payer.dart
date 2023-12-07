@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 
 import '../../../res/component/app_button.dart';
 import '../../../res/component/invoice_text_field.dart';
-import '../../../view model/invoice service/new_payer.dart';
+import '../../../view model/invoice service/inoice_service.dart';
 
 class AddPayer extends StatefulWidget {
   const AddPayer({Key? key}) : super(key: key);
@@ -15,8 +15,9 @@ class AddPayer extends StatefulWidget {
 }
 
 class _AddPayerState extends State<AddPayer> {
-  final payer = Get.put(NewPayerService());
   final _key = GlobalKey<FormState>();
+  final invoiceService = Get.put(InvoiceService());
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
@@ -34,7 +35,7 @@ class _AddPayerState extends State<AddPayer> {
               ),
               InvoiceTextField(
                 title: "Payer Name",
-                controller: payer.payerName.value,
+                controller: invoiceService.payerName.value,
                 validator: (value){
                   return value!.isEmpty ? "Enter Your Payer Name" : null;
                 },
@@ -44,7 +45,7 @@ class _AddPayerState extends State<AddPayer> {
               ),
               InvoiceTextField(
                 title: "Email Address",
-                controller: payer.email.value,
+                controller: invoiceService.payerEmail.value,
                 keyboardType: TextInputType.emailAddress,
                 validator: (value){
                   return value!.isEmpty ? "Enter Your Email Address" : null;
@@ -54,7 +55,7 @@ class _AddPayerState extends State<AddPayer> {
                 height: size.height * 0.02,
               ),
               InvoiceTextField(
-                controller: payer.phoneNumber.value,
+                controller: invoiceService.payerNumber.value,
                 title: "Phone Number",
                 keyboardType: TextInputType.phone,
                 validator: (value){
@@ -66,7 +67,7 @@ class _AddPayerState extends State<AddPayer> {
               ),
               InvoiceTextField(
                 title: "Address",
-                controller: payer.address.value,
+                controller: invoiceService.payerAddress.value,
                 keyboardType: TextInputType.multiline,
                 maxLines: 5,
                 validator: (value){
@@ -81,10 +82,10 @@ class _AddPayerState extends State<AddPayer> {
                     title: "Save",
                     height: size.height * 0.05,
                     width: size.width * 0.94,
-                    loading: payer.loading.value,
+                    loading: invoiceService.loading.value,
                     onTap: (){
                       if(_key.currentState!.validate()){
-                        payer.Payer(context);
+                        // payer.Payer(context);
                       }
                     },
                   ),

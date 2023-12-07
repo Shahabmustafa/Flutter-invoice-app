@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/res/component/app_button.dart';
 import 'package:flutter_invoice_app/res/component/invoice_text_field.dart';
-import 'package:flutter_invoice_app/view%20model/image_picker/image_picker_service.dart';
+import 'package:flutter_invoice_app/view%20model/invoice%20service/inoice_service.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
-
 import '../../../res/component/drop_down_image.dart';
-import '../../../view model/invoice service/new_business_service.dart';
 
 class YourDetails extends StatefulWidget {
   const YourDetails({Key? key}) : super(key: key);
@@ -17,7 +14,7 @@ class YourDetails extends StatefulWidget {
 
 class _YourDetailsState extends State<YourDetails> {
   final _key = GlobalKey<FormState>();
-  final business = Get.put(NewBusinessService());
+  final invoiceService = Get.put(InvoiceService());
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
@@ -35,7 +32,7 @@ class _YourDetailsState extends State<YourDetails> {
               ),
               InvoiceTextField(
                 title: "Business Name",
-                controller: business.businessName.value,
+                controller: invoiceService.businessName.value,
                 validator: (value){
                   return value!.isEmpty ? "Enter Your Business Name" : null;
                 },
@@ -45,8 +42,8 @@ class _YourDetailsState extends State<YourDetails> {
               ),
               InvoiceTextField(
                 title: "Email Address",
-                controller: business.email.value,
-                keyboardType: TextInputType.emailAddress,
+                // controller: business.email.value,
+                controller: invoiceService.businessEmail.value,
                 validator: (value){
                   return value!.isEmpty ? "Please Enter Your Email" : null;
                 },
@@ -56,7 +53,7 @@ class _YourDetailsState extends State<YourDetails> {
               ),
               InvoiceTextField(
                 title: "Phone Number",
-                controller: business.phoneNumber.value,
+                controller: invoiceService.businessNumber.value,
                 keyboardType: TextInputType.phone,
                 validator: (value){
                   return value!.isEmpty ? "Enter Your Phone Number" : null;
@@ -67,7 +64,7 @@ class _YourDetailsState extends State<YourDetails> {
               ),
               InvoiceTextField(
                 title: "Address",
-                controller: business.address.value,
+                controller: invoiceService.businessAddress.value,
                 keyboardType: TextInputType.multiline,
                 maxLines: 5,
                 validator: (value){
@@ -85,10 +82,10 @@ class _YourDetailsState extends State<YourDetails> {
                 title: "Save",
                 height: size.height * 0.05,
                 width: size.width * 0.94,
-                loading: business.loading.value,
+                loading: invoiceService.loading.value,
                 onTap: (){
                   if(_key.currentState!.validate()){
-                    business.newBusiness(context);
+                    // business.newBusiness(context,null);
                   }
                 },
               ),

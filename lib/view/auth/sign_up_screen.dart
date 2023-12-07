@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/view%20model/auth%20service/signup_service.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 import '../../res/assets/assets_url.dart';
 import '../../res/colors/app_colors.dart';

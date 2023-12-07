@@ -4,8 +4,8 @@ import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
 import 'package:flutter_invoice_app/res/routes/routes.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
+
 import '../colors/app_colors.dart';
-import '../fonts/app_fonts.dart';
 
 class UserCard extends StatelessWidget {
   const UserCard({Key? key}) : super(key: key);

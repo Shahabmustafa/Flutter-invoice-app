@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/res/colors/app_colors.dart';
 import 'package:get/get.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../../../view model/swith_service/swith_service.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({Key? key}) : super(key: key);
@@ -13,6 +12,7 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
+
 
   @override
   Widget build(BuildContext context) {
@@ -79,12 +79,17 @@ class _SettingPageState extends State<SettingPage> {
             child: ListTile(
               leading: Icon(Icons.dark_mode),
               title: Text("Dark Mode"),
-              trailing: Switch(
-                value: true,
-                onChanged: (bool value){
-
+              trailing: GetBuilder<ThemeController>(
+                builder: (controller) {
+                  return Switch(
+                    activeColor: AppColor.primaryColor,
+                    value: controller.isDark,
+                    onChanged: (value) {
+                      controller.changeTheme(value);
+                    },
+                  );
                 },
-              )
+              ),
             ),
           ),
         ],

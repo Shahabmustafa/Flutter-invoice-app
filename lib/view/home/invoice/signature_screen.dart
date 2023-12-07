@@ -1,6 +1,12 @@
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/res/component/app_button.dart';
+import 'package:flutter_invoice_app/utils/utils.dart';
 import 'package:hand_signature/signature.dart';
+import 'dart:ui' as ui;
+
+import 'package:signature/signature.dart';
 
 class SignaturePage extends StatefulWidget {
   const SignaturePage({Key? key}) : super(key: key);
@@ -10,7 +16,11 @@ class SignaturePage extends StatefulWidget {
 }
 
 class _SignaturePageState extends State<SignaturePage> {
-  // final GlobalKey<SignatureState> _signatureKey = GlobalKey();
+  final SignatureController _controller = SignatureController(
+    penStrokeWidth: 5,
+    penColor: Colors.black,
+    exportBackgroundColor: Colors.white,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -23,18 +33,11 @@ class _SignaturePageState extends State<SignaturePage> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Center(
-            child: Container(
-              height: size.height * 0.4,
+            child: Signature(
+              controller: _controller,
+              height: size.height * 0.35,
               width: size.width * 0.9,
-              decoration: BoxDecoration(
-                color: Colors.grey.shade300,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: HandSignature(
-                type: SignatureDrawType.line,
-                color: Colors.black,
-                control: HandSignatureControl(),
-              ),
+              backgroundColor: Colors.grey.shade300,
             ),
           ),
           Row(
@@ -45,18 +48,45 @@ class _SignaturePageState extends State<SignaturePage> {
                 width: size.width * 0.4,
                 title: "Clear",
                 onTap: (){
-                  setState(() {});
+                  _controller.clear();
                 },
               ),
               AppButton(
                 height: size.height * 0.05,
                 width: size.width * 0.4,
                 title: "Save",
+                onTap: (){
+                  uploadSignatureToFirebase();
+                },
               ),
             ],
           ),
         ],
       ),
     );
+  }
+  Future<void> uploadSignatureToFirebase() async {
+    try {
+      // Convert signature to image
+      ui.Image? image = await _controller.toImage(
+        width: 250,
+        height: 250,
+        // color: Colors.black,
+        // size: Size(200.0, 100.0),
+      );
+      ByteData? byteData = await image!.toByteData(format: ui.ImageByteFormat.png);
+      Uint8List imageData = byteData!.buffer.asUint8List();
+
+      // Upload image data to Firebase Storage
+      FirebaseStorage storage = FirebaseStorage.instance;
+      Reference ref = storage.ref().child('signatures/${DateTime.now().millisecondsSinceEpoch}.png');
+      UploadTask uploadTask = ref.putData(imageData);
+      await uploadTask.whenComplete(() => null);
+
+      String imageUrl = await ref.getDownloadURL();
+      Utils.flutterToast('Signature uploaded to Firebase Storage: $imageUrl');
+    } catch (e) {
+      Utils.flutterToast('Error uploading signature: $e');
+    }
   }
 }

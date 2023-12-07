@@ -4,12 +4,12 @@ import 'package:flutter_invoice_app/view/home/invoice/add_payer.dart';
 import 'package:flutter_invoice_app/view/home/invoice/item_list.dart';
 import 'package:flutter_invoice_app/view/home/invoice/list_of_invoice.dart';
 import 'package:flutter_invoice_app/view/home/invoice/signature_screen.dart';
+import 'package:flutter_invoice_app/view/home/invoice/user_profile/setting/setting.dart';
+import 'package:flutter_invoice_app/view/home/invoice/user_profile/user_profile.dart';
 import 'package:flutter_invoice_app/view/home/invoice/your_details.dart';
 import 'package:flutter_invoice_app/view/home/list_invoice.dart';
 import 'package:flutter_invoice_app/view/splash/splash_screen.dart';
 import 'package:get/get.dart';
-import 'package:flutter_invoice_app/view/home/invoice/user_profile/setting/setting.dart';
-import 'package:flutter_invoice_app/view/home/invoice/user_profile/user_profile.dart';
 
 class AppRoutes{
 

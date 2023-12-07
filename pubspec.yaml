@@ -49,6 +49,7 @@ dependencies:
   data_table_2: ^2.5.9
   image_picker: ^1.0.4
   shimmer: ^3.0.0
+  firebase_storage: ^11.5.3
 
 
 dev_dependencies:

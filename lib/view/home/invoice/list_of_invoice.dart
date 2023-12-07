@@ -1,18 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
 import 'package:flutter_invoice_app/res/assets/assets_url.dart';
 import 'package:flutter_invoice_app/res/colors/app_colors.dart';
 import 'package:flutter_invoice_app/res/component/app_button.dart';
 import 'package:flutter_invoice_app/res/component/image_convert_to_icons.dart';
 import 'package:flutter_invoice_app/res/component/invoice_box.dart';
 import 'package:flutter_invoice_app/res/component/invoice_text_field.dart';
-import 'package:flutter_invoice_app/res/fonts/app_fonts.dart';
 import 'package:flutter_invoice_app/res/routes/routes.dart';
-import 'package:flutter_invoice_app/view%20model/invoice%20service/payment_service.dart';
 import 'package:get/get.dart';
 
 import '../../../res/component/user_card.dart';
+import '../../../view model/invoice service/inoice_service.dart';
 
 class ListOfInvoice extends StatefulWidget {
   const ListOfInvoice({Key? key}) : super(key: key);
@@ -22,12 +20,11 @@ class ListOfInvoice extends StatefulWidget {
 }
 
 class _ListOfInvoiceState extends State<ListOfInvoice> {
+  final invoiceService = Get.put(InvoiceService());
+
   @override
   Widget build(BuildContext context) {
     final _key = GlobalKey<FormState>();
-    final paymentService = Get.put(PaymentService());
-    var date = DateTime.now();
-    var formattedDate = "${date.day}-${date.month}-${date.year}";
     final size = MediaQuery.sizeOf(context);
     return Scaffold(
       appBar: AppBar(
@@ -117,7 +114,7 @@ class _ListOfInvoiceState extends State<ListOfInvoice> {
                           ),
                           InvoiceTextField(
                             title: "Note",
-                            controller: paymentService.payment.value,
+                            controller: invoiceService.note.value,
                             maxLines: 6,
                             validator: (value){
                               return value!.isEmpty ? "Enter Your Payment Instructions" : null;
@@ -131,10 +128,10 @@ class _ListOfInvoiceState extends State<ListOfInvoice> {
                                 height: size.height * 0.05,
                                 width: size.width * 0.94,
                                 title: "Save",
-                                loading: paymentService.loading.value,
+                                loading: invoiceService.loading.value,
                                 onTap: (){
                                   if(_key.currentState!.validate()){
-                                    paymentService.Payment(context);
+                                    // paymentService.Payment(context);
                                   }
                                 },
                               ),
@@ -157,6 +154,18 @@ class _ListOfInvoiceState extends State<ListOfInvoice> {
                 Get.toNamed(AppRoutes.signature);
               },
             ),
+            SizedBox(
+              height: size.height * 0.02,
+            ),
+            AppButton(
+              height: size.height * 0.06,
+              width: size.width * 0.94,
+              title: "Save",
+              loading: invoiceService.loading.value,
+              onTap: (){
+                invoiceService.Invoice(context);
+              },
+            )
           ],
         ),
       ),

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/res/colors/app_colors.dart';
 
@@ -59,12 +58,33 @@ class InvoiceTextField extends StatelessWidget {
               controller: controller,
               keyboardType: keyboardType,
               validator: validator,
-              // enabled: enabled,
+              enabled: enabled,
               // maxLines: maxLines,
               decoration: InputDecoration(
-                fillColor: Colors.grey.shade200,
-                filled: true,
-                border: InputBorder.none,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(
+                    color: AppColor.primaryColor,
+                  ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(
+                    color: AppColor.primaryColor,
+                  ),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(
+                  color: AppColor.primaryColor,
+                  ),
+                ),
+                errorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(
+                    color: AppColor.errorColor,
+                  ),
+                ),
                 suffixIcon: suffixIcon,
                 prefixIcon: prefixIcon,
               ),

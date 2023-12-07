@@ -8,7 +8,7 @@ class AppThemeData{
       backgroundColor: AppColor.primaryColor,
       foregroundColor: AppColor.whiteColor,
     ),
-    scaffoldBackgroundColor: AppColor.whiteColor,
+    scaffoldBackgroundColor: Colors.grey.shade100,
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: AppColor.whiteColor,
     ),
@@ -39,11 +39,66 @@ class AppThemeData{
   );
 
   static ThemeData darkTheme = ThemeData(
-  hintColor: Colors.red,
-  brightness: Brightness.dark,
-  primaryColor: Colors.amber,
-  buttonTheme: ButtonThemeData(
-  buttonColor: Colors.amber,
-  disabledColor: Colors.grey,
-  ));
+    useMaterial3: true,
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: Colors.black,
+      foregroundColor: AppColor.whiteColor,
+    ),
+    scaffoldBackgroundColor: AppColor.blackColor,
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      backgroundColor: AppColor.blackColor,
+    ),
+    appBarTheme: AppBarTheme(
+      centerTitle: true,
+      iconTheme: IconThemeData(
+        color: AppColor.whiteColor,
+      ),
+      titleTextStyle: TextStyle(
+        color: AppColor.whiteColor,
+        fontSize: 25,
+        fontWeight: FontWeight.w500,
+      ),
+      backgroundColor: AppColor.blackColor,
+    ),
+    cardTheme: CardTheme(
+      surfaceTintColor: AppColor.blackColor,
+      color: AppColor.blackColor,
+      elevation: 5,
+    ),
+    listTileTheme: ListTileThemeData(
+      iconColor: AppColor.primaryColor,
+      textColor: AppColor.whiteColor,
+      selectedTileColor: AppColor.blackColor,
+    ),
+    inputDecorationTheme: InputDecorationTheme(
+      prefixIconColor: AppColor.primaryColor,
+      suffixIconColor: AppColor.primaryColor,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: BorderSide(
+          color: AppColor.primaryColor,
+        ),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: BorderSide(
+          color: AppColor.primaryColor,
+        ),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: BorderSide(
+          color: AppColor.primaryColor,
+        ),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: BorderSide(
+          color: AppColor.errorColor,
+        ),
+      ),
+    ),
+
+  );
+
 }

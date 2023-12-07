@@ -1,9 +1,9 @@
 
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
 import 'package:flutter_invoice_app/res/assets/assets_url.dart';
-import 'package:flutter_invoice_app/res/fonts/app_fonts.dart';
+import 'package:flutter_invoice_app/res/colors/app_colors.dart';
 import 'package:flutter_invoice_app/res/routes/routes.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -18,6 +18,9 @@ class ListInvoice extends StatefulWidget {
 }
 
 class _ListInvoiceState extends State<ListInvoice> {
+  static var date = DateTime.now();
+  var formattedDate = "${date.day}-${date.month}-${date.year}";
+  var miliSecond = date.millisecondsSinceEpoch;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,10 +40,43 @@ class _ListInvoiceState extends State<ListInvoice> {
         ],
       ),
       body: StreamBuilder(
-        stream: null,
+        stream: AppApiService.invoice.snapshots(),
         builder: (context,snapshot){
           if(snapshot.hasData){
-            return Text("Data He");
+            return ListView.builder(
+              itemCount: snapshot.data!.docs.length,
+              itemBuilder: (context,index){
+                return Card(
+                  child: ListTile(
+                    title: Text(snapshot.data!.docs[index]['businessName']),
+                    subtitle: Text(snapshot.data!.docs[index]['date']),
+                    trailing: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        InkWell(
+                          onTap: (){
+                            AppApiService.invoice.doc(snapshot.data!.docs[index].id).delete();
+                          },
+                          child: Icon(Icons.download),
+                        ),
+                        InkWell(
+                          onTap: (){
+
+                          },
+                          child: Icon(
+                            Icons.delete,
+                            color: AppColor.errorColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                    onTap: (){
+
+                    },
+                  ),
+                );
+              },
+            );
           }else{
             return Center(
               child: Text(

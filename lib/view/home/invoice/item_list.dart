@@ -1,14 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
 import 'package:flutter_invoice_app/res/colors/app_colors.dart';
-import 'package:flutter_invoice_app/view%20model/invoice%20service/add_item_service.dart';
 import 'package:get/get.dart';
-
 import '../../../res/component/app_button.dart';
 import '../../../res/component/invoice_text_field.dart';
-import '../../../res/component/table_widget.dart';
+import '../../../view model/invoice service/inoice_service.dart';
 
 class ItemList extends StatefulWidget {
   const ItemList({Key? key}) : super(key: key);
@@ -19,7 +14,8 @@ class ItemList extends StatefulWidget {
 
 class _ItemListState extends State<ItemList> {
   final _key = GlobalKey<FormState>();
-  final invoiceItem = Get.put(AddItemService());
+  final invoiceService = Get.put(InvoiceService());
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
@@ -27,30 +23,30 @@ class _ItemListState extends State<ItemList> {
       appBar: AppBar(
         title: Text("List of Item"),
       ),
-      body: StreamBuilder(
-        stream: AppApiService.addItem.snapshots(),
-        builder: (context,snapshot){
-          if(snapshot.data != null){
-            return ListView.builder(
-              itemCount: snapshot.data!.docs.length,
-              itemBuilder: (context,index){
-                var data = snapshot.data!.docs[index];
-                return TableWidget(
-                    itemName: data["itemName"],
-                    itemCost: data["itemCost"],
-                    itemQuantity: data["quantity"],
-                    total: data["total"].toString(),
-                    onTap: (){
-                      AppApiService.addItem.doc(snapshot.data!.docs[index].id).delete();
-                    }
-                );
-              },
-            );
-          }else{
-            return CircularProgressIndicator();
-          }
-        },
-      ),
+      // body: StreamBuilder(
+      //   stream: AppApiService.addItem.snapshots(),
+      //   builder: (context,snapshot){
+      //     if(snapshot.data != null){
+      //       return ListView.builder(
+      //         itemCount: snapshot.data!.docs.length,
+      //         itemBuilder: (context,index){
+      //           var data = snapshot.data!.docs[index];
+      //           return TableWidget(
+      //               itemName: data["itemName"],
+      //               itemCost: data["itemCost"],
+      //               itemQuantity: data["quantity"],
+      //               total: data["total"].toString(),
+      //               onTap: (){
+      //                 AppApiService.addItem.doc(snapshot.data!.docs[index].id).delete();
+      //               }
+      //           );
+      //         },
+      //       );
+      //     }else{
+      //       return CircularProgressIndicator();
+      //     }
+      //   },
+      // ),
       floatingActionButton: FloatingActionButton(
         onPressed: (){
           showModalBottomSheet(
@@ -77,7 +73,7 @@ class _ItemListState extends State<ItemList> {
                     ),
                     InvoiceTextField(
                       title: "Item Name",
-                      controller: invoiceItem.itemName.value,
+                      controller: invoiceService.itemName.value,
                       validator: (value){
                         return value!.isEmpty ? "Enter Your Item Name" : null;
                       },
@@ -88,7 +84,7 @@ class _ItemListState extends State<ItemList> {
                     InvoiceTextField(
                       title: "Item Cost",
                       keyboardType: TextInputType.number,
-                      controller: invoiceItem.itemCost.value,
+                      controller: invoiceService.itemCost.value,
                       validator: (value){
                         return value!.isEmpty ? "Enter Your Item Cost" : null;
                       },
@@ -99,7 +95,7 @@ class _ItemListState extends State<ItemList> {
                     InvoiceTextField(
                       title: "Quantity",
                       keyboardType: TextInputType.number,
-                      controller: invoiceItem.quantity.value,
+                      controller: invoiceService.itemQuantity.value,
                       validator: (value){
                         return value!.isEmpty ? "Enter Your Item Quantity" : null;
                       },
@@ -112,10 +108,10 @@ class _ItemListState extends State<ItemList> {
                           title: "Add Item",
                           height: size.height * 0.05,
                           width: size.width * 0.94,
-                          loading: invoiceItem.loading.value,
+                          loading: invoiceService.loading.value,
                           onTap: (){
                             if(_key.currentState!.validate()){
-                              invoiceItem.addItem(context);
+                              // invoiceItem.addItem(context);
                             }
                           },
                         ),

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class AppApiService{
 
@@ -15,27 +16,11 @@ class AppApiService{
   // FirebaseFirestore API
   static FirebaseFirestore firestore = FirebaseFirestore.instance;
   static DocumentReference<Map<String, dynamic>> userdb = firestore.collection("users").doc(userId);
-  static final business =
+  static final invoice =
   FirebaseFirestore.instance
       .collection("users")
       .doc(userId)
-      .collection("business");
+      .collection("invoice");
 
-  static final addItem =
-  FirebaseFirestore.instance
-      .collection("users")
-      .doc(userId)
-      .collection("addItem");
-
-  static final payer =
-  FirebaseFirestore.instance
-      .collection("users")
-      .doc(userId)
-      .collection("payer");
-
-  static final payment =
-  FirebaseFirestore.instance
-      .collection("users")
-      .doc(userId)
-      .collection("payment");
+  static FirebaseStorage storage = FirebaseStorage.instance;
 }
