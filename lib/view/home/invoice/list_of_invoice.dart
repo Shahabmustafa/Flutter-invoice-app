@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
 import 'package:flutter_invoice_app/res/assets/assets_url.dart';
 import 'package:flutter_invoice_app/res/colors/app_colors.dart';
 import 'package:flutter_invoice_app/res/component/app_button.dart';
@@ -8,6 +9,7 @@ import 'package:flutter_invoice_app/res/component/invoice_box.dart';
 import 'package:flutter_invoice_app/res/component/invoice_text_field.dart';
 import 'package:flutter_invoice_app/res/fonts/app_fonts.dart';
 import 'package:flutter_invoice_app/res/routes/routes.dart';
+import 'package:flutter_invoice_app/view%20model/invoice%20service/payment_service.dart';
 import 'package:get/get.dart';
 
 import '../../../res/component/user_card.dart';
@@ -23,6 +25,7 @@ class _ListOfInvoiceState extends State<ListOfInvoice> {
   @override
   Widget build(BuildContext context) {
     final _key = GlobalKey<FormState>();
+    final paymentService = Get.put(PaymentService());
     var date = DateTime.now();
     var formattedDate = "${date.day}-${date.month}-${date.year}";
     final size = MediaQuery.sizeOf(context);
@@ -114,6 +117,7 @@ class _ListOfInvoiceState extends State<ListOfInvoice> {
                           ),
                           InvoiceTextField(
                             title: "Note",
+                            controller: paymentService.payment.value,
                             maxLines: 6,
                             validator: (value){
                               return value!.isEmpty ? "Enter Your Payment Instructions" : null;
@@ -122,15 +126,18 @@ class _ListOfInvoiceState extends State<ListOfInvoice> {
                           SizedBox(
                             height: size.height * 0.04,
                           ),
-                          AppButton(
-                            height: size.height * 0.05,
-                            width: size.width * 0.5,
-                            title: "Save",
-                            onTap: (){
-                              if(_key.currentState!.validate()){
-
-                              }
-                            },
+                          Obx(() =>
+                              AppButton(
+                                height: size.height * 0.05,
+                                width: size.width * 0.94,
+                                title: "Save",
+                                loading: paymentService.loading.value,
+                                onTap: (){
+                                  if(_key.currentState!.validate()){
+                                    paymentService.Payment(context);
+                                  }
+                                },
+                              ),
                           ),
                         ],
                       ),

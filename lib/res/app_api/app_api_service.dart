@@ -32,4 +32,10 @@ class AppApiService{
       .collection("users")
       .doc(userId)
       .collection("payer");
+
+  static final payment =
+  FirebaseFirestore.instance
+      .collection("users")
+      .doc(userId)
+      .collection("payment");
 }

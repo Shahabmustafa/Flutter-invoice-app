@@ -9,15 +9,14 @@ class NewBusinessService extends GetxController{
   Rx<TextEditingController> email = TextEditingController().obs;
   Rx<TextEditingController> phoneNumber = TextEditingController().obs;
   Rx<TextEditingController> address = TextEditingController().obs;
+
   RxBool loading = false.obs;
+
   setLoading(bool value){
     loading.value = value;
   }
 
-
   newBusiness(BuildContext context){
-    var date = DateTime.now();
-    var formattedDate = "${date.day}-${date.month}-${date.year}";
     setLoading(true);
     try{
       AppApiService.business.add({

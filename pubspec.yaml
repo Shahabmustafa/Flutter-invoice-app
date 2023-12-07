@@ -47,6 +47,8 @@ dependencies:
   cached_network_image: ^3.3.0
   shared_preferences: ^2.2.2
   data_table_2: ^2.5.9
+  image_picker: ^1.0.4
+  shimmer: ^3.0.0
 
 
 dev_dependencies:

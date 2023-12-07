@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/res/component/app_button.dart';
 import 'package:flutter_invoice_app/res/component/invoice_text_field.dart';
+import 'package:flutter_invoice_app/view%20model/image_picker/image_picker_service.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../res/component/drop_down_image.dart';
 import '../../../view model/invoice service/new_business_service.dart';
@@ -75,11 +77,7 @@ class _YourDetailsState extends State<YourDetails> {
               SizedBox(
                 height: size.height * 0.02,
               ),
-              DropDownImage(
-                onTap: (){
-                  print("onTap");
-                },
-              ),
+              DropDownImage(),
               SizedBox(
                 height: size.height * 0.02,
               ),

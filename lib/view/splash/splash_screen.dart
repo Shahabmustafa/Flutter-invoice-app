@@ -3,6 +3,7 @@ import 'package:flutter_invoice_app/res/assets/assets_url.dart';
 import 'package:flutter_invoice_app/res/colors/app_colors.dart';
 import 'package:flutter_invoice_app/view%20model/splash%20service/splash_service.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shimmer/shimmer.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({Key? key}) : super(key: key);
@@ -22,36 +23,41 @@ class _SplashPageState extends State<SplashPage> {
   }
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Center(
-              child: Image.asset(
-                AssetsUrl.appLogo,
-                height: 150,
-                width: 150,
-              ),
-          ),
-          Column(
-            children: [
-              Text(
-                "Invoice",
-                style: GoogleFonts.abhayaLibre(
-                  fontSize: 40,
+      backgroundColor: AppColor.primaryColor,
+      body: Shimmer.fromColors(
+        baseColor: AppColor.primaryColor,
+        highlightColor: Colors.grey.shade200,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Center(
+                child: Image.asset(
+                  AssetsUrl.appLogo,
+                  height: 150,
+                  width: 150,
                 ),
-              ),
-              SizedBox(
-                height: 40,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 100),
-                child: LinearProgressIndicator(
-                  color: AppColor.primaryColor,
+            ),
+            Column(
+              children: [
+                Text(
+                  "Invoice",
+                  style: GoogleFonts.abhayaLibre(
+                    fontSize: 40,
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ],
+                // SizedBox(
+                //   height: 40,
+                // ),
+                // Padding(
+                //   padding: const EdgeInsets.symmetric(horizontal: 100),
+                //   child: LinearProgressIndicator(
+                //     color: AppColor.primaryColor,
+                //   ),
+                // ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
