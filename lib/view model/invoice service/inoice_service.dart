@@ -50,6 +50,7 @@ class InvoiceService extends GetxController{
       setLoading(true);
       await AppApiService.invoice.doc(formattedDate).set(businessModel.toJson()).then((value){
         setLoading(false);
+
       }).onError((error, stackTrace){
         setLoading(false);
       });

@@ -1,5 +1,3 @@
-
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
@@ -8,8 +6,8 @@ import 'package:flutter_invoice_app/res/colors/app_colors.dart';
 import 'package:flutter_invoice_app/res/routes/routes.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import '../../res/component/image_convert_to_icons.dart';
+import '../../view model/pdf_service/pdf_invice_service.dart';
 
 class ListInvoice extends StatefulWidget {
   const ListInvoice({Key? key}) : super(key: key);
@@ -71,7 +69,7 @@ class _ListInvoiceState extends State<ListInvoice> {
                         ),
                         InkWell(
                           onTap: (){
-
+                            AppApiService.invoice.doc(snapshot.data!.docs[index].id).delete();
                           },
                           child: Icon(
                             Icons.delete,
@@ -80,9 +78,10 @@ class _ListInvoiceState extends State<ListInvoice> {
                         ),
                       ],
                     ),
-                    // onTap: (){
-                    //
-                    // },
+                    onTap: ()async{
+                      final pdfFile = await PdfInvoiceService.generate();
+                      PdfApi.openFile(pdfFile);
+                    },
                   ),
                 );
               },

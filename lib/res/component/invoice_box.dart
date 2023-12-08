@@ -4,11 +4,12 @@ import '../colors/app_colors.dart';
 import '../fonts/app_fonts.dart';
 
 class InvoiceBox extends StatelessWidget {
-  InvoiceBox({Key? key,required this.title,required this.subtitle,required this.icon,required this.onTap}) : super(key: key);
+  InvoiceBox({Key? key,required this.title,required this.subtitle,required this.icon,required this.onTap,this.trailing}) : super(key: key);
   IconData icon;
   String title;
   String subtitle;
   VoidCallback onTap;
+  Widget? trailing;
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
@@ -29,7 +30,7 @@ class InvoiceBox extends StatelessWidget {
       ),
       child: ListTile(
         leading: Icon(icon,size: 30,),
-        trailing: Icon(Icons.arrow_forward_ios),
+        trailing: trailing,
         title: Text(
           title,
           style: AppFonts.mediumText,
