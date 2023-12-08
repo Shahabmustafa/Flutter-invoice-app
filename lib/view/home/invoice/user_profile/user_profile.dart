@@ -98,7 +98,7 @@ class _UserProfileState extends State<UserProfile> {
                 Card(
                   child: ListTile(
                     leading: Icon(Icons.numbers),
-                    title: Text(data["uid"]),
+                    title: Text(data["specificId"]),
                   ),
                 ),
                 SizedBox(
@@ -117,15 +117,6 @@ class _UserProfileState extends State<UserProfile> {
                   child: ListTile(
                     leading: Icon(Icons.alternate_email),
                     title: Text(data["email"]),
-                  ),
-                ),
-                SizedBox(
-                  height: 8,
-                ),
-                Card(
-                  child: ListTile(
-                    leading: Icon(Icons.language),
-                    title: Text(data["Language"]),
                   ),
                 ),
               ],

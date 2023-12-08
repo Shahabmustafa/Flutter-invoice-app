@@ -42,7 +42,7 @@ class _ListInvoiceState extends State<ListInvoice> {
       body: StreamBuilder(
         stream: AppApiService.invoice.snapshots(),
         builder: (context,snapshot){
-          if(snapshot.hasData){
+          if(!snapshot.hasData){
             return ListView.builder(
               itemCount: snapshot.data!.docs.length,
               itemBuilder: (context,index){
@@ -84,6 +84,7 @@ class _ListInvoiceState extends State<ListInvoice> {
                 style: GoogleFonts.aldrich(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
+                  color: Theme.of(context).textTheme.displayLarge!.color,
                 )
               ),
             );

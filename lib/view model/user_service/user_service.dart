@@ -7,6 +7,9 @@ import 'package:get/get.dart';
 class UserService extends GetxController{
 
   static final signupService = Get.put(SignUpService());
+  static var date = DateTime.now();
+  static var specificId = date.millisecondsSinceEpoch;
+
 
   static userAddDataFirestore(String userName,String email,){
     signupService.setLoading(true);
@@ -16,8 +19,7 @@ class UserService extends GetxController{
         userName: userName,
         email: email,
         profileImage: "https://i.pinimg.com/474x/ad/73/1c/ad731cd0da0641bb16090f25778ef0fd.jpg",
-        language: "English",
-        theme: false,
+        specificId: specificId.toString(),
       );
       AppApiService
           .firestore

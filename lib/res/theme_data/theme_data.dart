@@ -3,6 +3,8 @@ import '../colors/app_colors.dart';
 
 class AppThemeData{
   static ThemeData lightTheme = ThemeData(
+    splashColor: AppColor.primaryColor,
+    canvasColor: AppColor.whiteColor,
     useMaterial3: true,
     floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: AppColor.primaryColor,
@@ -36,15 +38,33 @@ class AppThemeData{
       prefixIconColor: AppColor.primaryColor,
       suffixIconColor: AppColor.primaryColor,
     ),
+    textTheme: TextTheme(
+      displayLarge: TextStyle(
+        color: AppColor.blackColor,
+      ),
+    ),
   );
 
   static ThemeData darkTheme = ThemeData(
+    splashColor: AppColor.blackColor,
+    cardColor: AppColor.blackColor,
     useMaterial3: true,
+    canvasColor: AppColor.primaryColor,
     floatingActionButtonTheme: FloatingActionButtonThemeData(
-      backgroundColor: Colors.black,
+      backgroundColor: AppColor.blackColor,
       foregroundColor: AppColor.whiteColor,
+      shape: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: BorderSide(
+          color: AppColor.primaryColor,
+          width: 3,
+        ),
+      )
     ),
     scaffoldBackgroundColor: AppColor.blackColor,
+    bottomSheetTheme: BottomSheetThemeData(
+      backgroundColor: AppColor.blackColor,
+    ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: AppColor.blackColor,
     ),
@@ -98,7 +118,11 @@ class AppThemeData{
         ),
       ),
     ),
-
+    textTheme: TextTheme(
+      displayLarge: TextStyle(
+        color: AppColor.whiteColor,
+      ),
+    ),
   );
 
 }

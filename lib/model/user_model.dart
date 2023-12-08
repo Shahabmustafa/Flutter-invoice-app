@@ -3,24 +3,22 @@ class UserModel {
   String? userName;
   String? email;
   String? profileImage;
-  String? language;
-  bool? theme;
+  String? specificId;
 
   UserModel(
       {this.uid,
         this.userName,
         this.email,
         this.profileImage,
-        this.language,
-        this.theme});
+        this.specificId,
+        });
 
   UserModel.fromJson(Map<String, dynamic> json) {
     uid = json['uid'];
     userName = json['userName'];
     email = json['email'];
     profileImage = json['profileImage'];
-    language = json['Language'];
-    theme = json['theme'];
+    specificId = json['specificId'];
   }
 
   Map<String, dynamic> toJson() {
@@ -29,8 +27,7 @@ class UserModel {
     data['userName'] = this.userName;
     data['email'] = this.email;
     data['profileImage'] = this.profileImage;
-    data['Language'] = this.language;
-    data['theme'] = this.theme;
+    data['specificId'] = this.specificId;
     return data;
   }
 }

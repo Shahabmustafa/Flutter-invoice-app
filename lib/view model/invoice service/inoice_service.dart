@@ -48,12 +48,16 @@ class InvoiceService extends GetxController{
         date: formattedDate,
       );
       await AppApiService.invoice.add(invoiceModel.toJson()).then((value)async{
-        await AppApiService.invoice.doc(value.id).collection('items').add({
-          "itemName" : itemName.value.text,
-          "itemCost" : itemCost.value.text,
-          "itemQuantity" : itemQuantity.value.text,
-          "total" : total.toString(),
-        });
+       try{
+         await AppApiService.invoice.doc(value.id).collection('items').add({
+           "itemName" : itemName.value.text,
+           "itemCost" : itemCost.value.text,
+           "itemQuantity" : itemQuantity.value.text,
+           "total" : total.toString(),
+         });
+       }catch(e){
+         // Utils.flutterToast()
+       }
         Get.back();
         Utils.flutterToast("Your Invoice is Created");
         setLoading(false);

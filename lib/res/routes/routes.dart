@@ -4,6 +4,7 @@ import 'package:flutter_invoice_app/view/home/invoice/add_payer.dart';
 import 'package:flutter_invoice_app/view/home/invoice/item_list.dart';
 import 'package:flutter_invoice_app/view/home/invoice/list_of_invoice.dart';
 import 'package:flutter_invoice_app/view/home/invoice/signature_screen.dart';
+import 'package:flutter_invoice_app/view/home/invoice/user_profile/setting/languages_change.dart';
 import 'package:flutter_invoice_app/view/home/invoice/user_profile/setting/setting.dart';
 import 'package:flutter_invoice_app/view/home/invoice/user_profile/user_profile.dart';
 import 'package:flutter_invoice_app/view/home/invoice/your_details.dart';
@@ -24,6 +25,7 @@ class AppRoutes{
   static const String signature = "/signature_routes";
   static const String userProfile = "/user_profile_routes";
   static const String setting = "/setting_routes";
+  static const String changeLanguage = "/change_languages_routes";
 
   static appRoutes() => [
     GetPage(
@@ -89,6 +91,12 @@ class AppRoutes{
     GetPage(
       name: setting,
       page: () => SettingPage(),
+      transition: Transition.rightToLeftWithFade,
+      transitionDuration: const Duration(microseconds: 250),
+    ),
+    GetPage(
+      name: changeLanguage,
+      page: () => ChangeLanguages(),
       transition: Transition.rightToLeftWithFade,
       transitionDuration: const Duration(microseconds: 250),
     ),

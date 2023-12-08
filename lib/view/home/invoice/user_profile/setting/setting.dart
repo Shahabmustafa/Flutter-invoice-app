@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
 import 'package:flutter_invoice_app/res/colors/app_colors.dart';
+import 'package:flutter_invoice_app/utils/utils.dart';
 import 'package:get/get.dart';
 
 import '../../../../../view model/swith_service/swith_service.dart';
@@ -68,7 +70,7 @@ class _SettingPageState extends State<SettingPage> {
               title: Text("Change Language"),
               trailing: Icon(Icons.arrow_forward_ios),
               onTap: (){
-
+                Get.toNamed("/change_languages_routes");
               },
             ),
           ),
@@ -90,6 +92,21 @@ class _SettingPageState extends State<SettingPage> {
                   );
                 },
               ),
+            ),
+          ),
+          SizedBox(
+            height: size.height * 0.01,
+          ),
+          Card(
+            child: ListTile(
+              leading: Icon(Icons.exit_to_app_rounded),
+              title: Text("Logout"),
+              onTap: (){
+                AppApiService.auth.signOut().then((value){
+                  Get.toNamed("/login_routes");
+                  Utils.flutterToast("Log Out");
+                });
+              },
             ),
           ),
         ],

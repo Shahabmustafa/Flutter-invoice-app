@@ -37,6 +37,7 @@ class InvoiceTextField extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
+                  color: Theme.of(context).textTheme.displayLarge!.color,
                 ),
               ),
               SizedBox(width: 3,),
@@ -61,6 +62,12 @@ class InvoiceTextField extends StatelessWidget {
               enabled: enabled,
               // maxLines: maxLines,
               decoration: InputDecoration(
+                labelStyle: TextStyle(
+                  color: Theme.of(context).textTheme.displayLarge!.color,
+                ),
+                hintStyle: TextStyle(
+                  color: Theme.of(context).textTheme.displayLarge!.color,
+                ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                   borderSide: BorderSide(
@@ -87,6 +94,10 @@ class InvoiceTextField extends StatelessWidget {
                 ),
                 suffixIcon: suffixIcon,
                 prefixIcon: prefixIcon,
+              ),
+              cursorColor: AppColor.primaryColor,
+              style: TextStyle(
+                color: Theme.of(context).textTheme.displayLarge!.color,
               ),
               onTapOutside: (event){
                 FocusManager.instance.primaryFocus?.unfocus();

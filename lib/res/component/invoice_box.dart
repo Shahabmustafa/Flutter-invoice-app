@@ -16,14 +16,14 @@ class InvoiceBox extends StatelessWidget {
       height: size.height * 0.1,
       width:  size.width * 1,
       decoration: BoxDecoration(
-          color: AppColor.whiteColor,
+          color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(30),
           boxShadow: [
             BoxShadow(
               color: AppColor.grayColor,
-              spreadRadius: 0.1,
+              spreadRadius: 0.3,
               blurRadius: 1,
-              offset: Offset(2,2),
+              offset: Offset(0.2,0.2),
             ),
           ]
       ),

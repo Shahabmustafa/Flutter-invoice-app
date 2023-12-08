@@ -23,7 +23,7 @@ class _SplashPageState extends State<SplashPage> {
   }
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor.primaryColor,
+      backgroundColor: Theme.of(context).splashColor,
       body: Shimmer.fromColors(
         baseColor: AppColor.primaryColor,
         highlightColor: Colors.grey.shade200,

@@ -134,6 +134,7 @@ class _LoginPageState extends State<LoginPage> {
                       style: TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.bold,
+                        color: Theme.of(context).textTheme.displayLarge!.color,
                       ),
                     ),
                     GestureDetector(

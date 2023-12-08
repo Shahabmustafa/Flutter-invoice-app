@@ -17,10 +17,13 @@ class AppButton extends StatelessWidget {
         height: height,
         width: width,
         decoration: BoxDecoration(
-          color: AppColor.primaryColor,
+          color: Theme.of(context).splashColor,
           borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: Theme.of(context).canvasColor,
+          ),
         ),
-        child: loading ? Center(child: CircularProgressIndicator(color: AppColor.whiteColor,)) : Center(
+        child: loading ? Center(child: CircularProgressIndicator(color: Theme.of(context).canvasColor,)) : Center(
             child: Text(
               title,
               style: TextStyle(
