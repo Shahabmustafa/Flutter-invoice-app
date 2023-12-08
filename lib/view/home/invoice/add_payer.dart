@@ -83,9 +83,10 @@ class _AddPayerState extends State<AddPayer> {
                     height: size.height * 0.05,
                     width: size.width * 0.94,
                     loading: invoiceService.loading.value,
-                    onTap: (){
+                    onTap: ()async{
                       if(_key.currentState!.validate()){
-                        // payer.Payer(context);
+                        await invoiceService.payerService(context);
+                        Get.back();
                       }
                     },
                   ),

@@ -131,7 +131,7 @@ class _ListOfInvoiceState extends State<ListOfInvoice> {
                                 loading: invoiceService.loading.value,
                                 onTap: (){
                                   if(_key.currentState!.validate()){
-                                    // paymentService.Payment(context);
+                                    invoiceService.paymentService(context);
                                   }
                                 },
                               ),
@@ -163,7 +163,7 @@ class _ListOfInvoiceState extends State<ListOfInvoice> {
               title: "Save",
               loading: invoiceService.loading.value,
               onTap: (){
-                invoiceService.Invoice(context);
+                Get.back();
               },
             )
           ],

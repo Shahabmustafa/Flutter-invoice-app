@@ -1,7 +1,10 @@
+import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
-import 'package:flutter_invoice_app/model/invoice_model.dart';
+import 'package:flutter_invoice_app/model/business_model.dart';
+import 'package:flutter_invoice_app/model/payer_model.dart';
 import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
-import 'package:flutter_invoice_app/utils/utils.dart';
+import 'package:flutter_invoice_app/view%20model/image_picker/image_picker_service.dart';
 import 'package:get/get.dart';
 
 class InvoiceService extends GetxController{
@@ -19,6 +22,8 @@ class InvoiceService extends GetxController{
   Rx<TextEditingController> itemQuantity = TextEditingController().obs;
   Rx<TextEditingController> note = TextEditingController().obs;
 
+  final imagePicker = Get.put(ImagePickerService());
+
   RxBool loading = false.obs;
 
   setLoading(bool value){
@@ -28,58 +33,54 @@ class InvoiceService extends GetxController{
   static var date = DateTime.now();
   var formattedDate = "${date.day}-${date.month}-${date.year}";
 
-  Invoice(BuildContext context)async{
-    var a = int.parse(itemCost.value.text);
-    var b = int.parse(itemQuantity.value.text);
-    var total = a*b;
 
-    setLoading(true);
+  businessService(BuildContext context)async{
+    firebase_storage.Reference storageRef = firebase_storage.FirebaseStorage.instance.ref(AppApiService.userId).child(formattedDate).child("businessLogo");
+    firebase_storage.UploadTask uploadTask = storageRef.putFile(File((imagePicker.imagePath.value.toString())));
+    await Future.value(uploadTask);
+    final newUrl = await storageRef.getDownloadURL();
+    BusinessModel businessModel = BusinessModel(
+      businessName: businessName.value.text,
+      businessEmail: businessEmail.value.text,
+      businessAddress: businessAddress.value.text,
+      businessPhone: businessNumber.value.text,
+      businessLogo: newUrl,
+    );
     try{
-      InvoiceModel invoiceModel = InvoiceModel(
-        businessName: businessName.value.text,
-        businessEmail: businessEmail.value.text,
-        businessNumber: businessNumber.value.text,
-        businessAddress: businessAddress.value.text,
-        payerName: payerName.value.text,
-        payerEmail: payerEmail.value.text,
-        payerNumber: payerNumber.value.text,
-        payerAddress: payerAddress.value.text,
-        note: note.value.text,
-        date: formattedDate,
-      );
-      await AppApiService.invoice.add(invoiceModel.toJson()).then((value)async{
-       try{
-         await AppApiService.invoice.doc(value.id).collection('items').add({
-           "itemName" : itemName.value.text,
-           "itemCost" : itemCost.value.text,
-           "itemQuantity" : itemQuantity.value.text,
-           "total" : total.toString(),
-         });
-       }catch(e){
-         // Utils.flutterToast()
-       }
-        Get.back();
-        Utils.flutterToast("Your Invoice is Created");
+      setLoading(true);
+      await AppApiService.invoice.doc(formattedDate).set(businessModel.toJson()).then((value){
         setLoading(false);
-        businessName.value.clear();
-        businessEmail.value.clear();
-        businessNumber.value.clear();
-        businessAddress.value.clear();
-        payerName.value.clear();
-        payerEmail.value.clear();
-        payerNumber.value.clear();
-        payerAddress.value.clear();
-        itemName.value.clear();
-        itemCost.value.clear();
-        itemQuantity.value.clear();
-        note.value.clear();
       }).onError((error, stackTrace){
         setLoading(false);
-        Utils.flutterToast(error.toString());
       });
     }catch(e){
-      Utils.flutterToast(e.toString());
       setLoading(false);
     }
   }
+
+  payerService(BuildContext context)async{
+    PayerModel payerModel = PayerModel(
+      payerName: payerName.value.text,
+      payerEmail: payerEmail.value.text,
+      payerPhone: payerNumber.value.text,
+      payerAddress: payerAddress.value.text,
+    );
+    setLoading(true);
+    try{
+      await AppApiService.invoice.doc(formattedDate).update(payerModel.toJson()).then((value){
+        setLoading(false);
+      }).onError((error, stackTrace){
+        setLoading(false);
+      });
+    }catch(e){
+      setLoading(false);
+    }
+  }
+
+  paymentService(BuildContext context)async{
+    await AppApiService.invoice.doc(formattedDate).update({
+      "paymentDescription" : note.value.text,
+    });
+  }
+
 }

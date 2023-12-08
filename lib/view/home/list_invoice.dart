@@ -1,5 +1,6 @@
 
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
 import 'package:flutter_invoice_app/res/assets/assets_url.dart';
@@ -20,7 +21,6 @@ class ListInvoice extends StatefulWidget {
 class _ListInvoiceState extends State<ListInvoice> {
   static var date = DateTime.now();
   var formattedDate = "${date.day}-${date.month}-${date.year}";
-  var miliSecond = date.millisecondsSinceEpoch;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,21 +42,31 @@ class _ListInvoiceState extends State<ListInvoice> {
       body: StreamBuilder(
         stream: AppApiService.invoice.snapshots(),
         builder: (context,snapshot){
-          if(!snapshot.hasData){
+          if(snapshot.hasData){
             return ListView.builder(
               itemCount: snapshot.data!.docs.length,
               itemBuilder: (context,index){
                 return Card(
                   child: ListTile(
+                    leading: ClipRRect(
+                      borderRadius: BorderRadius.circular(100),
+                      child: CachedNetworkImage(
+                        width: 50,
+                        height: 50,
+                        fit: BoxFit.fill,
+                        imageUrl: snapshot.data!.docs[index]['businessLogo'],
+                        progressIndicatorBuilder: (context, url, downloadProgress) =>
+                            CircularProgressIndicator(value: downloadProgress.progress),
+                        errorWidget: (context, url, error) => Icon(Icons.error),
+                      ),
+                    ),
                     title: Text(snapshot.data!.docs[index]['businessName']),
-                    subtitle: Text(snapshot.data!.docs[index]['date']),
+                    subtitle: Text(snapshot.data!.docs[index]['businessEmail']),
                     trailing: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         InkWell(
-                          onTap: (){
-                            AppApiService.invoice.doc(snapshot.data!.docs[index].id).delete();
-                          },
+                          onTap: (){},
                           child: Icon(Icons.download),
                         ),
                         InkWell(
@@ -70,9 +80,9 @@ class _ListInvoiceState extends State<ListInvoice> {
                         ),
                       ],
                     ),
-                    onTap: (){
-
-                    },
+                    // onTap: (){
+                    //
+                    // },
                   ),
                 );
               },
