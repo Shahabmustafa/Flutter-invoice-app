@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:ui';
+import 'package:flutter/services.dart';
 import 'package:flutter_invoice_app/res/colors/app_colors.dart';
 import 'package:flutter_invoice_app/utils/utils.dart';
 import 'package:open_file/open_file.dart';
@@ -34,24 +35,34 @@ class PdfInvoiceService{
   }
 
 
-  static Widget buildTitle() => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "Company Name",
+  static Widget buildTitle(){
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // pw.Image.asset(""),
+        Text(
+            "Kitoob",
             style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold
+                fontSize: 20,
+                fontWeight: FontWeight.bold
             )
-          ),
-          SizedBox(
-            height: 0.1 * PdfPageFormat.cm,
-          ),
-          Text(
-            "Company Email",
-          ),
-        ],
-      );
+        ),
+        SizedBox(
+          height: 0.1 * PdfPageFormat.cm,
+        ),
+        Text(
+          "Company Email",
+        ),
+        SizedBox(
+          height: 0.1 * PdfPageFormat.cm,
+        ),
+        Text(
+          "Company Email",
+        ),
+      ],
+    );
+  }
 
   static Widget buildInvoice(){
     final header = [
@@ -178,9 +189,7 @@ class PdfInvoiceService{
   static Widget buildSupplierddress() => Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Text("Kittob",style: TextStyle(fontWeight: FontWeight.bold)),
-      SizedBox(height: 1 * PdfPageFormat.mm),
-      Text("Hussain Town Street"),
+      Text("INVOICE ID 16343434454",style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold)),
     ],
   );
 

@@ -57,7 +57,6 @@ class _ListOfInvoiceState extends State<ListOfInvoice> {
               title: "Your Details",
               subtitle: "aadd your business details",
               icon: Icons.home_work_outlined,
-              // trailing: ,
               onTap: (){
                 Get.toNamed(AppRoutes.yourDetails);
               },

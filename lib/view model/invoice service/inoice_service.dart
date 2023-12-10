@@ -21,7 +21,7 @@ class InvoiceService extends GetxController{
   Rx<TextEditingController> itemCost = TextEditingController().obs;
   Rx<TextEditingController> itemQuantity = TextEditingController().obs;
   Rx<TextEditingController> note = TextEditingController().obs;
-
+  static late String? businessId;
   final imagePicker = Get.put(ImagePickerService());
 
   RxBool loading = false.obs;
@@ -48,9 +48,9 @@ class InvoiceService extends GetxController{
     );
     try{
       setLoading(true);
-      await AppApiService.invoice.doc(formattedDate).set(businessModel.toJson()).then((value){
+      await AppApiService.invoice.add(businessModel.toJson()).then((value){
+        businessId = value.id;
         setLoading(false);
-
       }).onError((error, stackTrace){
         setLoading(false);
       });
@@ -68,7 +68,7 @@ class InvoiceService extends GetxController{
     );
     setLoading(true);
     try{
-      await AppApiService.invoice.doc(formattedDate).update(payerModel.toJson()).then((value){
+      await AppApiService.invoice.doc(businessId).update(payerModel.toJson()).then((value){
         setLoading(false);
       }).onError((error, stackTrace){
         setLoading(false);
@@ -79,8 +79,11 @@ class InvoiceService extends GetxController{
   }
 
   paymentService(BuildContext context)async{
-    await AppApiService.invoice.doc(formattedDate).update({
+    await AppApiService.invoice.doc(businessId).update({
       "paymentDescription" : note.value.text,
+    }).then((value){
+      note.value.clear();
+      Get.back();
     });
   }
 
