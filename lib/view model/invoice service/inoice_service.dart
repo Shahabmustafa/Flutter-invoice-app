@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/model/business_model.dart';
@@ -21,7 +22,7 @@ class InvoiceService extends GetxController{
   Rx<TextEditingController> itemCost = TextEditingController().obs;
   Rx<TextEditingController> itemQuantity = TextEditingController().obs;
   Rx<TextEditingController> note = TextEditingController().obs;
-  static late String? businessId;
+  String? businessId;
   final imagePicker = Get.put(ImagePickerService());
 
   RxBool loading = false.obs;
@@ -30,12 +31,8 @@ class InvoiceService extends GetxController{
     loading.value = value;
   }
 
-  static var date = DateTime.now();
-  var formattedDate = "${date.day}-${date.month}-${date.year}";
-
-
   businessService(BuildContext context)async{
-    firebase_storage.Reference storageRef = firebase_storage.FirebaseStorage.instance.ref(AppApiService.userId).child(formattedDate).child("businessLogo");
+    firebase_storage.Reference storageRef = firebase_storage.FirebaseStorage.instance.ref("image").child("businessLogo");
     firebase_storage.UploadTask uploadTask = storageRef.putFile(File((imagePicker.imagePath.value.toString())));
     await Future.value(uploadTask);
     final newUrl = await storageRef.getDownloadURL();
@@ -48,9 +45,10 @@ class InvoiceService extends GetxController{
     );
     try{
       setLoading(true);
-      await AppApiService.invoice.add(businessModel.toJson()).then((value){
+      await AppApiService.invoice.add(businessModel.toJson()).then((value)async{
         businessId = value.id;
         setLoading(false);
+        Get.back();
       }).onError((error, stackTrace){
         setLoading(false);
       });
@@ -70,6 +68,7 @@ class InvoiceService extends GetxController{
     try{
       await AppApiService.invoice.doc(businessId).update(payerModel.toJson()).then((value){
         setLoading(false);
+        Get.back();
       }).onError((error, stackTrace){
         setLoading(false);
       });
@@ -86,5 +85,28 @@ class InvoiceService extends GetxController{
       Get.back();
     });
   }
+
+  businessItem(BuildContext context)async{
+    var a = int.parse(itemCost.value.text);
+    var b = int.parse(itemQuantity.value.text);
+    var total = a * b;
+    try{
+      await AppApiService.invoice.doc(businessId).update({
+        "array" : FieldValue.arrayUnion(
+          [
+            itemName.value.text,
+            itemCost.value.text,
+            itemQuantity.value.text,
+            total,
+          ],
+        ),
+      }).then((value){
+        Get.back();
+      });
+    }catch(e){
+
+    }
+  }
+
 
 }

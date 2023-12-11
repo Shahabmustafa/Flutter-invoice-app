@@ -77,9 +77,11 @@ class _SignaturePageState extends State<SignaturePage> {
       );
       ByteData? byteData = await image!.toByteData(format: ui.ImageByteFormat.png);
       Uint8List imageData = byteData!.buffer.asUint8List();
+      var date = DateTime.now();
+      var formattedDate = "${date.day}-${date.month}-${date.year}";
       // Upload image data to Firebase Storage
       FirebaseStorage storage = FirebaseStorage.instance;
-      Reference ref = storage.ref(AppApiService.userId).child().child("signature");
+      Reference ref = storage.ref(AppApiService.userId).child(formattedDate).child("signature");
       UploadTask uploadTask = ref.putData(imageData);
       await uploadTask.whenComplete(() => null);
 

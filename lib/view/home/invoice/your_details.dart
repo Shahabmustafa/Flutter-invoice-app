@@ -85,7 +85,6 @@ class _YourDetailsState extends State<YourDetails> {
                 loading: invoiceService.loading.value,
                 onTap: (){
                   if(_key.currentState!.validate()){
-                    Get.back();
                     invoiceService.businessService(context);
                   }
                 },

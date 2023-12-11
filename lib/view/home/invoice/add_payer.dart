@@ -86,7 +86,6 @@ class _AddPayerState extends State<AddPayer> {
                     onTap: ()async{
                       if(_key.currentState!.validate()){
                         invoiceService.payerService(context);
-                        Get.back();
                       }
                     },
                   ),
