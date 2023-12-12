@@ -1,9 +1,5 @@
 import 'dart:io';
-import 'dart:ui';
-import 'package:flutter/services.dart';
 import 'package:flutter_invoice_app/model/invoice_model.dart';
-import 'package:flutter_invoice_app/res/colors/app_colors.dart';
-import 'package:flutter_invoice_app/utils/utils.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
@@ -22,11 +18,11 @@ class PdfInvoiceService{
             SizedBox(
               height: 3 * PdfPageFormat.cm,
             ),
-            buildTitle(),
+            buildTitle(invoiceModel),
             SizedBox(
               height: 3 * PdfPageFormat.cm,
             ),
-            buildInvoice(),
+            buildInvoice(itemModel),
             Divider(),
             buildTotal(),
             ],
@@ -37,14 +33,12 @@ class PdfInvoiceService{
   }
 
 
-  static Widget buildTitle(){
-
+  static Widget buildTitle(InvoiceModel invoiceModel){
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // pw.Image.asset(""),
         Text(
-            "Kitoob",
+            invoiceModel.businessName.toString(),
             style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold
@@ -54,19 +48,19 @@ class PdfInvoiceService{
           height: 0.1 * PdfPageFormat.cm,
         ),
         Text(
-          "Company Email",
+          invoiceModel.businessEmail.toString(),
         ),
         SizedBox(
           height: 0.1 * PdfPageFormat.cm,
         ),
         Text(
-          "Company Email",
+          invoiceModel.businessAddress.toString(),
         ),
       ],
     );
   }
 
-  static Widget buildInvoice(){
+  static Widget buildInvoice(ItemModel itemModel){
     final header = [
       "Item Name",
       "Item Cost",
@@ -74,49 +68,10 @@ class PdfInvoiceService{
       "Total",
     ];
 
-    final data = [
-      "Milk",
-      "100",
-      "5",
-      "500",
-    ];
-
-    final dataOne = [
-      "Surf",
-      "100",
-      "1",
-      "100",
-    ];
-    final dataTwo = [
-      "Juice",
-      "200",
-      "6",
-      "1200",
-    ];
-
-    final dataThree = [
-      "ICE Cream",
-      "50",
-      "10",
-      "500",
-    ];
-
-    final dataFour = [
-      "Tea",
-      "100",
-      "10",
-      "1000",
-    ];
 
     return Table.fromTextArray(
       headers: header,
-      data: [
-        data,
-        dataOne,
-        dataTwo,
-        dataThree,
-        dataFour,
-      ],
+      data: [],
       border: null,
       headerStyle: TextStyle(fontWeight: FontWeight.bold,color: PdfColor.fromInt(0xFFFFFF)),
       headerDecoration: BoxDecoration(color: PdfColor.fromInt(0xFF59e1d6)),

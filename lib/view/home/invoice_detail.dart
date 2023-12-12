@@ -12,6 +12,7 @@ class InvoiceDetail extends StatelessWidget {
   InvoiceDetail({Key? key,required this.invoiceModel}) : super(key: key);
   InvoiceModel invoiceModel;
   ItemModel? itemModel;
+  final item = FirebaseFirestore.instance.collection("users").doc(AppApiService.userId).collection("items");
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,7 +40,7 @@ class InvoiceDetail extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
               child: Container(
                 padding: EdgeInsets.only(left: 10),
-                height: 100,
+                height: 80,
                 width: double.infinity,
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -61,8 +62,8 @@ class InvoiceDetail extends StatelessWidget {
                         ClipRRect(
                           borderRadius: BorderRadius.circular(100),
                           child: CachedNetworkImage(
-                            width: 70,
-                            height: 70,
+                            width: 60,
+                            height: 60,
                             fit: BoxFit.fill,
                             imageUrl: invoiceModel.businessLogo.toString(),
                             progressIndicatorBuilder: (context, url, downloadProgress) =>
@@ -110,7 +111,7 @@ class InvoiceDetail extends StatelessWidget {
                 height: 200,
                 width: double.infinity,
                 child: StreamBuilder(
-                  stream: FirebaseFirestore.instance.collection("users").doc(AppApiService.userId).collection("items").snapshots(),
+                  stream: item.snapshots(),
                   builder: (context,snapshot){
                     if(snapshot.hasData){
                       return ListView.builder(
@@ -143,6 +144,36 @@ class InvoiceDetail extends StatelessWidget {
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 children: [
+                                  Container(
+                                    height: 30,
+                                    decoration: BoxDecoration(
+                                      color: AppColor.primaryColor,
+                                      borderRadius: BorderRadius.only(
+                                        bottomLeft: Radius.circular(10),
+                                        bottomRight: Radius.circular(10),
+                                      ),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(right: 5),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        children: [
+                                          InkWell(
+                                            onTap: (){
+                                              item.doc(snapshot.data!.docs[index].id).delete();
+                                            },
+                                              child: Center(
+                                                child: Icon(
+                                                  Icons.close,
+                                                  color: AppColor.whiteColor,
+                                                  size: 20,
+                                                ),
+                                              ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                                     children: [
@@ -200,7 +231,10 @@ class InvoiceDetail extends StatelessWidget {
                                       ),
                                     ],
                                   ),
-                                  Divider(),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                                    child: Divider(color: AppColor.primaryColor,),
+                                  ),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                                     children: [
@@ -233,45 +267,93 @@ class InvoiceDetail extends StatelessWidget {
                 ),
               ),
             ),
-            ListTile(
-              title: Text("Payer Name"),
-              subtitle: Text(invoiceModel.payerName.toString()),
+            SizedBox(
+              height: 10,
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Divider(),
-            ),
-            ListTile(
-              title: Text("Payer Email"),
-              subtitle: Text(invoiceModel.payerEmail.toString()),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Divider(),
-            ),
-            ListTile(
-              title: Text("Payer Phone Number"),
-              subtitle: Text(invoiceModel.payerNumber.toString()),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Divider(),
-            ),
-            ListTile(
-              title: Text("Payer Address"),
-              subtitle: Text(invoiceModel.payerAddress.toString()),
-            ),
-            CachedNetworkImage(
-              width: 200,
-              height: 100,
-              fit: BoxFit.fill,
-              imageUrl: invoiceModel.signature.toString(),
-              progressIndicatorBuilder: (context, url, downloadProgress) =>
-                  CircularProgressIndicator(value: downloadProgress.progress),
-              errorWidget: (context, url, error) => Icon(Icons.error),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Container(
+                padding: EdgeInsets.only(left: 10,right: 10),
+                height: 150,
+                decoration: BoxDecoration(
+                  color: AppColor.whiteColor,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                        blurRadius: 0.1,
+                        spreadRadius: 0.1,
+                        blurStyle: BlurStyle.solid,
+                        offset: Offset(0.004,0.5)
+                      ),
+                  ],
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("Payer Name",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 17),),
+                        Text(invoiceModel.payerName.toString(),style: TextStyle(fontWeight: FontWeight.w500,fontSize: 17),),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("Payer Email",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 17),),
+                        Text(invoiceModel.payerEmail.toString(),style: TextStyle(fontWeight: FontWeight.w500,fontSize: 17),),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("Payer Number",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 17),),
+                        Text(invoiceModel.payerNumber.toString(),style: TextStyle(fontWeight: FontWeight.w500,fontSize: 17),),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("Payer Address",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 17),),
+                        Text(invoiceModel.payerAddress.toString(),style: TextStyle(fontWeight: FontWeight.w500,fontSize: 17),),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
             ),
             SizedBox(
               height: 20,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Container(
+                height: 150,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                          blurRadius: 0.1,
+                          spreadRadius: 0.1,
+                          blurStyle: BlurStyle.solid,
+                          offset: Offset(0.004,0.5)
+                      ),
+                    ]
+                ),
+                child: Center(
+                  child: CachedNetworkImage(
+                    width: 200,
+                    height: 100,
+                    fit: BoxFit.fill,
+                    imageUrl: invoiceModel.signature.toString(),
+                    progressIndicatorBuilder: (context, url, downloadProgress) =>
+                        CircularProgressIndicator(value: downloadProgress.progress),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                  ),
+                ),
+              ),
             ),
           ],
         ),
