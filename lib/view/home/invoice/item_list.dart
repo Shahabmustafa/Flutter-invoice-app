@@ -1,8 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/res/colors/app_colors.dart';
 import 'package:get/get.dart';
+import '../../../res/app_api/app_api_service.dart';
 import '../../../res/component/app_button.dart';
 import '../../../res/component/invoice_text_field.dart';
+import '../../../res/component/table_widget.dart';
 import '../../../view model/invoice service/inoice_service.dart';
 
 class ItemList extends StatefulWidget {
@@ -23,30 +26,34 @@ class _ItemListState extends State<ItemList> {
       appBar: AppBar(
         title: Text("List of Item"),
       ),
-      // body: StreamBuilder(
-      //   stream: AppApiService.addItem.snapshots(),
-      //   builder: (context,snapshot){
-      //     if(snapshot.data != null){
-      //       return ListView.builder(
-      //         itemCount: snapshot.data!.docs.length,
-      //         itemBuilder: (context,index){
-      //           var data = snapshot.data!.docs[index];
-      //           return TableWidget(
-      //               itemName: data["itemName"],
-      //               itemCost: data["itemCost"],
-      //               itemQuantity: data["quantity"],
-      //               total: data["total"].toString(),
-      //               onTap: (){
-      //                 AppApiService.addItem.doc(snapshot.data!.docs[index].id).delete();
-      //               }
-      //           );
-      //         },
-      //       );
-      //     }else{
-      //       return CircularProgressIndicator();
-      //     }
-      //   },
-      // ),
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance.collection('users').doc(AppApiService.userId).collection("items").snapshots(),
+        builder: (context,snapshot){
+          if(snapshot.data != null){
+            return ListView.builder(
+              itemCount: snapshot.data!.docs.length,
+              itemBuilder: (context,index){
+                var data = snapshot.data!.docs[index];
+                return TableWidget(
+                    itemName: data["itemName"],
+                    itemCost: data["itemCost"],
+                    itemQuantity: data["itemQuantity"],
+                    total: data["total"].toString(),
+                    onTap: (){
+                      FirebaseFirestore.instance.collection('users')
+                          .doc(AppApiService.userId)
+                          .collection("items")
+                          .doc(snapshot.data!.docs[index].id)
+                          .delete();
+                    }
+                );
+              },
+            );
+          }else{
+            return CircularProgressIndicator();
+          }
+        },
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: (){
           showModalBottomSheet(

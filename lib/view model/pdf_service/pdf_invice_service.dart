@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/services.dart';
+import 'package:flutter_invoice_app/model/invoice_model.dart';
 import 'package:flutter_invoice_app/res/colors/app_colors.dart';
 import 'package:flutter_invoice_app/utils/utils.dart';
 import 'package:open_file/open_file.dart';
@@ -8,10 +9,11 @@ import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 import 'package:pdf/widgets.dart' as pw;
+import '../../model/item_model.dart';
 
 class PdfInvoiceService{
 
-  static Future<File> generate()async{
+  static Future<File> generate(InvoiceModel invoiceModel,ItemModel itemModel)async{
     final pdf = Document();
     pdf.addPage(
       MultiPage(

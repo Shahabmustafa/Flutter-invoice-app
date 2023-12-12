@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
 import 'package:flutter_invoice_app/res/component/app_button.dart';
 import 'package:flutter_invoice_app/utils/utils.dart';
+import 'package:flutter_invoice_app/view%20model/invoice%20service/inoice_service.dart';
+import 'package:get/get.dart';
 import 'package:hand_signature/signature.dart';
 import 'dart:ui' as ui;
 
@@ -17,6 +19,7 @@ class SignaturePage extends StatefulWidget {
 }
 
 class _SignaturePageState extends State<SignaturePage> {
+  final signature = Get.put(InvoiceService());
   final SignatureController _controller = SignatureController(
     penStrokeWidth: 5,
     penColor: Colors.black,
@@ -56,9 +59,10 @@ class _SignaturePageState extends State<SignaturePage> {
                 height: size.height * 0.05,
                 width: size.width * 0.4,
                 title: "Save",
+                loading: signature.loading.value,
                 onTap: (){
-                  uploadSignatureToFirebase();
-                },
+                  signature.uploadSignatureToFirebase(_controller);
+                  },
               ),
             ],
           ),
@@ -66,7 +70,7 @@ class _SignaturePageState extends State<SignaturePage> {
       ),
     );
   }
-  Future<void> uploadSignatureToFirebase() async {
+  Future<void> uploadSignatureToFirebase(String docId) async {
     try {
       // Convert signature to image
       ui.Image? image = await _controller.toImage(
@@ -77,16 +81,14 @@ class _SignaturePageState extends State<SignaturePage> {
       );
       ByteData? byteData = await image!.toByteData(format: ui.ImageByteFormat.png);
       Uint8List imageData = byteData!.buffer.asUint8List();
-      var date = DateTime.now();
-      var formattedDate = "${date.day}-${date.month}-${date.year}";
       // Upload image data to Firebase Storage
       FirebaseStorage storage = FirebaseStorage.instance;
-      Reference ref = storage.ref(AppApiService.userId).child(formattedDate).child("signature");
+      Reference ref = storage.ref("signature");
       UploadTask uploadTask = ref.putData(imageData);
       await uploadTask.whenComplete(() => null);
 
       String imageUrl = await ref.getDownloadURL();
-      await AppApiService.invoice.doc(formattedDate).update({
+      await AppApiService.invoice.doc(docId).update({
         "signature" : imageUrl,
       });
       Utils.flutterToast('Signature uploaded to Firebase Storage: $imageUrl');
