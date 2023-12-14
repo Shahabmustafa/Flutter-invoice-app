@@ -1,6 +1,7 @@
 import 'package:flutter_invoice_app/view/auth/login_screen.dart';
 import 'package:flutter_invoice_app/view/auth/sign_up_screen.dart';
 import 'package:flutter_invoice_app/view/home/invoice/add_payer.dart';
+import 'package:flutter_invoice_app/view/home/invoice/customer/add_customer.dart';
 import 'package:flutter_invoice_app/view/home/invoice/item_list.dart';
 import 'package:flutter_invoice_app/view/home/invoice/list_of_invoice.dart';
 import 'package:flutter_invoice_app/view/home/invoice/signature_screen.dart';
@@ -8,7 +9,7 @@ import 'package:flutter_invoice_app/view/home/invoice/user_profile/setting/chang
 import 'package:flutter_invoice_app/view/home/invoice/user_profile/setting/languages_change.dart';
 import 'package:flutter_invoice_app/view/home/invoice/user_profile/setting/setting.dart';
 import 'package:flutter_invoice_app/view/home/invoice/user_profile/user_profile.dart';
-import 'package:flutter_invoice_app/view/home/invoice/your_details.dart';
+import 'package:flutter_invoice_app/view/home/invoice/customer/customer_detail.dart';
 import 'package:flutter_invoice_app/view/home/invoice_detail.dart';
 import 'package:flutter_invoice_app/view/home/list_invoice.dart';
 import 'package:flutter_invoice_app/view/splash/splash_screen.dart';
@@ -29,6 +30,7 @@ class AppRoutes{
   static const String setting = "/setting_routes";
   static const String changeLanguage = "/change_languages_routes";
   static const String changeProfileDetail = "/change_profile_detail";
+  static const String addCustomer = "/add_customer";
 
   static appRoutes() => [
     GetPage(
@@ -63,7 +65,7 @@ class AppRoutes{
     ),
     GetPage(
       name: yourDetails,
-      page: () => YourDetails(),
+      page: () => CustomerDetail(),
       transition: Transition.rightToLeftWithFade,
       transitionDuration: const Duration(microseconds: 250),
     ),
@@ -106,6 +108,12 @@ class AppRoutes{
     GetPage(
       name: changeProfileDetail,
       page: () => ChangeProfileDetail(),
+      transition: Transition.rightToLeftWithFade,
+      transitionDuration: const Duration(microseconds: 250),
+    ),
+    GetPage(
+      name: addCustomer,
+      page: () => AddCustomer(),
       transition: Transition.rightToLeftWithFade,
       transitionDuration: const Duration(microseconds: 250),
     ),

@@ -135,7 +135,7 @@ class _UserProfileState extends State<UserProfile> {
                 Card(
                   child: ListTile(
                     leading: Icon(Icons.phone),
-                    title: Text(data["phoneNumber"]),
+                    title: data["phoneNumber"].toString().isEmpty ? Text("03***********") : Text(data["phoneNumber"]),
                   ),
                 ),
               ],

@@ -54,8 +54,8 @@ class _ListOfInvoiceState extends State<ListOfInvoice> {
               height: size.height * 0.02,
             ),
             InvoiceBox(
-              title: "Your Details",
-              subtitle: "aadd your business details",
+              title: "Customer",
+              subtitle: "add your Customer details",
               icon: Icons.home_work_outlined,
               onTap: (){
                 Get.toNamed(AppRoutes.yourDetails);
