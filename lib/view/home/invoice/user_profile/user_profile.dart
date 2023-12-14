@@ -4,6 +4,10 @@ import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
 import 'package:flutter_invoice_app/res/colors/app_colors.dart';
 import 'package:flutter_invoice_app/res/routes/routes.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+
+import '../../../../view model/image_picker/image_picker_service.dart';
+import '../../../../view model/user_service/user_image_service.dart';
 
 class UserProfile extends StatefulWidget {
   const UserProfile({Key? key}) : super(key: key);
@@ -13,6 +17,8 @@ class UserProfile extends StatefulWidget {
 }
 
 class _UserProfileState extends State<UserProfile> {
+  final profileUpdate = Get.put(UserProfileService());
+  final pickImage = Get.put(ImagePickerService());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,7 +59,9 @@ class _UserProfileState extends State<UserProfile> {
                               title: Text("Camera"),
                               trailing: Icon(Icons.arrow_forward_ios),
                               onTap: (){
-
+                                pickImage.getImage(context, ImageSource.camera).then((value){
+                                  profileUpdate.storeImage();
+                                });
                               },
                             ),
                             ListTile(
@@ -61,7 +69,9 @@ class _UserProfileState extends State<UserProfile> {
                               title: Text("Gallery"),
                               trailing: Icon(Icons.arrow_forward_ios),
                               onTap: (){
-
+                                pickImage.getImage(context, ImageSource.gallery).then((value){
+                                  profileUpdate.storeImage();
+                                });
                               },
                             ),
                           ],
@@ -117,6 +127,15 @@ class _UserProfileState extends State<UserProfile> {
                   child: ListTile(
                     leading: Icon(Icons.alternate_email),
                     title: Text(data["email"]),
+                  ),
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                Card(
+                  child: ListTile(
+                    leading: Icon(Icons.phone),
+                    title: Text(data["phoneNumber"]),
                   ),
                 ),
               ],

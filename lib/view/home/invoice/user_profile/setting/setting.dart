@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
 import 'package:flutter_invoice_app/res/colors/app_colors.dart';
+import 'package:flutter_invoice_app/res/routes/routes.dart';
 import 'package:flutter_invoice_app/utils/utils.dart';
 import 'package:get/get.dart';
 
@@ -31,7 +32,7 @@ class _SettingPageState extends State<SettingPage> {
               title: Text("Change Profile Detail"),
               trailing: Icon(Icons.arrow_forward_ios),
               onTap: (){
-
+                Get.toNamed(AppRoutes.changeProfileDetail);
               },
             ),
           ),

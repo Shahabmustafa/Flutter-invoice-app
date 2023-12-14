@@ -1,9 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_invoice_app/model/user_model.dart';
 import 'package:flutter_invoice_app/res/colors/app_colors.dart';
 import 'package:flutter_invoice_app/res/component/app_button.dart';
 import 'package:flutter_invoice_app/res/component/invoice_text_field.dart';
 import 'package:flutter_invoice_app/res/component/social_media_button.dart';
 import 'package:flutter_invoice_app/res/routes/routes.dart';
+import 'package:flutter_invoice_app/utils/utils.dart';
+import 'package:flutter_invoice_app/view%20model/auth%20service/google_sign_in.dart';
 import 'package:flutter_invoice_app/view%20model/auth%20service/login_service.dart';
 import 'package:get/get.dart';
 
@@ -177,7 +181,25 @@ class _LoginPageState extends State<LoginPage> {
                     SocialMediaButton(
                       imageUrl: AssetsUrl.gmailLogo,
                       onTap: (){
-                        Get.toNamed(AppRoutes.listInvoice);
+                        var date = DateTime.now();
+                        var specificId = date.millisecondsSinceEpoch;
+                        googleSignIn().signInWithGoogle().then((value){
+                          UserModel userModel = UserModel(
+                            uid: value.user!.uid,
+                            userName: value.user!.displayName,
+                            profileImage: value.user!.photoURL,
+                            email: value.user!.email,
+                            specificId: specificId.toString(),
+                          );
+                          FirebaseFirestore.instance
+                              .collection("users")
+                              .doc(value.user!.uid)
+                              .set(userModel.toJson()).then((value){
+                            Get.toNamed(AppRoutes.listInvoice);
+                          });
+                        }).onError((error, stackTrace){
+                          Utils.flutterToast(error.toString());
+                        });
                       },
                     ),
                     SocialMediaButton(
