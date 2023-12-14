@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
 import 'package:flutter_invoice_app/res/component/app_button.dart';
 import 'package:flutter_invoice_app/utils/utils.dart';
-import 'package:flutter_invoice_app/view%20model/invoice%20service/inoice_service.dart';
 import 'package:get/get.dart';
 import 'package:hand_signature/signature.dart';
 import 'dart:ui' as ui;
@@ -19,7 +18,6 @@ class SignaturePage extends StatefulWidget {
 }
 
 class _SignaturePageState extends State<SignaturePage> {
-  final signature = Get.put(InvoiceService());
   final SignatureController _controller = SignatureController(
     penStrokeWidth: 5,
     penColor: Colors.black,
@@ -59,9 +57,8 @@ class _SignaturePageState extends State<SignaturePage> {
                 height: size.height * 0.05,
                 width: size.width * 0.4,
                 title: "Save",
-                loading: signature.loading.value,
+                // loading: signature.loading.value,
                 onTap: (){
-                  signature.uploadSignatureToFirebase(_controller);
                   },
               ),
             ],

@@ -2,10 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/res/colors/app_colors.dart';
 import 'package:flutter_invoice_app/res/routes/routes.dart';
-import 'package:flutter_invoice_app/view%20model/invoice%20service/Item_service.dart';
 import 'package:get/get.dart';
 import '../../../../res/app_api/app_api_service.dart';
-import '../../../../view model/invoice service/inoice_service.dart';
 
 class ItemList extends StatefulWidget {
   const ItemList({Key? key}) : super(key: key);

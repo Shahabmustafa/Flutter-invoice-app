@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_invoice_app/view%20model/invoice%20service/customer_service.dart';
 import 'package:get/get.dart';
-import '../../../res/component/app_button.dart';
-import '../../../res/component/invoice_text_field.dart';
-import '../../../view model/invoice service/inoice_service.dart';
+import '../../../../res/component/app_button.dart';
+import '../../../../res/component/invoice_text_field.dart';
 
 class AddCustomer extends StatefulWidget {
   const AddCustomer({Key? key}) : super(key: key);
@@ -13,7 +13,7 @@ class AddCustomer extends StatefulWidget {
 
 class _AddCustomerState extends State<AddCustomer> {
   final _key = GlobalKey<FormState>();
-  final invoiceService = Get.put(InvoiceService());
+  final customerService = Get.put(CustomerService());
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,7 @@ class _AddCustomerState extends State<AddCustomer> {
               ),
               InvoiceTextField(
                 title: "Customer Name",
-                controller: invoiceService.payerName.value,
+                controller: customerService.customerName.value,
                 validator: (value){
                   return value!.isEmpty ? "Enter Your Customer Name" : null;
                 },
@@ -43,7 +43,7 @@ class _AddCustomerState extends State<AddCustomer> {
               ),
               InvoiceTextField(
                 title: "Email Address",
-                controller: invoiceService.payerEmail.value,
+                controller: customerService.customerEmail.value,
                 keyboardType: TextInputType.emailAddress,
                 validator: (value){
                   return value!.isEmpty ? "Enter Your Email Address" : null;
@@ -53,7 +53,7 @@ class _AddCustomerState extends State<AddCustomer> {
                 height: size.height * 0.02,
               ),
               InvoiceTextField(
-                controller: invoiceService.payerNumber.value,
+                controller: customerService.customerPhone.value,
                 title: "Phone Number",
                 keyboardType: TextInputType.phone,
                 validator: (value){
@@ -65,7 +65,7 @@ class _AddCustomerState extends State<AddCustomer> {
               ),
               InvoiceTextField(
                 title: "Address",
-                controller: invoiceService.payerAddress.value,
+                controller: customerService.customerAddress.value,
                 keyboardType: TextInputType.multiline,
                 maxLines: 5,
                 validator: (value){
@@ -80,10 +80,10 @@ class _AddCustomerState extends State<AddCustomer> {
                     title: "Save",
                     height: size.height * 0.05,
                     width: size.width * 0.94,
-                    loading: invoiceService.loading.value,
+                    loading: customerService.loading.value,
                     onTap: ()async{
                       if(_key.currentState!.validate()){
-
+                        customerService.customerService(context);
                       }
                     },
                   ),
