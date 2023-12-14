@@ -2,15 +2,15 @@ class ItemModel {
   String? itemName;
   String? itemCost;
   String? itemQuantity;
-  String? total;
+  String? WholePrice;
 
-  ItemModel({this.itemName, this.itemCost, this.itemQuantity, this.total});
+  ItemModel({this.itemName, this.itemCost, this.itemQuantity, this.WholePrice});
 
   ItemModel.fromJson(Map<String, dynamic> json) {
     itemName = json['itemName'];
     itemCost = json['itemCost'];
     itemQuantity = json['itemQuantity'];
-    total = json['total'];
+    WholePrice = json['WholePrice'];
   }
 
   Map<String, dynamic> toJson() {
@@ -18,7 +18,7 @@ class ItemModel {
     data['itemName'] = this.itemName;
     data['itemCost'] = this.itemCost;
     data['itemQuantity'] = this.itemQuantity;
-    data['total'] = this.total;
+    data['WholePrice'] = this.WholePrice;
     return data;
   }
 }

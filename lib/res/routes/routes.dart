@@ -1,16 +1,14 @@
 import 'package:flutter_invoice_app/view/auth/login_screen.dart';
 import 'package:flutter_invoice_app/view/auth/sign_up_screen.dart';
-import 'package:flutter_invoice_app/view/home/invoice/add_payer.dart';
-import 'package:flutter_invoice_app/view/home/invoice/customer/add_customer.dart';
-import 'package:flutter_invoice_app/view/home/invoice/item_list.dart';
+import 'package:flutter_invoice_app/view/home/invoice/add_customer.dart';
+import 'package:flutter_invoice_app/view/home/invoice/item/add_item.dart';
+import 'package:flutter_invoice_app/view/home/invoice/item/item_list.dart';
 import 'package:flutter_invoice_app/view/home/invoice/list_of_invoice.dart';
 import 'package:flutter_invoice_app/view/home/invoice/signature_screen.dart';
 import 'package:flutter_invoice_app/view/home/invoice/user_profile/setting/change_profile_detail.dart';
 import 'package:flutter_invoice_app/view/home/invoice/user_profile/setting/languages_change.dart';
 import 'package:flutter_invoice_app/view/home/invoice/user_profile/setting/setting.dart';
 import 'package:flutter_invoice_app/view/home/invoice/user_profile/user_profile.dart';
-import 'package:flutter_invoice_app/view/home/invoice/customer/customer_detail.dart';
-import 'package:flutter_invoice_app/view/home/invoice_detail.dart';
 import 'package:flutter_invoice_app/view/home/list_invoice.dart';
 import 'package:flutter_invoice_app/view/splash/splash_screen.dart';
 import 'package:get/get.dart';
@@ -22,9 +20,9 @@ class AppRoutes{
   static const String signUp = "/signup_routes";
   static const String listInvoice = "/list_routes";
   static const String listofInvoice = "/list_of_invoice_routes";
-  static const String yourDetails = "/your_details_routes";
   static const String addPayer = "/add_payer_routes";
   static const String itemList = "/item_list_routes";
+  static const String addItem = "/add_item";
   static const String signature = "/signature_routes";
   static const String userProfile = "/user_profile_routes";
   static const String setting = "/setting_routes";
@@ -64,14 +62,8 @@ class AppRoutes{
       transitionDuration: const Duration(microseconds: 250),
     ),
     GetPage(
-      name: yourDetails,
-      page: () => CustomerDetail(),
-      transition: Transition.rightToLeftWithFade,
-      transitionDuration: const Duration(microseconds: 250),
-    ),
-    GetPage(
       name: addPayer,
-      page: () => AddPayer(),
+      page: () => AddCustomer(),
       transition: Transition.rightToLeftWithFade,
       transitionDuration: const Duration(microseconds: 250),
     ),
@@ -114,6 +106,12 @@ class AppRoutes{
     GetPage(
       name: addCustomer,
       page: () => AddCustomer(),
+      transition: Transition.rightToLeftWithFade,
+      transitionDuration: const Duration(microseconds: 250),
+    ),
+    GetPage(
+      name: addItem,
+      page: () => AddItem(),
       transition: Transition.rightToLeftWithFade,
       transitionDuration: const Duration(microseconds: 250),
     ),

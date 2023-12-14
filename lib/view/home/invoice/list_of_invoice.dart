@@ -49,7 +49,6 @@ class _ListOfInvoiceState extends State<ListOfInvoice> {
             SizedBox(
               height: size.height * 0.02,
             ),
-            UserCard(),
             SizedBox(
               height: size.height * 0.02,
             ),
@@ -58,7 +57,7 @@ class _ListOfInvoiceState extends State<ListOfInvoice> {
               subtitle: "add your Customer details",
               icon: Icons.home_work_outlined,
               onTap: (){
-                Get.toNamed(AppRoutes.yourDetails);
+                Get.toNamed(AppRoutes.addCustomer);
               },
             ),
             SizedBox(

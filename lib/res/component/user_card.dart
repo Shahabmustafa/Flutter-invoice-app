@@ -68,7 +68,6 @@ class UserCard extends StatelessWidget {
           }else{
             return InkWell(
               onTap: (){
-                Get.toNamed(AppRoutes.userProfile);
               },
               child: Container(
                 height: size.height * 0.1,

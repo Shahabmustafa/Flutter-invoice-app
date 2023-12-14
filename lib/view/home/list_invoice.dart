@@ -9,7 +9,6 @@ import 'package:flutter_invoice_app/view/home/invoice_detail.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../res/component/image_convert_to_icons.dart';
-import '../../view model/pdf_service/pdf_invice_service.dart';
 
 class ListInvoice extends StatefulWidget {
   const ListInvoice({Key? key}) : super(key: key);
@@ -25,19 +24,20 @@ class _ListInvoiceState extends State<ListInvoice> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Invoice"),
-        automaticallyImplyLeading: false,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: IconWidget(
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            buildProfile(),
+            Text("Invoice"),
+            IconWidget(
               imageUrl: AssetsUrl.addFile,
               onTap: (){
                 Get.toNamed(AppRoutes.listofInvoice);
               },
             ),
-          ),
-        ],
+          ],
+        ),
+        automaticallyImplyLeading: false,
       ),
       body: StreamBuilder(
         stream: AppApiService.invoice.snapshots(),
@@ -108,6 +108,34 @@ class _ListInvoiceState extends State<ListInvoice> {
           }
         },
       ),
+    );
+  }
+  static Widget buildProfile(){
+    return StreamBuilder(
+        stream: AppApiService.firestore.collection("users").doc(AppApiService.userId).snapshots(),
+        builder: (context,snapshot){
+          if(snapshot.hasData){
+            Map<String,dynamic> data = snapshot.data!.data() as Map<String,dynamic>;
+            return  GestureDetector(
+              onTap: (){
+                Get.toNamed(AppRoutes.userProfile);
+              },
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(100),
+                child: CachedNetworkImage(
+                  width: 40,
+                  height: 40,
+                  imageUrl: data["profileImage"],
+                  progressIndicatorBuilder: (context, url, downloadProgress) =>
+                      CircularProgressIndicator(value: downloadProgress.progress),
+                  errorWidget: (context, url, error) => Icon(Icons.error),
+                ),
+              ),
+            );
+          }else{
+            return SizedBox();
+          }
+        },
     );
   }
 }

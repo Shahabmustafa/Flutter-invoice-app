@@ -1,20 +1,17 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../../res/component/app_button.dart';
 import '../../../res/component/invoice_text_field.dart';
 import '../../../view model/invoice service/inoice_service.dart';
 
-class AddPayer extends StatefulWidget {
-  const AddPayer({Key? key}) : super(key: key);
+class AddCustomer extends StatefulWidget {
+  const AddCustomer({Key? key}) : super(key: key);
 
   @override
-  State<AddPayer> createState() => _AddPayerState();
+  State<AddCustomer> createState() => _AddCustomerState();
 }
 
-class _AddPayerState extends State<AddPayer> {
+class _AddCustomerState extends State<AddCustomer> {
   final _key = GlobalKey<FormState>();
   final invoiceService = Get.put(InvoiceService());
 
@@ -23,21 +20,22 @@ class _AddPayerState extends State<AddPayer> {
     final size = MediaQuery.sizeOf(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text("New Payer"),
+        title: Text("New Customer"),
       ),
       body: SingleChildScrollView(
         child: Form(
           key: _key,
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(
-                height: size.height * 0.2,
+                height: size.height * 0.15,
               ),
               InvoiceTextField(
-                title: "Payer Name",
+                title: "Customer Name",
                 controller: invoiceService.payerName.value,
                 validator: (value){
-                  return value!.isEmpty ? "Enter Your Payer Name" : null;
+                  return value!.isEmpty ? "Enter Your Customer Name" : null;
                 },
               ),
               SizedBox(
@@ -85,7 +83,7 @@ class _AddPayerState extends State<AddPayer> {
                     loading: invoiceService.loading.value,
                     onTap: ()async{
                       if(_key.currentState!.validate()){
-                        invoiceService.payerService(context);
+
                       }
                     },
                   ),

@@ -93,36 +93,36 @@ class InvoiceService extends GetxController{
     });
   }
 
-  businessItem(BuildContext context)async{
-    var a = int.parse(itemCost.value.text);
-    var b = int.parse(itemQuantity.value.text);
-    var total = a * b;
-
-    ItemModel itemModel = ItemModel(
-      itemName: itemName.value.text,
-      itemCost: itemCost.value.text,
-      itemQuantity: itemQuantity.value.text,
-      total: total.toString(),
-    );
-    try{
-      setLoading(true);
-      await FirebaseFirestore.instance
-          .collection("users")
-          .doc(AppApiService.userId)
-          .collection("items")
-          .add(itemModel.toJson()).then((value){
-        setLoading(false);
-        itemName.value.clear();
-        itemCost.value.clear();
-        itemQuantity.value.clear();
-        Get.back();
-      }).onError((error, stackTrace){
-        setLoading(false);
-      });
-    }catch(e){
-      setLoading(false);
-    }
-  }
+  // businessItem(BuildContext context)async{
+  //   var a = int.parse(itemCost.value.text);
+  //   var b = int.parse(itemQuantity.value.text);
+  //   var total = a * b;
+  //
+  //   ItemModel itemModel = ItemModel(
+  //     itemName: itemName.value.text,
+  //     itemCost: itemCost.value.text,
+  //     itemQuantity: itemQuantity.value.text,
+  //     total: total.toString(),
+  //   );
+  //   try{
+  //     setLoading(true);
+  //     await FirebaseFirestore.instance
+  //         .collection("users")
+  //         .doc(AppApiService.userId)
+  //         .collection("items")
+  //         .add(itemModel.toJson()).then((value){
+  //       setLoading(false);
+  //       itemName.value.clear();
+  //       itemCost.value.clear();
+  //       itemQuantity.value.clear();
+  //       Get.back();
+  //     }).onError((error, stackTrace){
+  //       setLoading(false);
+  //     });
+  //   }catch(e){
+  //     setLoading(false);
+  //   }
+  // }
 
   Future<void> uploadSignatureToFirebase(SignatureController _controller) async {
     setLoading(true);
