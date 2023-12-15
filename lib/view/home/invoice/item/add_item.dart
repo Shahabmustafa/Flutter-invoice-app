@@ -29,7 +29,51 @@ class _AddItemState extends State<AddItem> {
           child: Column(
             children: [
               SizedBox(
-                height: size.height * 0.1,
+                height: size.height * 0.05,
+              ),
+              InvoiceTextField(
+                title: "Customer Name",
+                controller: itemService.customerName.value,
+                validator: (value){
+                  return value!.isEmpty ? "Enter Your Customer Name" : null;
+                },
+              ),
+              SizedBox(
+                height: size.height * 0.02,
+              ),
+              InvoiceTextField(
+                title: "Email Address",
+                controller: itemService.customerEmail.value,
+                keyboardType: TextInputType.emailAddress,
+                validator: (value){
+                  return value!.isEmpty ? "Enter Your Email Address" : null;
+                },
+              ),
+              SizedBox(
+                height: size.height * 0.02,
+              ),
+              InvoiceTextField(
+                controller: itemService.customerPhone.value,
+                title: "Phone Number",
+                keyboardType: TextInputType.phone,
+                validator: (value){
+                  return value!.isEmpty ? "Enter Your Phone Number" : null;
+                },
+              ),
+              SizedBox(
+                height: size.height * 0.02,
+              ),
+              InvoiceTextField(
+                title: "Address",
+                controller: itemService.customerAddress.value,
+                keyboardType: TextInputType.multiline,
+                maxLines: 5,
+                validator: (value){
+                  return value!.isEmpty ? "Enter Your Address" : null;
+                },
+              ),
+              SizedBox(
+                height: size.height * 0.02,
               ),
               InvoiceTextField(
                 title: "Item Name",
@@ -42,19 +86,19 @@ class _AddItemState extends State<AddItem> {
                 height: size.height * 0.02,
               ),
               InvoiceTextField(
-                title: "Quantity",
+                title: "Item Price",
                 keyboardType: TextInputType.number,
-                controller: itemService.itemQuantity.value,
+                controller: itemService.itemCost.value,
                 validator: (value){
-                  return value!.isEmpty ? "Enter Your Item Quantity" : null;
+                  return value!.isEmpty ? "Enter Your Item Price" : null;
                 },
               ),
               SizedBox(
                 height: size.height * 0.02,
               ),
               InvoiceTextField(
-                title: "Item Whole Price",
-                controller: itemService.WholePrice.value,
+                title: "Discount",
+                controller: itemService.discount.value,
                 validator: (value){
                   return value!.isEmpty ? "Enter Your Item Whole Price" : null;
                 },
@@ -63,11 +107,23 @@ class _AddItemState extends State<AddItem> {
                 height: size.height * 0.02,
               ),
               InvoiceTextField(
-                title: "Item Price",
+                title: "Tax",
                 keyboardType: TextInputType.number,
-                controller: itemService.itemCost.value,
+                controller: itemService.tax.value,
                 validator: (value){
-                  return value!.isEmpty ? "Enter Your Item Price" : null;
+                  return value!.isEmpty ? "Enter Your Item Tax" : null;
+                },
+              ),
+              SizedBox(
+                height: size.height * 0.02,
+              ),
+              InvoiceTextField(
+                title: "Total",
+                keyboardType: TextInputType.number,
+                controller: itemService.description.value,
+                enabled: false,
+                validator: (value){
+                  return value!.isEmpty ? "Enter Your Item Description" : null;
                 },
               ),
               SizedBox(

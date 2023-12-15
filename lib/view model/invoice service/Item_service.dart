@@ -5,10 +5,16 @@ import 'package:get/get.dart';
 
 class ItemService extends GetxController{
 
+  Rx<TextEditingController> customerName = TextEditingController().obs;
+  Rx<TextEditingController> customerEmail = TextEditingController().obs;
+  Rx<TextEditingController> customerPhone = TextEditingController().obs;
+  Rx<TextEditingController> customerAddress = TextEditingController().obs;
   Rx<TextEditingController> itemName = TextEditingController().obs;
-  Rx<TextEditingController> itemQuantity = TextEditingController().obs;
   Rx<TextEditingController> itemCost = TextEditingController().obs;
-  Rx<TextEditingController> WholePrice = TextEditingController().obs;
+  Rx<TextEditingController> discount = TextEditingController().obs;
+  Rx<TextEditingController> tax = TextEditingController().obs;
+  Rx<TextEditingController> description = TextEditingController().obs;
+
 
   RxBool loading = false.obs;
 
@@ -18,10 +24,15 @@ class ItemService extends GetxController{
 
   addItem(BuildContext context)async{
     ItemModel itemModel = ItemModel(
+      customerName: customerName.value.text,
+      customerEmail: customerEmail.value.text,
+      customerPhone: customerPhone.value.text,
+      customerAddress: customerAddress.value.text,
       itemName: itemName.value.text,
-      itemQuantity: itemQuantity.value.text,
       itemCost: itemCost.value.text,
-      WholePrice: WholePrice.value.text,
+      discount: discount.value.text,
+      tax: tax.value.text,
+      description: description.value.text,
     );
     setLoading(true);
     try{
@@ -32,10 +43,15 @@ class ItemService extends GetxController{
           .add(itemModel.toJson()).then((value){
         setLoading(false);
         Get.back();
+        customerName.value.clear();
+        customerEmail.value.clear();
+        customerPhone.value.clear();
+        customerAddress.value.clear();
         itemName.value.clear();
-        itemQuantity.value.clear();
         itemCost.value.clear();
-        WholePrice.value.clear();
+        discount.value.clear();
+        tax.value.clear();
+        description.value.clear();
       }).onError((error, stackTrace){
         setLoading(false);
       });

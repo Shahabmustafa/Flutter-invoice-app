@@ -52,7 +52,6 @@ class _ListOfInvoiceState extends State<ListOfInvoice> {
               subtitle: "add your Customer details",
               icon: Icons.home_work_outlined,
               onTap: (){
-                Get.toNamed(AppRoutes.listCustomer);
               },
             ),
             SizedBox(
