@@ -13,7 +13,7 @@ class ItemService extends GetxController{
   Rx<TextEditingController> itemCost = TextEditingController().obs;
   Rx<TextEditingController> discount = TextEditingController().obs;
   Rx<TextEditingController> tax = TextEditingController().obs;
-  Rx<TextEditingController> description = TextEditingController().obs;
+  Rx<TextEditingController> paid = TextEditingController().obs;
 
 
   RxBool loading = false.obs;
@@ -23,6 +23,10 @@ class ItemService extends GetxController{
   }
 
   addItem(BuildContext context)async{
+    final a = int.parse(itemCost.toString());
+    final b = int.parse(discount.toString());
+    final c = a / b;
+    final total = a - c;
     ItemModel itemModel = ItemModel(
       customerName: customerName.value.text,
       customerEmail: customerEmail.value.text,
@@ -32,7 +36,9 @@ class ItemService extends GetxController{
       itemCost: itemCost.value.text,
       discount: discount.value.text,
       tax: tax.value.text,
-      description: description.value.text,
+      paid: paid.value.text,
+      total: total.toString(),
+      totalDept: "",
     );
     setLoading(true);
     try{
@@ -51,7 +57,7 @@ class ItemService extends GetxController{
         itemCost.value.clear();
         discount.value.clear();
         tax.value.clear();
-        description.value.clear();
+        paid.value.clear();
       }).onError((error, stackTrace){
         setLoading(false);
       });

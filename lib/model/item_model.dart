@@ -7,7 +7,9 @@ class ItemModel {
   String? itemCost;
   String? discount;
   String? tax;
-  String? description;
+  String? total;
+  String? paid;
+  String? totalDept;
 
   ItemModel({
     this.customerName,
@@ -18,7 +20,9 @@ class ItemModel {
     this.itemCost,
     this.discount,
     this.tax,
-    this.description,
+    this.total,
+    this.paid,
+    this.totalDept,
   });
 
   ItemModel.fromJson(Map<String, dynamic> json) {
@@ -30,7 +34,9 @@ class ItemModel {
     itemCost = json['itemCost'];
     discount = json['discount'];
     tax = json['tax'];
-    description = json['description'];
+    total = json['total'];
+    paid = json['paid'];
+    totalDept = json['totalDept'];
   }
 
   Map<String, dynamic> toJson() {
@@ -43,7 +49,9 @@ class ItemModel {
     data['itemCost'] = this.itemCost;
     data['discount'] = this.discount;
     data['tax'] = this.tax;
-    data['description'] = this.description;
+    data['total'] = this.total;
+    data['paid'] = this.paid;
+    data['totalDept'] = this.totalDept;
     return data;
   }
 }

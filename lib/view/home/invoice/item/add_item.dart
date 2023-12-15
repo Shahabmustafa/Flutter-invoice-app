@@ -120,11 +120,35 @@ class _AddItemState extends State<AddItem> {
               InvoiceTextField(
                 title: "Total",
                 keyboardType: TextInputType.number,
-                controller: itemService.description.value,
+                // controller: itemService.description.value,
                 enabled: false,
+                // validator: (value){
+                //   return value!.isEmpty ? "Enter Your Item Description" : null;
+                // },
+              ),
+              SizedBox(
+                height: size.height * 0.02,
+              ),
+              InvoiceTextField(
+                title: "Paid",
+                keyboardType: TextInputType.number,
+                controller: itemService.paid.value,
+                enabled: true,
                 validator: (value){
                   return value!.isEmpty ? "Enter Your Item Description" : null;
                 },
+              ),
+              SizedBox(
+                height: size.height * 0.02,
+              ),
+              InvoiceTextField(
+                title: "Total Dept",
+                keyboardType: TextInputType.number,
+                // controller: itemService.paid.value,
+                enabled: false,
+                // validator: (value){
+                //   return value!.isEmpty ? "Enter Your Item Description" : null;
+                // },
               ),
               SizedBox(
                 height: size.height * 0.02,
