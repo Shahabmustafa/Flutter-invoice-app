@@ -9,36 +9,35 @@ import '../../model/item_model.dart';
 
 class PdfInvoiceService{
 
-  static Future<File> generate(InvoiceModel invoiceModel,ItemModel itemModel)async{
+  static Future<File> generate(ItemModel itemModel)async{
     final pdf = Document();
     pdf.addPage(
       MultiPage(
           build: (context) => [
-            buildHeader(),
             SizedBox(
               height: 3 * PdfPageFormat.cm,
             ),
-            buildTitle(invoiceModel),
+            buildTitle(itemModel),
             SizedBox(
               height: 3 * PdfPageFormat.cm,
             ),
             buildInvoice(itemModel),
             Divider(),
-            buildTotal(),
+            buildTotal(itemModel),
             ],
-        footer: (context) => buildFooter(),
+        footer: (context) => buildFooter(itemModel),
       ),
     );
     return PdfApi.saveDocument(name: "Invoice.pdf", pdf: pdf);
   }
 
 
-  static Widget buildTitle(InvoiceModel invoiceModel){
+  static Widget buildTitle(ItemModel itemModel){
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-            invoiceModel.businessName.toString(),
+            itemModel.customerName.toString(),
             style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold
@@ -48,13 +47,13 @@ class PdfInvoiceService{
           height: 0.1 * PdfPageFormat.cm,
         ),
         Text(
-          invoiceModel.businessEmail.toString(),
+          itemModel.customerEmail.toString(),
         ),
         SizedBox(
           height: 0.1 * PdfPageFormat.cm,
         ),
         Text(
-          invoiceModel.businessAddress.toString(),
+          itemModel.customerPhone.toString(),
         ),
       ],
     );
@@ -64,14 +63,23 @@ class PdfInvoiceService{
     final header = [
       "Item Name",
       "Item Cost",
-      "Item Quantity",
-      "Total",
+      "Tax",
+      "Discount",
+    ];
+
+    List Data = [
+      itemModel.itemName,
+      itemModel.itemCost.toString(),
+      "${itemModel.tax.toString()}%",
+      "${itemModel.discount.toString()}%",
     ];
 
 
     return Table.fromTextArray(
       headers: header,
-      data: [],
+      data: [
+        Data,
+      ],
       border: null,
       headerStyle: TextStyle(fontWeight: FontWeight.bold,color: PdfColor.fromInt(0xFFFFFF)),
       headerDecoration: BoxDecoration(color: PdfColor.fromInt(0xFF59e1d6)),
@@ -81,27 +89,35 @@ class PdfInvoiceService{
         1: Alignment.centerLeft,
         2: Alignment.centerLeft,
         3: Alignment.centerLeft,
-        4: Alignment.centerRight,
-        5: Alignment.centerRight,
       },
     );
   }
 
-  static Widget buildTotal(){
+  static Widget buildTotal(ItemModel itemModel){
     return Container(
       alignment: Alignment.centerRight,
       child: Row(
         children: [
-          Spacer(flex: 6),
+          Spacer(flex: 10),
           Expanded(
-            flex: 4,
+            flex: 3,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 buildText(
-                  title: "total",
-                  value: "3300",
+                  title: "Total",
+                  value: itemModel.total.toString(),
                   unite: true
+                ),
+                buildText(
+                    title: "Paid",
+                    value: itemModel.paid.toString(),
+                    unite: true
+                ),
+                buildText(
+                    title: "Total dept",
+                    value: itemModel.totalDept.toString(),
+                    unite: true
                 ),
               ],
             ),
@@ -111,36 +127,13 @@ class PdfInvoiceService{
     );
   }
 
-  static Widget buildFooter() => Column(
+  static Widget buildFooter(ItemModel itemModel) => Column(
     crossAxisAlignment: CrossAxisAlignment.center,
     children: [
       Divider(),
       SizedBox(height: 2 * PdfPageFormat.mm),
-      buildSimpleText(title: "Address", value: "Hussain Town Street no 4"),
-      SizedBox(height: 2 * PdfPageFormat.mm),
-      buildSimpleText(title: "Paypal", value: "Hussain Town Street no 4"),
-    ],
-  );
-
-  static Widget buildHeader() => Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      SizedBox(height: 1 * PdfPageFormat.cm,),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          buildSupplierddress(),
-          Container(
-            height: 50,
-            width: 50,
-            child: BarcodeWidget(
-              data: "03112445554",
-              barcode: Barcode.aztec(),
-            ),
-          ),
-        ],
-      ),
-    ],
+      buildSimpleText(title: "Address", value: itemModel.customerAddress.toString()),
+    ]
   );
 
   static Widget buildSupplierddress() => Column(

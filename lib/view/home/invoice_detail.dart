@@ -23,8 +23,8 @@ class InvoiceDetail extends StatelessWidget {
             padding: const EdgeInsets.only(right: 10),
             child: InkWell(
               onTap: ()async{
-                final pdfFile = await PdfInvoiceService.generate(invoiceModel,itemModel!);
-                PdfApi.openFile(pdfFile);
+                // final pdfFile = await PdfInvoiceService.generate(invoiceModel,itemModel!);
+                // PdfApi.openFile(pdfFile);
               },
               child: Icon(
                 Icons.print,

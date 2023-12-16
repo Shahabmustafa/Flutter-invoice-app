@@ -13,6 +13,8 @@ class InvoiceTextField extends StatelessWidget {
     this.enabled = true,
     this.maxLines,
     this.obscureText = false,
+    this.suffix,
+    this.maxLength
   }) : super(key: key);
   String title;
   TextEditingController? controller;
@@ -23,6 +25,8 @@ class InvoiceTextField extends StatelessWidget {
   bool enabled;
   int? maxLines;
   bool obscureText = false;
+  Widget? suffix;
+  int? maxLength;
 
   @override
   Widget build(BuildContext context) {
@@ -60,8 +64,10 @@ class InvoiceTextField extends StatelessWidget {
               keyboardType: keyboardType,
               validator: validator,
               enabled: enabled,
+              maxLength: maxLength,
               // maxLines: maxLines,
               decoration: InputDecoration(
+                suffix: suffix,
                 labelStyle: TextStyle(
                   color: Theme.of(context).textTheme.displayLarge!.color,
                 ),

@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_invoice_app/model/item_model.dart';
 import 'package:flutter_invoice_app/res/colors/app_colors.dart';
 import 'package:flutter_invoice_app/res/routes/routes.dart';
 import 'package:get/get.dart';
 import '../../../../res/app_api/app_api_service.dart';
+import '../../../../view model/pdf_service/pdf_invice_service.dart';
 
 class ItemList extends StatefulWidget {
   const ItemList({Key? key}) : super(key: key);
@@ -57,236 +59,95 @@ class _ItemListState extends State<ItemList> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              "Customer Name",
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.w500,
+                            GestureDetector(
+                              onTap: ()async{
+                                ItemModel itemModel = ItemModel(
+                                  customerName: snapshot.data!.docs[index]["customerName"],
+                                  customerEmail: snapshot.data!.docs[index]["customerEmail"],
+                                  customerPhone: snapshot.data!.docs[index]["customerPhone"],
+                                  customerAddress: snapshot.data!.docs[index]["customerAddress"],
+                                  itemName: snapshot.data!.docs[index]["itemName"],
+                                  itemCost: snapshot.data!.docs[index]["itemCost"],
+                                  discount: snapshot.data!.docs[index]["discount"],
+                                  tax: snapshot.data!.docs[index]["tax"],
+                                  total: snapshot.data!.docs[index]["total"],
+                                  paid: snapshot.data!.docs[index]["paid"],
+                                  totalDept: snapshot.data!.docs[index]["totalDept"],
+                                );
+                                final pdfFile = await PdfInvoiceService.generate(itemModel);
+                                PdfApi.openFile(pdfFile);
+                              },
+                              child: Icon(
+                                Icons.print,
+                                color: AppColor.primaryColor,
                               ),
                             ),
-                            Text(
-                              "Shahab Mustafa",
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.w500,
+                            GestureDetector(
+                              onTap: (){
+                                AppApiService.firestore
+                                    .collection("users")
+                                    .doc(AppApiService.userId)
+                                    .collection("items")
+                                    .doc(snapshot.data!.docs[index].id)
+                                    .delete();
+                              },
+                              child: Icon(
+                                Icons.delete,
+                                color: AppColor.errorColor,
                               ),
                             ),
+                            Icon(Icons.edit,color: AppColor.primaryColor,),
                           ],
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Customer Email",
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            Text(
-                              "Shahab Mustafa",
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
+                        TextWidgets(
+                          title: "Customer Name",
+                          subtitle: snapshot.data!.docs[index]["customerName"],
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Phone Number",
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            Text(
-                              "Shahab Mustafa",
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
+                        TextWidgets(
+                          title: "C-Email",
+                          subtitle: snapshot.data!.docs[index]["customerEmail"],
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Address",
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            Text(
-                              "Shahab Mustafa",
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
+                        TextWidgets(
+                          title: "Phone Number",
+                          subtitle: snapshot.data!.docs[index]["customerPhone"],
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Item Name",
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            Text(
-                              "Shahab Mustafa",
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
+                        TextWidgets(
+                          title: "Address",
+                          subtitle: snapshot.data!.docs[index]["customerAddress"],
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Item Price",
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            Text(
-                              "Shahab Mustafa",
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
+                        TextWidgets(
+                          title: "Item Name",
+                          subtitle: snapshot.data!.docs[index]["itemName"],
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Discount",
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            Text(
-                              "Shahab Mustafa",
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
+                        TextWidgets(
+                          title: "Item Price",
+                          subtitle: snapshot.data!.docs[index]["itemCost"],
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Tax",
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            Text(
-                              "Shahab Mustafa",
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
+                        TextWidgets(
+                          title: "Discount",
+                          subtitle: "${snapshot.data!.docs[index]["discount"]}%",
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Description",
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            Text(
-                              "Shahab Mustafa",
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
+                        TextWidgets(
+                          title: "Tax",
+                          subtitle: "${snapshot.data!.docs[index]["tax"]}%",
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
                           child: Divider(
                             color: AppColor.primaryColor,
                           ),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Total",
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            Text(
-                              "10000",
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
+                        TextWidgets(
+                          title: "Total",
+                          subtitle: snapshot.data!.docs[index]["total"],
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Paid",
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            Text(
-                              "10000",
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
+                        TextWidgets(
+                          title: "Paid",
+                          subtitle: snapshot.data!.docs[index]["paid"],
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Total Debt",
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            Text(
-                              "0",
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
+                        TextWidgets(
+                          title: "Total Debt",
+                          subtitle: snapshot.data!.docs[index]["totalDept"],
                         ),
                       ],
                     ),
@@ -308,3 +169,33 @@ class _ItemListState extends State<ItemList> {
     );
   }
 }
+
+
+class TextWidgets extends StatelessWidget {
+  TextWidgets({Key? key,required this.title,required this.subtitle}) : super(key: key);
+  String title;
+  String subtitle;
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          title,
+          style: TextStyle(
+            fontSize: 17,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        Text(
+        subtitle,
+          style: TextStyle(
+            fontSize: 17,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ],
+    );
+  }
+}
+

@@ -99,6 +99,8 @@ class _AddItemState extends State<AddItem> {
               InvoiceTextField(
                 title: "Discount",
                 controller: itemService.discount.value,
+                maxLength: 2,
+                suffix: Text("%"),
                 validator: (value){
                   return value!.isEmpty ? "Enter Your Item Whole Price" : null;
                 },
@@ -108,6 +110,8 @@ class _AddItemState extends State<AddItem> {
               ),
               InvoiceTextField(
                 title: "Tax",
+                suffix: Text("%"),
+                maxLength: 2,
                 keyboardType: TextInputType.number,
                 controller: itemService.tax.value,
                 validator: (value){
@@ -120,7 +124,7 @@ class _AddItemState extends State<AddItem> {
               InvoiceTextField(
                 title: "Total",
                 keyboardType: TextInputType.number,
-                // controller: itemService.description.value,
+                controller: itemService.totalPrice.value,
                 enabled: false,
                 // validator: (value){
                 //   return value!.isEmpty ? "Enter Your Item Description" : null;
@@ -133,9 +137,8 @@ class _AddItemState extends State<AddItem> {
                 title: "Paid",
                 keyboardType: TextInputType.number,
                 controller: itemService.paid.value,
-                enabled: true,
                 validator: (value){
-                  return value!.isEmpty ? "Enter Your Item Description" : null;
+                  return value!.isEmpty ? "Enter Your Total Paid" : null;
                 },
               ),
               SizedBox(
