@@ -10,6 +10,8 @@ class ItemModel {
   String? total;
   String? paid;
   String? totalDept;
+  String? dateNow;
+  String? duaDate;
 
   ItemModel({
     this.customerName,
@@ -23,6 +25,8 @@ class ItemModel {
     this.total,
     this.paid,
     this.totalDept,
+    this.dateNow,
+    this.duaDate,
   });
 
   ItemModel.fromJson(Map<String, dynamic> json) {
@@ -37,6 +41,8 @@ class ItemModel {
     total = json['total'];
     paid = json['paid'];
     totalDept = json['totalDept'];
+    dateNow = json['dateNow'];
+    duaDate = json['duaDate'];
   }
 
   Map<String, dynamic> toJson() {
@@ -52,6 +58,8 @@ class ItemModel {
     data['total'] = this.total;
     data['paid'] = this.paid;
     data['totalDept'] = this.totalDept;
+    data['dateNow'] = this.dateNow;
+    data['duaDate'] = this.duaDate;
     return data;
   }
 }

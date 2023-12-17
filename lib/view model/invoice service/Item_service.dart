@@ -35,6 +35,9 @@ class ItemService extends GetxController{
     var addDiscount = addtex - data;
 
     var totalPaid = addDiscount - int.parse(paid.value.text);
+
+    var date = DateTime.now();
+    var formattedDate = "${date.day}-${date.month}-${date.year}";
     
     // var taxPrice = int.parse()
     ItemModel itemModel = ItemModel(
@@ -49,6 +52,7 @@ class ItemService extends GetxController{
       paid: paid.value.text,
       total: addDiscount.toString(),
       totalDept: totalPaid.toString(),
+      dateNow: formattedDate,
     );
     setLoading(true);
     try{

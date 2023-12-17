@@ -1,8 +1,6 @@
 import 'package:flutter_invoice_app/view/auth/login_screen.dart';
 import 'package:flutter_invoice_app/view/auth/sign_up_screen.dart';
 import 'package:flutter_invoice_app/view/home/invoice/item/add_item.dart';
-import 'package:flutter_invoice_app/view/home/invoice/item/item_list.dart';
-import 'package:flutter_invoice_app/view/home/invoice/list_of_invoice.dart';
 import 'package:flutter_invoice_app/view/home/invoice/signature_screen.dart';
 import 'package:flutter_invoice_app/view/home/invoice/user_profile/setting/change_profile_detail.dart';
 import 'package:flutter_invoice_app/view/home/invoice/user_profile/setting/languages_change.dart';
@@ -18,9 +16,7 @@ class AppRoutes{
   static const String loginScreen = "/login_routes";
   static const String signUp = "/signup_routes";
   static const String listInvoice = "/list_routes";
-  static const String listofInvoice = "/list_of_invoice_routes";
   static const String addPayer = "/add_payer_routes";
-  static const String itemList = "/item_list_routes";
   static const String addItem = "/add_item";
   static const String signature = "/signature_routes";
   static const String userProfile = "/user_profile_routes";
@@ -51,18 +47,6 @@ class AppRoutes{
       name: listInvoice,
       page: () => ListInvoice(),
       transition: Transition.leftToRightWithFade,
-      transitionDuration: const Duration(microseconds: 250),
-    ),
-    GetPage(
-      name: listofInvoice,
-      page: () => ListOfInvoice(),
-      transition: Transition.rightToLeftWithFade,
-      transitionDuration: const Duration(microseconds: 250),
-    ),
-    GetPage(
-      name: itemList,
-      page: () => ItemList(),
-      transition: Transition.rightToLeftWithFade,
       transitionDuration: const Duration(microseconds: 250),
     ),
     GetPage(
