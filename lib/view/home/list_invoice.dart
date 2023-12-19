@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
 import 'package:flutter_invoice_app/res/assets/assets_url.dart';
 import 'package:flutter_invoice_app/res/colors/app_colors.dart';
+import 'package:flutter_invoice_app/res/component/app_button.dart';
 import 'package:flutter_invoice_app/res/routes/routes.dart';
 import 'package:get/get.dart';
 import '../../model/item_model.dart';
@@ -53,7 +54,7 @@ class _ListInvoiceState extends State<ListInvoice> {
                   padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 15),
-                    height: size.height * 0.5,
+                    height: size.height * 0.6,
                     width: size.width * 1,
                     decoration: BoxDecoration(
                       color: AppColor.whiteColor,
@@ -68,50 +69,18 @@ class _ListInvoiceState extends State<ListInvoice> {
                       ],
                     ),
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            GestureDetector(
-                              onTap: ()async{
-                                ItemModel itemModel = ItemModel(
-                                  customerName: snapshot.data!.docs[index]["customerName"],
-                                  customerEmail: snapshot.data!.docs[index]["customerEmail"],
-                                  customerPhone: snapshot.data!.docs[index]["customerPhone"],
-                                  customerAddress: snapshot.data!.docs[index]["customerAddress"],
-                                  itemName: snapshot.data!.docs[index]["itemName"],
-                                  itemCost: snapshot.data!.docs[index]["itemCost"],
-                                  discount: snapshot.data!.docs[index]["discount"],
-                                  tax: snapshot.data!.docs[index]["tax"],
-                                  total: snapshot.data!.docs[index]["total"],
-                                  paid: snapshot.data!.docs[index]["paid"],
-                                  totalDept: snapshot.data!.docs[index]["totalDept"],
-                                );
-                                final pdfFile = await PdfInvoiceService.generate(itemModel);
-                                PdfApi.openFile(pdfFile);
-                              },
-                              child: Icon(
-                                Icons.print,
-                                color: AppColor.primaryColor,
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: (){
-                                AppApiService.firestore
-                                    .collection("users")
-                                    .doc(AppApiService.userId)
-                                    .collection("items")
-                                    .doc(snapshot.data!.docs[index].id)
-                                    .delete();
-                              },
-                              child: Icon(
-                                Icons.delete,
-                                color: AppColor.errorColor,
-                              ),
-                            ),
-                            Icon(Icons.edit,color: AppColor.primaryColor,),
-                          ],
+                        TextWidgets(
+                          title: "Start Date",
+                          subtitle: snapshot.data!.docs[index]["dateNow"],
+                        ),
+                        TextWidgets(
+                          title: "Due Date",
+                          subtitle: snapshot.data!.docs[index]["duaDate"],
+                        ),
+                        SizedBox(
+                          height: 10,
                         ),
                         TextWidgets(
                           title: "Customer Name",
@@ -162,6 +131,55 @@ class _ListInvoiceState extends State<ListInvoice> {
                         TextWidgets(
                           title: "Total Debt",
                           subtitle: snapshot.data!.docs[index]["totalDept"],
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            AppButton(
+                              title: "Print",
+                              height: 40,
+                              width: 100,
+                              onTap: ()async{
+                                ItemModel itemModel = ItemModel(
+                                  customerName: snapshot.data!.docs[index]["customerName"],
+                                  customerEmail: snapshot.data!.docs[index]["customerEmail"],
+                                  customerPhone: snapshot.data!.docs[index]["customerPhone"],
+                                  customerAddress: snapshot.data!.docs[index]["customerAddress"],
+                                  itemName: snapshot.data!.docs[index]["itemName"],
+                                  itemCost: snapshot.data!.docs[index]["itemCost"],
+                                  discount: snapshot.data!.docs[index]["discount"],
+                                  tax: snapshot.data!.docs[index]["tax"],
+                                  total: snapshot.data!.docs[index]["total"],
+                                  paid: snapshot.data!.docs[index]["paid"],
+                                  totalDept: snapshot.data!.docs[index]["totalDept"],
+                                );
+                                final pdfFile = await PdfInvoiceService.generate(itemModel);
+                                PdfApi.openFile(pdfFile);
+                              },
+                            ),
+                            AppButton(
+                              title: "Delete",
+                              height: 40,
+                              width: 100,
+                              onTap: ()async {
+                                AppApiService.firestore
+                                    .collection("users")
+                                    .doc(AppApiService.userId)
+                                    .collection("items")
+                                    .doc(snapshot.data!.docs[index].id)
+                                    .delete();
+                              },
+                            ),
+                            AppButton(
+                                title: "Update",
+                                height: 40,
+                                width: 100,
+                                onTap: ()async {}
+                            ),
+                          ],
                         ),
                       ],
                     ),

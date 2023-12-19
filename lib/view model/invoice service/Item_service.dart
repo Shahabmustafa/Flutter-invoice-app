@@ -15,6 +15,8 @@ class ItemService extends GetxController{
   Rx<TextEditingController> tax = TextEditingController().obs;
   Rx<TextEditingController> paid = TextEditingController().obs;
   Rx<TextEditingController> totalPrice = TextEditingController().obs;
+  Rx<TextEditingController> startDate = TextEditingController().obs;
+  Rx<TextEditingController> dueDate = TextEditingController().obs;
 
 
   RxBool loading = false.obs;
@@ -52,7 +54,8 @@ class ItemService extends GetxController{
       paid: paid.value.text,
       total: addDiscount.toString(),
       totalDept: totalPaid.toString(),
-      dateNow: formattedDate,
+      dateNow: startDate.value.text,
+      duaDate: dueDate.value.text,
     );
     setLoading(true);
     try{

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import '../../../../res/component/app_button.dart';
 import '../../../../res/component/invoice_text_field.dart';
 import '../../../../view model/invoice service/Item_service.dart';
@@ -15,6 +16,60 @@ class _AddItemState extends State<AddItem> {
   final _key = GlobalKey<FormState>();
   final itemService = Get.put(ItemService());
 
+  DateTime selectedDate = DateTime.now();
+
+  Future<void> _dateNow(BuildContext context) async {
+    DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+    if (pickedDate != null) {
+      TimeOfDay? pickedTime = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.fromDateTime(selectedDate),
+      );
+      if (pickedTime != null) {
+        setState(() {
+          selectedDate = DateTime(
+            pickedDate.year,
+            pickedDate.month,
+            pickedDate.day,
+            pickedTime.hour,
+            pickedTime.minute,
+          );
+          itemService.startDate.value.text = DateFormat.yMd().add_jm().format(selectedDate);
+        });
+      }
+    }
+  }
+  Future<void> _dateDue(BuildContext context) async {
+    DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+    if (pickedDate != null) {
+      TimeOfDay? pickedTime = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.fromDateTime(selectedDate),
+      );
+      if (pickedTime != null) {
+        setState(() {
+          selectedDate = DateTime(
+            pickedDate.year,
+            pickedDate.month,
+            pickedDate.day,
+            pickedTime.hour,
+            pickedTime.minute,
+          );
+          itemService.dueDate.value.text = DateFormat.yMd().add_jm().format(selectedDate);
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -152,6 +207,31 @@ class _AddItemState extends State<AddItem> {
                 // validator: (value){
                 //   return value!.isEmpty ? "Enter Your Item Description" : null;
                 // },
+              ),
+              SizedBox(
+                height: size.height * 0.02,
+              ),
+              Row(
+                children: [
+                  Flexible(
+                    child: InvoiceTextField(
+                      title: "Start Date",
+                      controller: itemService.startDate.value,
+                      keyboardType: TextInputType.datetime,
+                      readOnly: true,
+                      onTap: () => _dateNow(context),
+                    ),
+                  ),
+                  Flexible(
+                    child: InvoiceTextField(
+                      title: "Due Date",
+                      controller: itemService.dueDate.value,
+                      keyboardType: TextInputType.datetime,
+                      readOnly: true,
+                      onTap: () => _dateDue(context),
+                    ),
+                  ),
+                ],
               ),
               SizedBox(
                 height: size.height * 0.02,

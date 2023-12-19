@@ -14,7 +14,9 @@ class InvoiceTextField extends StatelessWidget {
     this.maxLines,
     this.obscureText = false,
     this.suffix,
-    this.maxLength
+    this.maxLength,
+    this.onTap,
+    this.readOnly = false,
   }) : super(key: key);
   String title;
   TextEditingController? controller;
@@ -27,7 +29,8 @@ class InvoiceTextField extends StatelessWidget {
   bool obscureText = false;
   Widget? suffix;
   int? maxLength;
-
+  void Function()? onTap;
+  bool readOnly;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -65,6 +68,7 @@ class InvoiceTextField extends StatelessWidget {
               validator: validator,
               enabled: enabled,
               maxLength: maxLength,
+              readOnly: readOnly,
               // maxLines: maxLines,
               decoration: InputDecoration(
                 suffix: suffix,
@@ -108,6 +112,7 @@ class InvoiceTextField extends StatelessWidget {
               onTapOutside: (event){
                 FocusManager.instance.primaryFocus?.unfocus();
               },
+              onTap: onTap,
             ),
           ),
         ],
