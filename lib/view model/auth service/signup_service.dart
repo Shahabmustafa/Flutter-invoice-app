@@ -4,6 +4,8 @@ import 'package:flutter_invoice_app/utils/utils.dart';
 import 'package:flutter_invoice_app/view%20model/user_service/user_service.dart';
 import 'package:get/get.dart';
 
+import '../notification_service/notification_service.dart';
+
 class SignUpService extends GetxController{
 
   Rx<TextEditingController> userName = TextEditingController().obs;
@@ -13,6 +15,9 @@ class SignUpService extends GetxController{
   RxBool loading = false.obs;
   RxBool Visibility = true.obs;
   RxBool confirmVisibility = true.obs;
+
+  static final notification = NotificationService();
+
 
   setLoading(bool value){
     loading.value = value;
@@ -24,12 +29,14 @@ class SignUpService extends GetxController{
       AppApiService.auth.createUserWithEmailAndPassword(
         email: email.value.text,
         password: password.value.text,
-      ).then((value){
+      ).then((value)async{
         setLoading(false);
         UserService.userAddDataFirestore(
           userName.value.text,
           email.value.text,
         );
+        await notification.getToken();
+        await notification.getToken();
         Utils.flutterToast("Your account has been create");
         userName.value.clear();
         email.value.clear();

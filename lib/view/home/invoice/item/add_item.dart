@@ -71,7 +71,7 @@ class _AddItemState extends State<AddItem> {
     }
   }
 
-  @override
+
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
     return Scaffold(
@@ -203,7 +203,8 @@ class _AddItemState extends State<AddItem> {
                 title: "Total Dept",
                 keyboardType: TextInputType.number,
                 // controller: itemService.paid.value,
-                enabled: false,
+                // enabled: false,
+                readOnly: true,
                 // validator: (value){
                 //   return value!.isEmpty ? "Enter Your Item Description" : null;
                 // },

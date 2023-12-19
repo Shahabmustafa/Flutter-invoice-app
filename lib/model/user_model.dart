@@ -5,6 +5,7 @@ class UserModel {
   String? profileImage;
   String? specificId;
   String? phoneNumber;
+  String? token;
 
   UserModel(
       {this.uid,
@@ -13,6 +14,7 @@ class UserModel {
         this.profileImage,
         this.specificId,
         this.phoneNumber,
+        this.token,
         });
 
   UserModel.fromJson(Map<String, dynamic> json) {
@@ -22,6 +24,7 @@ class UserModel {
     profileImage = json['profileImage'];
     specificId = json['specificId'];
     phoneNumber = json['phoneNumber'];
+    token = json['token'];
   }
 
   Map<String, dynamic> toJson() {
@@ -32,6 +35,7 @@ class UserModel {
     data['profileImage'] = this.profileImage;
     data['specificId'] = this.specificId;
     data['phoneNumber'] = this.phoneNumber;
+    data['token'] = this.token;
     return data;
   }
 }
