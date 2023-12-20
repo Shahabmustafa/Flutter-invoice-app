@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_invoice_app/res/localization/localization.dart';
 import 'package:flutter_invoice_app/res/routes/routes.dart';
 import 'package:flutter_invoice_app/res/theme_data/theme_data.dart';
 import 'package:flutter_invoice_app/view%20model/binding.dart';
@@ -35,6 +36,9 @@ class MyApp extends StatelessWidget {
         theme: AppThemeData.lightTheme,
         darkTheme: AppThemeData.darkTheme,
         themeMode: controller.isDark ? ThemeMode.dark : ThemeMode.light,
+        translations: Languages(),
+        locale: const Locale('sa','ar'),
+        fallbackLocale: Locale('sa','ar'),
         home: SplashPage(),
         getPages: AppRoutes.appRoutes(),
       ),

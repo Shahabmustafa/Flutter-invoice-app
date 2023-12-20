@@ -54,12 +54,12 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 children: [
                   InvoiceTextField(
-                    title: "Email",
+                    title: "login_email_hading".tr,
                     controller: loginService.email.value,
                     keyboardType: TextInputType.emailAddress,
                     prefixIcon: Icon(Icons.alternate_email),
                     validator: (value){
-                      return value!.isEmpty ? "Please Enter Email" : null;
+                      return value!.isEmpty ? "login_email_validator".tr : null;
                     },
                   ),
                   SizedBox(
@@ -67,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   Obx(() =>
                       InvoiceTextField(
-                        title: "Password",
+                        title: "login_password_hading".tr,
                         controller: loginService.password.value,
                         prefixIcon: Icon(Icons.key),
                         suffixIcon: GestureDetector(
@@ -82,8 +82,8 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         obscureText: loginService.visibility.value,
                         validator: (value){
-                          return value!.isEmpty ? "Please Enter Password" :
-                          value.length < 8 ? "Please Enter Eight Digits code" : null;
+                          return value!.isEmpty ? "login_password_validator".tr :
+                          value.length < 8 ? "login_password_second_validator".tr : null;
                         },
                       ),
                   ),
@@ -96,7 +96,7 @@ class _LoginPageState extends State<LoginPage> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Text(
-                          "Forget Password",
+                          "forget_password".tr,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 17,
@@ -111,7 +111,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   Obx(() =>
                       AppButton(
-                        title: "Login",
+                        title: "button_login".tr,
                         height: size.height * 0.06,
                         width: size.width * 0.95,
                         loading: loginService.loading.value,
@@ -134,7 +134,7 @@ class _LoginPageState extends State<LoginPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "Don't have an account?",
+                      "don't_have_any_account".tr,
                       style: TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.bold,
@@ -146,7 +146,7 @@ class _LoginPageState extends State<LoginPage> {
                         Get.toNamed(AppRoutes.signUp);
                       },
                       child: Text(
-                        " Sign Up",
+                        "sign_up_link".tr,
                         style: TextStyle(
                           fontSize: 17,
                           fontWeight: FontWeight.bold,

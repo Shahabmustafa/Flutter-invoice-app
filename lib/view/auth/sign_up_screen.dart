@@ -44,23 +44,23 @@ class _SignUpPageState extends State<SignUpPage> {
               child: Column(
                 children: [
                   InvoiceTextField(
-                    title: "User Name",
+                    title: "signup_userName_hading".tr,
                     controller: signUpService.userName.value,
                     prefixIcon: Icon(Icons.person),
                     validator: (value){
-                      return value!.isEmpty ? "Please Enter Your User Name" : null;
+                      return value!.isEmpty ? "signup_userName_validator".tr : null;
                     },
                   ),
                   SizedBox(
                     height: size.height * 0.02,
                   ),
                   InvoiceTextField(
-                    title: "Email",
+                    title: "signup_email_hading".tr,
                     controller: signUpService.email.value,
                     keyboardType: TextInputType.emailAddress,
                     prefixIcon: Icon(Icons.alternate_email),
                     validator: (value){
-                      return value!.isEmpty ? "Please Enter Email" : null;
+                      return value!.isEmpty ? "signup_email_validator".tr : null;
                     },
                   ),
                   SizedBox(
@@ -68,7 +68,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                   Obx(() =>
                       InvoiceTextField(
-                        title: "Password",
+                        title: "signup_password_hading".tr,
                         controller: signUpService.password.value,
                         prefixIcon: Icon(Icons.key),
                         suffixIcon: GestureDetector(
@@ -83,8 +83,8 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                         obscureText: signUpService.Visibility.value,
                         validator: (value){
-                          return value!.isEmpty ? "Please Enter Password" :
-                          value.length < 8 ? "Please Enter Eight Digits code" : null;
+                          return value!.isEmpty ? "signup_password_validator".tr :
+                          value.length < 8 ? "signup_password_second_validator".tr : null;
                         },
                       ),
                   ),
@@ -93,7 +93,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                   Obx(() =>
                       InvoiceTextField(
-                        title: "Confirm Password",
+                        title: "signup_con_password_hading".tr,
                         controller: signUpService.conPassword.value,
                         prefixIcon: Icon(Icons.key),
                         suffixIcon: GestureDetector(
@@ -108,8 +108,8 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                         obscureText: signUpService.confirmVisibility.value,
                         validator: (value){
-                          return signUpService.conPassword.value.text.isEmpty ? "Please Enter Password" :
-                          signUpService.conPassword.value.text != signUpService.password.value.text ? "Your Confirm Password is not equal to Password" : null;
+                          return signUpService.conPassword.value.text.isEmpty ? "signup_con_password_validator".tr :
+                          signUpService.conPassword.value.text != signUpService.password.value.text ? "signup_con_password_second_validator".tr : null;
                         },
                       ),
                   ),
@@ -118,7 +118,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                   Obx(() =>
                       AppButton(
-                        title: "Sign Up",
+                        title: "button_signUp".tr,
                         height: size.height * 0.06,
                         width: size.width * 0.95,
                         loading: signUpService.loading.value,
@@ -139,7 +139,7 @@ class _SignUpPageState extends State<SignUpPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "Already have an account?",
+                  "already_have_an_account".tr,
                   style: TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.bold,
@@ -151,7 +151,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     Get.back();
                   },
                   child: Text(
-                    " Sign in",
+                    "sign_in_link".tr,
                     style: TextStyle(
                       fontSize: 17,
                       fontWeight: FontWeight.bold,
