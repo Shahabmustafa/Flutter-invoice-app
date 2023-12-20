@@ -1,5 +1,4 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/res/routes/routes.dart';
 import 'package:flutter_invoice_app/res/theme_data/theme_data.dart';
@@ -8,14 +7,7 @@ import 'package:flutter_invoice_app/view%20model/shared_pref.dart';
 import 'package:flutter_invoice_app/view%20model/swith_service/swith_service.dart';
 import 'package:flutter_invoice_app/view/splash/splash_screen.dart';
 import 'package:get/get.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'firebase_options.dart';
-
-Future<void> _backgroundMessageHandler(RemoteMessage message)async{
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-}
 
 
 void main()async{
@@ -23,10 +15,6 @@ void main()async{
   await SharedPrefHelper.init();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
-  );
-  await FirebaseMessaging.instance.getInitialMessage();
-  FirebaseMessaging.onBackgroundMessage(
-      _backgroundMessageHandler
   );
   runApp(const MyApp());
 }

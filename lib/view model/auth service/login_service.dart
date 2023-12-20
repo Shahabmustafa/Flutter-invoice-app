@@ -3,6 +3,7 @@ import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
 import 'package:flutter_invoice_app/res/routes/routes.dart';
 import 'package:flutter_invoice_app/utils/utils.dart';
 import 'package:get/get.dart';
+
 import '../notification_service/notification_service.dart';
 
 class LoginService extends GetxController{
@@ -25,8 +26,6 @@ class LoginService extends GetxController{
         email: email.value.text,
         password: password.value.text,
       ).then((value)async{
-        await notification.getToken();
-        await notification.getToken();
         setLoading(false);
         Utils.flutterToast("You have Sucessfully Login");
         email.value.clear();

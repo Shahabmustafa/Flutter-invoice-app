@@ -35,8 +35,6 @@ class SignUpService extends GetxController{
           userName.value.text,
           email.value.text,
         );
-        await notification.getToken();
-        await notification.getToken();
         Utils.flutterToast("Your account has been create");
         userName.value.clear();
         email.value.clear();

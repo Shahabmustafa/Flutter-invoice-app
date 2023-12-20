@@ -5,6 +5,8 @@ import 'package:flutter_invoice_app/res/assets/assets_url.dart';
 import 'package:flutter_invoice_app/res/colors/app_colors.dart';
 import 'package:flutter_invoice_app/res/component/app_button.dart';
 import 'package:flutter_invoice_app/res/routes/routes.dart';
+import 'package:flutter_invoice_app/view%20model/notification_service/notification_service.dart';
+import 'package:flutter_invoice_app/view/home/invoice/item/update_item.dart';
 import 'package:get/get.dart';
 import '../../model/item_model.dart';
 import '../../res/component/image_convert_to_icons.dart';
@@ -19,6 +21,8 @@ class ListInvoice extends StatefulWidget {
 }
 
 class _ListInvoiceState extends State<ListInvoice> {
+
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
@@ -170,14 +174,16 @@ class _ListInvoiceState extends State<ListInvoice> {
                                     .doc(AppApiService.userId)
                                     .collection("items")
                                     .doc(snapshot.data!.docs[index].id)
-                                    .delete();
+                                    .delete().then((value) => NotificationService().simpleNotificationShow("Your Invoice is Delete"));
                               },
                             ),
                             AppButton(
                                 title: "Update",
                                 height: 40,
                                 width: 100,
-                                onTap: ()async {}
+                                onTap: (){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => UpdateItem(updateId: snapshot.data!.docs[index].id)));
+                                }
                             ),
                           ],
                         ),

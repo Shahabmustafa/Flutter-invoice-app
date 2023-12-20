@@ -37,7 +37,6 @@ dependencies:
   cupertino_icons: ^1.0.2
   get: ^4.6.6
   google_fonts: ^6.1.0
-  intl: ^0.19.0
   signature: ^5.4.1
   hand_signature: ^3.0.2
   firebase_core: ^2.24.0
@@ -57,6 +56,8 @@ dependencies:
   firebase_messaging: ^14.7.9
   flutter_local_notifications: ^16.2.0
   http: ^1.1.2
+  workmanager: ^0.5.2
+  intl: ^0.19.0
 
 
 dev_dependencies:

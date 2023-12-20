@@ -1,12 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/model/invoice_model.dart';
 import 'package:flutter_invoice_app/model/item_model.dart';
 import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
-import 'package:flutter_invoice_app/res/colors/app_colors.dart';
-
-import '../../view model/pdf_service/pdf_invice_service.dart';
 
 class InvoiceDetail extends StatelessWidget {
   InvoiceDetail({Key? key,required this.invoiceModel}) : super(key: key);

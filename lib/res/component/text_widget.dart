@@ -12,15 +12,15 @@ class TextWidgets extends StatelessWidget {
         Text(
           title,
           style: TextStyle(
-            fontSize: 17,
-            fontWeight: FontWeight.w500,
+            fontSize: 15,
+            fontWeight: FontWeight.w400,
           ),
         ),
         Text(
           subtitle,
           style: TextStyle(
-            fontSize: 17,
-            fontWeight: FontWeight.w500,
+            fontSize: 15,
+            fontWeight: FontWeight.w300,
           ),
         ),
       ],

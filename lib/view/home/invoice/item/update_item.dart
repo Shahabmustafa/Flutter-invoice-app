@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_invoice_app/view%20model/invoice%20service/update_item_service.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -6,18 +7,19 @@ import 'package:intl/intl.dart';
 import '../../../../res/colors/app_colors.dart';
 import '../../../../res/component/app_button.dart';
 import '../../../../res/component/invoice_text_field.dart';
-import '../../../../view model/invoice service/Item_service.dart';
 
-class AddItem extends StatefulWidget {
-  const AddItem({Key? key}) : super(key: key);
+class UpdateItem extends StatefulWidget {
+  UpdateItem({Key? key,required this.updateId}) : super(key: key);
+
+  String updateId;
 
   @override
-  State<AddItem> createState() => _AddItemState();
+  State<UpdateItem> createState() => _UpdateItemState();
 }
 
-class _AddItemState extends State<AddItem> {
+class _UpdateItemState extends State<UpdateItem> {
   final _key = GlobalKey<FormState>();
-  final itemService = Get.put(ItemService());
+  final itemService = Get.put(UpdateItemService());
 
   DateTime selectedDate = DateTime.now();
 
@@ -79,7 +81,7 @@ class _AddItemState extends State<AddItem> {
     final size = MediaQuery.sizeOf(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text("Add Item"),
+        title: Text("Update Item"),
       ),
       body: SingleChildScrollView(
         child: Form(
@@ -242,13 +244,13 @@ class _AddItemState extends State<AddItem> {
               ),
               Obx(() =>
                   AppButton(
-                    title: "Add Item",
+                    title: "Update Item",
                     height: size.height * 0.05,
                     width: size.width * 0.94,
                     loading: itemService.loading.value,
                     onTap: (){
                       if(_key.currentState!.validate()){
-                        itemService.addItem(context);
+                        itemService.updateItem(context,widget.updateId);
                       }
                     },
                   ),

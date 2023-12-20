@@ -190,6 +190,8 @@ class _LoginPageState extends State<LoginPage> {
                             profileImage: value.user!.photoURL,
                             email: value.user!.email,
                             specificId: specificId.toString(),
+                            phoneNumber: "",
+                            token: "",
                           );
                           FirebaseFirestore.instance
                               .collection("users")

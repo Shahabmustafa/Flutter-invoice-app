@@ -1,10 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_invoice_app/model/item_model.dart';
 import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
+import 'package:flutter_invoice_app/view%20model/notification_service/notification_service.dart';
 import 'package:get/get.dart';
 import 'package:workmanager/workmanager.dart';
 
-class ItemService extends GetxController{
+class UpdateItemService extends GetxController{
 
   Rx<TextEditingController> customerName = TextEditingController().obs;
   Rx<TextEditingController> customerEmail = TextEditingController().obs;
@@ -26,7 +27,7 @@ class ItemService extends GetxController{
     loading.value = value;
   }
 
-  addItem(BuildContext context)async{
+  updateItem(BuildContext context,String update)async{
     var data = int.parse(discount.value.text) / 100 * int.parse(itemCost.value.text);
     // var discountPrice = int.parse(itemCost.value.text) - data;
 
@@ -61,14 +62,10 @@ class ItemService extends GetxController{
           .collection('users')
           .doc(AppApiService.userId)
           .collection("items")
-          .add(itemModel.toJson()).then((value){
+          .doc(update)
+          .update(itemModel.toJson()).then((value){
         setLoading(false);
         Get.back();
-        // Workmanager().registerOneOffTask(
-        //   "task one",
-        //   "Backup",
-        //   initialDelay: Duration(seconds: 5),
-        // );
         customerName.value.clear();
         customerEmail.value.clear();
         customerPhone.value.clear();
@@ -78,6 +75,7 @@ class ItemService extends GetxController{
         discount.value.clear();
         tax.value.clear();
         paid.value.clear();
+        NotificationService().simpleNotificationShow("Your Invoice is Update");
       }).onError((error, stackTrace){
         setLoading(false);
       });

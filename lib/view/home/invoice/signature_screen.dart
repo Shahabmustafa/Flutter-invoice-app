@@ -1,13 +1,11 @@
+import 'dart:ui' as ui;
+
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
 import 'package:flutter_invoice_app/res/component/app_button.dart';
 import 'package:flutter_invoice_app/utils/utils.dart';
-import 'package:get/get.dart';
-import 'package:hand_signature/signature.dart';
-import 'dart:ui' as ui;
-
 import 'package:signature/signature.dart';
 
 class SignaturePage extends StatefulWidget {
