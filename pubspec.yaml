@@ -58,7 +58,9 @@ dependencies:
   http: ^1.1.2
   workmanager: ^0.5.2
   intl: ^0.19.0
-
+  flutter_flip_card: ^0.0.4
+  avatar_glow: ^3.0.1
+  flutter_sms: ^2.3.3
 
 dev_dependencies:
   flutter_test:

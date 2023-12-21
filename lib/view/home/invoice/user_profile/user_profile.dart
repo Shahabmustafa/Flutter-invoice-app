@@ -1,3 +1,4 @@
+import 'package:avatar_glow/avatar_glow.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
@@ -19,6 +20,7 @@ class UserProfile extends StatefulWidget {
 class _UserProfileState extends State<UserProfile> {
   final profileUpdate = Get.put(UserProfileService());
   final pickImage = Get.put(ImagePickerService());
+  bool _animate = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,20 +92,31 @@ class _UserProfileState extends State<UserProfile> {
                           width: 2.5,
                         ),
                       ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(100),
-                        child: CachedNetworkImage(
-                          imageUrl: data["profileImage"],
-                          progressIndicatorBuilder: (context, url, downloadProgress) =>
-                              CircularProgressIndicator(value: downloadProgress.progress),
-                          errorWidget: (context, url, error) => Icon(Icons.error),
+                      child: AvatarGlow(
+                        startDelay: const Duration(milliseconds: 1000),
+                        glowColor: Colors.grey.shade300,
+                        glowShape: BoxShape.circle,
+                        animate: _animate,
+                        curve: Curves.fastOutSlowIn,
+                        child: Material(
+                          elevation: 8.0,
+                          shape: CircleBorder(),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(100),
+                            child: CachedNetworkImage(
+                              imageUrl: data["profileImage"],
+                              progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                  CircularProgressIndicator(value: downloadProgress.progress),
+                              errorWidget: (context, url, error) => Icon(Icons.error),
+                            ),
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
                 SizedBox(
-                  height: 20,
+                  height: 50,
                 ),
                 Card(
                   child: ListTile(
