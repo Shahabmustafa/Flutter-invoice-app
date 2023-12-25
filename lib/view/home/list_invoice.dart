@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_flip_card/controllers/flip_card_controllers.dart';
@@ -6,11 +7,11 @@ import 'package:flutter_flip_card/modal/flip_side.dart';
 import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
 import 'package:flutter_invoice_app/res/assets/assets_url.dart';
 import 'package:flutter_invoice_app/res/colors/app_colors.dart';
-import 'package:flutter_invoice_app/res/component/app_button.dart';
 import 'package:flutter_invoice_app/res/routes/routes.dart';
 import 'package:flutter_invoice_app/view%20model/notification_service/notification_service.dart';
 import 'package:flutter_invoice_app/view/home/invoice/item/update_item.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../model/item_model.dart';
 import '../../res/component/image_convert_to_icons.dart';
 import '../../res/component/text_widget.dart';
@@ -26,6 +27,23 @@ class ListInvoice extends StatefulWidget {
 class _ListInvoiceState extends State<ListInvoice> {
 
   final con = FlipCardController();
+
+  void launchWhatsApp({required String phone,required String message,}) async {String url() {
+    if (Platform.isAndroid) {
+      // add the [https]
+      return "https://wa.me/$phone/?text=${Uri.parse(message)}"; // new line
+    } else {
+      // add the [https]
+      return "https://api.whatsapp.com/send?phone=$phone=${Uri.parse(message)}"; // new line
+    }
+    }
+
+    if (await canLaunch(url())) {
+      await launch(url());
+    } else {
+      throw 'Could not launch ${url()}';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -217,7 +235,7 @@ class _ListInvoiceState extends State<ListInvoice> {
                                       ),
                                       IconButton(
                                         onPressed: (){
-
+                                          launchWhatsApp(phone: snapshot.data!.docs[index]["customerPhone"], message: "Please Pay Payment Last Date ${snapshot.data!.docs[index]["duaDate"]}");
                                         },
                                         icon: Icon(Icons.near_me,color: Colors.blue,),
                                       ),
