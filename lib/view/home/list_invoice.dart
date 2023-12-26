@@ -223,7 +223,6 @@ class _ListInvoiceState extends State<ListInvoice> {
                                       ),
                                       IconButton(
                                         onPressed: (){
-                                          print("sdsdd");
                                           launchWhatsApp(phone: "+923112445554", message: "Please Pay Payment Last Date ${snapshot.data!.docs[index]["duaDate"]}");
                                         },
                                         icon: Icon(Icons.near_me,color: Colors.blue,),
