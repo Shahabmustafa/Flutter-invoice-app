@@ -29,8 +29,10 @@ class _ListInvoiceState extends State<ListInvoice> {
   final con = FlipCardController();
 
   void launchWhatsApp({required String phone,required String message,}) async  {
-      String url = "https://wa.me/$phone?text=$message";
-      await canLaunch(url) ? await launch(url) : print("can't open whatsapp");
+    final _url = Uri.parse("https://wa.me/$phone?text=$message");
+    if (!await launchUrl(_url)) {
+      throw Exception('Could not launch $_url');
+    }
   }
 
   @override
@@ -223,7 +225,7 @@ class _ListInvoiceState extends State<ListInvoice> {
                                       ),
                                       IconButton(
                                         onPressed: (){
-                                          launchWhatsApp(phone: "+923112445554", message: "Please Pay Payment Last Date ${snapshot.data!.docs[index]["duaDate"]}");
+                                          launchWhatsApp(phone: snapshot.data!.docs[index]["customerPhone"], message: "Please Collect your balance today is last date ${snapshot.data!.docs[index]["duaDate"]}");
                                         },
                                         icon: Icon(Icons.near_me,color: Colors.blue,),
                                       ),
