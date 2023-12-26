@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-
-// import 'package:intl/intl.dart';
-import '../../../../res/colors/app_colors.dart';
 import '../../../../res/component/app_button.dart';
 import '../../../../res/component/invoice_text_field.dart';
 import '../../../../view model/invoice service/Item_service.dart';
@@ -182,11 +179,9 @@ class _AddItemState extends State<AddItem> {
               InvoiceTextField(
                 title: "Total",
                 keyboardType: TextInputType.number,
-                controller: itemService.totalPrice.value,
                 enabled: false,
-                // validator: (value){
-                //   return value!.isEmpty ? "Enter Your Item Description" : null;
-                // },
+                onChanged: (value){
+                },
               ),
               SizedBox(
                 height: size.height * 0.02,
