@@ -61,7 +61,8 @@ dependencies:
   flutter_flip_card: ^0.0.4
   avatar_glow: ^3.0.1
   url_launcher: ^6.2.2
-#  flutter_sms: ^2.3.3
+  emailjs: ^1.3.0
+
 
 dev_dependencies:
   flutter_test:

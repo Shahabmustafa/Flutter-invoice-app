@@ -1,4 +1,6 @@
-import 'dart:io';
+import 'dart:convert';
+import 'package:emailjs/emailjs.dart';
+import 'package:http/http.dart' as http;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_flip_card/controllers/flip_card_controllers.dart';
@@ -35,6 +37,37 @@ class _ListInvoiceState extends State<ListInvoice> {
     }
   }
 
+  void launchMessage({required String phone,required String messages,}) async  {
+    final url = Uri.parse('sms:${phone}?body=${messages}');
+    if (!await canLaunchUrl(url)) {
+      throw Exception('Could not launch $url');
+    }
+  }
+
+  sendMessage(String userName,String userMessage,String email)async{
+    try{
+      await EmailJS.send(
+        "service_dj5j4y6",
+        "template_gwcbryc",
+        {
+          'user_name': userName,
+          'user_message': userMessage,
+          "user_subject" : "Invoice",
+          "user_email" : email,
+        },
+        const Options(
+          publicKey: 'gE3tYnHPa5YJTWzTX',
+          privateKey: 'ld8FMFC3s9ZZGIqbfj1ZM',
+        ),
+      );
+      print('SUCCESS!');
+    }catch (error) {
+      if (error is EmailJSResponseStatus) {
+        print('ERROR... ${error.status}: ${error.text}');
+      }
+      print(error.toString());
+    }
+  }
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
@@ -225,7 +258,47 @@ class _ListInvoiceState extends State<ListInvoice> {
                                       ),
                                       IconButton(
                                         onPressed: (){
-                                          launchWhatsApp(phone: snapshot.data!.docs[index]["customerPhone"], message: "Please Collect your balance today is last date ${snapshot.data!.docs[index]["duaDate"]}");
+                                          Get.defaultDialog(
+                                            title: "Choose",
+                                            middleText: "",
+                                            content: GestureDetector(
+                                              onTap: () => sendMessage(
+                                                snapshot.data!.docs[index]["customerName"],
+                                                "Please Collect your balance today is last date ${snapshot.data!.docs[index]["duaDate"]}",
+                                                snapshot.data!.docs[index]["customerEmail"]
+                                              ),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  Icon(
+                                                    Icons.message,
+                                                    color: Colors.blue,
+                                                  ),
+                                                  SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                  Text("Send to Messages"),
+                                                ],
+                                              ),
+                                            ),
+                                            confirm: GestureDetector(
+                                              onTap: (){
+                                                launchWhatsApp(
+                                                    phone: snapshot.data!.docs[index]["customerPhone"],
+                                                    message: "Please Collect your balance today is last date ${snapshot.data!.docs[index]["duaDate"]}");
+                                              },
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  Image.asset("assets/images/img.icons8.png",height: 30,width: 30,),
+                                                  SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                  Text("Send to Whatsapp"),
+                                                ],
+                                              ),
+                                            ),
+                                          );
                                         },
                                         icon: Icon(Icons.near_me,color: Colors.blue,),
                                       ),
