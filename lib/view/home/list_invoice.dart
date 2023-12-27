@@ -103,60 +103,60 @@ class _ListInvoiceState extends State<ListInvoice> {
                       itemCount: snapshot.data!.docs.length,
                       itemBuilder: (context,index){
                         return FlipCard(
-                          backWidget: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 15),
-                            height: size.height * 0.3,
-                            width: size.width * 1,
-                            decoration: BoxDecoration(
-                              color: AppColor.whiteColor,
-                              borderRadius: BorderRadius.circular(10),
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.grey,
-                                    blurRadius: 0.3,
-                                    spreadRadius: 0.1,
-                                    offset: Offset(0.1,1)
-                                ),
-                              ],
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                TextWidgets(
-                                  title: "Item Name",
-                                  subtitle: snapshot.data!.docs[index]["itemName"],
-                                ),
-                                TextWidgets(
-                                  title: "Item Price",
-                                  subtitle: snapshot.data!.docs[index]["itemCost"],
-                                ),
-                                TextWidgets(
-                                  title: "Discount",
-                                  subtitle: "${snapshot.data!.docs[index]["discount"]}%",
-                                ),
-                                TextWidgets(
-                                  title: "Tax",
-                                  subtitle: "${snapshot.data!.docs[index]["tax"]}%",
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                                  child: Divider(
+                          backWidget: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 15),
+                              height: size.height * 0.3,
+                              width: size.width * 1,
+                              decoration: BoxDecoration(
+                                color: AppColor.whiteColor,
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Colors.grey,
+                                      blurRadius: 0.3,
+                                      spreadRadius: 0.1,
+                                      offset: Offset(0.1,1)
+                                  ),
+                                ],
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  TextWidgets(
+                                    title: "Item Name",
+                                    subtitle: snapshot.data!.docs[index]["itemName"],
+                                  ),
+                                  TextWidgets(
+                                    title: "Item Price",
+                                    subtitle: snapshot.data!.docs[index]["itemCost"],
+                                  ),
+                                  TextWidgets(
+                                    title: "Discount",
+                                    subtitle: "${snapshot.data!.docs[index]["discount"]}%",
+                                  ),
+                                  TextWidgets(
+                                    title: "Tax",
+                                    subtitle: "${snapshot.data!.docs[index]["tax"]}%",
+                                  ),
+                                  Divider(
                                     color: AppColor.primaryColor,
                                   ),
-                                ),
-                                TextWidgets(
-                                  title: "Total",
-                                  subtitle: snapshot.data!.docs[index]["total"],
-                                ),
-                                TextWidgets(
-                                  title: "Paid",
-                                  subtitle: snapshot.data!.docs[index]["paid"],
-                                ),
-                                TextWidgets(
-                                  title: "Total Debt",
-                                  subtitle: snapshot.data!.docs[index]["totalDept"],
-                                ),
-                              ],
+                                  TextWidgets(
+                                    title: "Total",
+                                    subtitle: snapshot.data!.docs[index]["total"],
+                                  ),
+                                  TextWidgets(
+                                    title: "Paid",
+                                    subtitle: snapshot.data!.docs[index]["paid"],
+                                  ),
+                                  TextWidgets(
+                                    title: "Total Debt",
+                                    subtitle: snapshot.data!.docs[index]["totalDept"],
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                           controller: con,
@@ -185,17 +185,6 @@ class _ListInvoiceState extends State<ListInvoice> {
                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 children: [
                                   TextWidgets(
-                                    title: "Start Date",
-                                    subtitle: snapshot.data!.docs[index]["dateNow"],
-                                  ),
-                                  TextWidgets(
-                                    title: "Due Date",
-                                    subtitle: snapshot.data!.docs[index]["duaDate"],
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  TextWidgets(
                                     title: "Customer Name",
                                     subtitle: snapshot.data!.docs[index]["customerName"],
                                   ),
@@ -210,6 +199,17 @@ class _ListInvoiceState extends State<ListInvoice> {
                                   TextWidgets(
                                     title: "Address",
                                     subtitle: snapshot.data!.docs[index]["customerAddress"],
+                                  ),
+                                  Divider(
+                                    color: AppColor.primaryColor,
+                                  ),
+                                  TextWidgets(
+                                    title: "Start Date",
+                                    subtitle: snapshot.data!.docs[index]["dateNow"],
+                                  ),
+                                  TextWidgets(
+                                    title: "Due Date",
+                                    subtitle: snapshot.data!.docs[index]["duaDate"],
                                   ),
                                   SizedBox(
                                     height: 10,
@@ -264,21 +264,21 @@ class _ListInvoiceState extends State<ListInvoice> {
                                             content: GestureDetector(
                                               onTap: () => sendMessage(
                                                 snapshot.data!.docs[index]["customerName"],
-                                                "Please Collect your balance today is last date ${snapshot.data!.docs[index]["duaDate"]}",
+                                                "You have a loan, pay it quickly, this is the last date${snapshot.data!.docs[index]["duaDate"]}",
                                                 snapshot.data!.docs[index]["customerEmail"]
                                               ),
-                                              child: Row(
-                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                children: [
-                                                  Icon(
-                                                    Icons.message,
-                                                    color: Colors.blue,
-                                                  ),
-                                                  SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                  Text("Send to Messages"),
-                                                ],
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(left: 20),
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                  children: [
+                                                    Image.asset("assets/images/img.icons8.png",height: 30,width: 30,),
+                                                    SizedBox(
+                                                      width: 10,
+                                                    ),
+                                                    Text("Send to Gmail"),
+                                                  ],
+                                                ),
                                               ),
                                             ),
                                             confirm: GestureDetector(
@@ -287,15 +287,18 @@ class _ListInvoiceState extends State<ListInvoice> {
                                                     phone: snapshot.data!.docs[index]["customerPhone"],
                                                     message: "Please Collect your balance today is last date ${snapshot.data!.docs[index]["duaDate"]}");
                                               },
-                                              child: Row(
-                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                children: [
-                                                  Image.asset("assets/images/img.icons8.png",height: 30,width: 30,),
-                                                  SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                  Text("Send to Whatsapp"),
-                                                ],
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(left: 20),
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                  children: [
+                                                    Image.asset("assets/images/whatsapp.png",height: 30,width: 30,),
+                                                    SizedBox(
+                                                      width: 5,
+                                                    ),
+                                                    Text("Send to Whatsapp"),
+                                                  ],
+                                                ),
                                               ),
                                             ),
                                           );
