@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_invoice_app/view%20model/firebase/supplier_controller.dart';
+import 'package:get/get.dart';
 
 import '../../../../../res/component/app_button.dart';
 import '../../../../../res/component/invoice_text_field.dart';
@@ -12,6 +14,7 @@ class AddSupplier extends StatefulWidget {
 
 class _AddSupplierState extends State<AddSupplier> {
   final _key = GlobalKey<FormState>();
+  final addSupplier = Get.put(SupplierController());
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +33,7 @@ class _AddSupplierState extends State<AddSupplier> {
               ),
               InvoiceTextField(
                 title: "Company Name",
+                controller: addSupplier.companyName.value,
                 validator: (value){
                   return value!.isEmpty ? "Enter Your Company Name" : null;
                 },
@@ -39,6 +43,7 @@ class _AddSupplierState extends State<AddSupplier> {
               ),
               InvoiceTextField(
                 title: "Company Email Address",
+                controller: addSupplier.companyEmail.value,
                 keyboardType: TextInputType.emailAddress,
                 validator: (value){
                   return value!.isEmpty ? "Enter Your Email Address" : null;
@@ -49,6 +54,7 @@ class _AddSupplierState extends State<AddSupplier> {
               ),
               InvoiceTextField(
                 title: "Company Phone Number",
+                controller: addSupplier.companyPhoneNumber.value,
                 keyboardType: TextInputType.phone,
                 validator: (value){
                   return value!.isEmpty ? "Enter Your Phone Number" : null;
@@ -59,6 +65,7 @@ class _AddSupplierState extends State<AddSupplier> {
               ),
               InvoiceTextField(
                 title: "Company Address",
+                controller: addSupplier.companyAddress.value,
                 keyboardType: TextInputType.multiline,
                 maxLines: 5,
                 validator: (value){
@@ -70,6 +77,7 @@ class _AddSupplierState extends State<AddSupplier> {
               ),
               InvoiceTextField(
                 title: "Supplier Name",
+                controller: addSupplier.supplierName.value,
                 validator: (value){
                   return value!.isEmpty ? "Enter Your Item Name" : null;
                 },
@@ -79,6 +87,7 @@ class _AddSupplierState extends State<AddSupplier> {
               ),
               InvoiceTextField(
                 title: "Supplier Phone Number",
+                controller: addSupplier.supplierPhoneNumber.value,
                 keyboardType: TextInputType.number,
                 validator: (value){
                   return value!.isEmpty ? "Enter Your Item Price" : null;
@@ -89,6 +98,7 @@ class _AddSupplierState extends State<AddSupplier> {
               ),
               InvoiceTextField(
                 title: "Supplier Email",
+                controller: addSupplier.supplierEmail.value,
                 suffix: Text("%"),
                 validator: (value){
                   return value!.isEmpty ? "Enter Your Item Whole Price" : null;
@@ -101,9 +111,10 @@ class _AddSupplierState extends State<AddSupplier> {
                 title: "Add Item",
                 height: size.height * 0.05,
                 width: size.width * 0.94,
-                // loading: itemService.loading.value,
+                loading: addSupplier.loading.loading.value,
                 onTap: (){
                   if(_key.currentState!.validate()){
+                    addSupplier.addSupplier();
                   }
                 },
               ),

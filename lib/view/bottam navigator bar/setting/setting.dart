@@ -110,7 +110,7 @@ class _SettingPageState extends State<SettingPage> {
                 title: Text("Order"),
                 trailing: Icon(Icons.arrow_forward_ios),
                 onTap: (){
-                  Get.toNamed(AppRoutes.addOrder);
+                  Get.toNamed(AppRoutes.Order);
                 },
               ),
             ),

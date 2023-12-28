@@ -18,4 +18,14 @@ class AppApiService{
   firestore.collection("users")
       .doc(userId)
       .collection("items");
+
+  static final customer =
+  firestore.collection("users")
+      .doc(userId)
+      .collection("customer");
+
+  static final supplier =
+  firestore.collection("users")
+      .doc(userId)
+      .collection("supplier");
 }
