@@ -1,14 +1,20 @@
 import 'package:flutter_invoice_app/view/auth/login_screen.dart';
 import 'package:flutter_invoice_app/view/auth/sign_up_screen.dart';
-import 'package:flutter_invoice_app/view/home/invoice/item/add_item.dart';
-import 'package:flutter_invoice_app/view/home/invoice/signature_screen.dart';
-import 'package:flutter_invoice_app/view/home/invoice/user_profile/setting/change_profile_detail.dart';
-import 'package:flutter_invoice_app/view/home/invoice/user_profile/setting/languages_change.dart';
-import 'package:flutter_invoice_app/view/home/invoice/user_profile/setting/setting.dart';
-import 'package:flutter_invoice_app/view/home/invoice/user_profile/user_profile.dart';
-import 'package:flutter_invoice_app/view/home/list_invoice.dart';
+import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/setting/prodile_screen.dart';
+import 'package:flutter_invoice_app/view/home/home_screen.dart';
 import 'package:flutter_invoice_app/view/splash/splash_screen.dart';
 import 'package:get/get.dart';
+import '../../view/bottam navigator bar/setting/add_customer.dart';
+import '../../view/bottam navigator bar/setting/add_item.dart';
+import '../../view/bottam navigator bar/setting/add_order.dart';
+import '../../view/bottam navigator bar/setting/add_supplier.dart';
+import '../../view/bottam navigator bar/setting/change_profile_detail.dart';
+import '../../view/bottam navigator bar/setting/customer_screen.dart';
+import '../../view/bottam navigator bar/setting/item_screen.dart';
+import '../../view/bottam navigator bar/setting/languages_change.dart';
+import '../../view/bottam navigator bar/setting/order.dart';
+import '../../view/bottam navigator bar/setting/setting.dart';
+import '../../view/bottam navigator bar/setting/supplier.dart';
 
 class AppRoutes{
 
@@ -23,6 +29,15 @@ class AppRoutes{
   static const String setting = "/setting_routes";
   static const String changeLanguage = "/change_languages_routes";
   static const String changeProfileDetail = "/change_profile_detail";
+  static const String homeScreen = "/home_screen";
+  static const String addItems = "/add_items";
+  static const String Items = "/items_screen";
+  static const String addSupplier = "/add_supplier";
+  static const String Supplier = "/supplier_screen";
+  static const String addCustomer = "/add_customer";
+  static const String Customer = "/customer_screen";
+  static const String addOrder = "/add_order";
+  static const String Order = "/order_screen";
 
   static appRoutes() => [
     GetPage(
@@ -40,24 +55,6 @@ class AppRoutes{
     GetPage(
       name: signUp,
       page: () => SignUpPage(),
-      transition: Transition.rightToLeftWithFade,
-      transitionDuration: const Duration(microseconds: 250),
-    ),
-    GetPage(
-      name: listInvoice,
-      page: () => ListInvoice(),
-      transition: Transition.leftToRightWithFade,
-      transitionDuration: const Duration(microseconds: 250),
-    ),
-    GetPage(
-      name: signature,
-      page: () => SignaturePage(),
-      transition: Transition.rightToLeftWithFade,
-      transitionDuration: const Duration(microseconds: 250),
-    ),
-    GetPage(
-      name: userProfile,
-      page: () => UserProfile(),
       transition: Transition.rightToLeftWithFade,
       transitionDuration: const Duration(microseconds: 250),
     ),
@@ -80,8 +77,62 @@ class AppRoutes{
       transitionDuration: const Duration(microseconds: 250),
     ),
     GetPage(
-      name: addItem,
-      page: () => AddItem(),
+      name: homeScreen,
+      page: () => HomePage(),
+      transition: Transition.rightToLeftWithFade,
+      transitionDuration: const Duration(microseconds: 250),
+    ),
+    GetPage(
+      name: userProfile,
+      page: () => UserProfile(),
+      transition: Transition.rightToLeftWithFade,
+      transitionDuration: const Duration(microseconds: 250),
+    ),
+    GetPage(
+      name: addItems,
+      page: () => AddItems(),
+      transition: Transition.rightToLeftWithFade,
+      transitionDuration: const Duration(microseconds: 250),
+    ),
+    GetPage(
+      name: Items,
+      page: () => ItemScreen(),
+      transition: Transition.rightToLeftWithFade,
+      transitionDuration: const Duration(microseconds: 250),
+    ),
+    GetPage(
+      name: addSupplier,
+      page: () => AddSupplier(),
+      transition: Transition.rightToLeftWithFade,
+      transitionDuration: const Duration(microseconds: 250),
+    ),
+    GetPage(
+      name: Supplier,
+      page: () => SupplierScreen(),
+      transition: Transition.rightToLeftWithFade,
+      transitionDuration: const Duration(microseconds: 250),
+    ),
+    GetPage(
+      name: addCustomer,
+      page: () => AddCustomer(),
+      transition: Transition.rightToLeftWithFade,
+      transitionDuration: const Duration(microseconds: 250),
+    ),
+    GetPage(
+      name: Customer,
+      page: () => CustomerScreen(),
+      transition: Transition.rightToLeftWithFade,
+      transitionDuration: const Duration(microseconds: 250),
+    ),
+    GetPage(
+      name: addOrder,
+      page: () => AddOrder(),
+      transition: Transition.rightToLeftWithFade,
+      transitionDuration: const Duration(microseconds: 250),
+    ),
+    GetPage(
+      name: Order,
+      page: () => OrderScreen(),
       transition: Transition.rightToLeftWithFade,
       transitionDuration: const Duration(microseconds: 250),
     ),

@@ -9,7 +9,7 @@ class SplashService{
   splashService(){
     if(AppApiService.user != null){
       Timer(Duration(seconds: 5), () {
-        Get.toNamed(AppRoutes.listInvoice);
+        Get.toNamed(AppRoutes.homeScreen);
       });
     }else{
       Timer(Duration(seconds: 5), () {

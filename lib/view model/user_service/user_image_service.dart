@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
 import 'package:flutter_invoice_app/view%20model/auth%20service/login_service.dart';
 import 'package:flutter_invoice_app/view%20model/image_picker/image_picker_service.dart';
@@ -8,7 +9,7 @@ import 'package:get/get.dart';
 
 class UserProfileService extends GetxController{
 
-  final ref = AppApiService.storage.ref(AppApiService.userId);
+  final ref = FirebaseStorage.instance.ref(AppApiService.userId);
 
   final pickImage = Get.put(ImagePickerService());
 

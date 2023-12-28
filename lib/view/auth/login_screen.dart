@@ -189,15 +189,13 @@ class _LoginPageState extends State<LoginPage> {
                             userName: value.user!.displayName,
                             profileImage: value.user!.photoURL,
                             email: value.user!.email,
-                            specificId: specificId.toString(),
                             phoneNumber: "",
-                            token: "",
                           );
                           FirebaseFirestore.instance
                               .collection("users")
                               .doc(value.user!.uid)
                               .set(userModel.toJson()).then((value){
-                            Get.toNamed(AppRoutes.listInvoice);
+                            Get.toNamed(AppRoutes.homeScreen);
                           });
                         }).onError((error, stackTrace){
                           Utils.flutterToast(error.toString());

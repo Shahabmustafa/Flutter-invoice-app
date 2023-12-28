@@ -30,7 +30,7 @@ class LoginService extends GetxController{
         Utils.flutterToast("You have Sucessfully Login");
         email.value.clear();
         password.value.clear();
-        Get.toNamed(AppRoutes.listInvoice);
+        Get.toNamed(AppRoutes.homeScreen);
       }).onError((error, stackTrace){
         setLoading(false);
         Utils.flutterToast("Please Check Your Email and Password");
