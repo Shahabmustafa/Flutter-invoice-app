@@ -40,7 +40,6 @@ class _AddOrderState extends State<AddOrder> {
               ),
               InvoiceTextField(
                 title: "",
-                // controller: addSupplier.companyEmail.value,
                 keyboardType: TextInputType.emailAddress,
                 validator: (value){
                   return value!.isEmpty ? "Enter Your Email Address" : null;

@@ -5,6 +5,8 @@ class ItemModel {
   String? sale;
   String? cost;
   String? wholeSale;
+  String? stock;
+  String? categori;
   String? tax;
   String? companyName;
   String? saleDate;
@@ -15,6 +17,8 @@ class ItemModel {
         this.sale,
         this.cost,
         this.wholeSale,
+        this.stock,
+        this.categori,
         this.tax,
         this.companyName,
         this.saleDate,
@@ -27,6 +31,8 @@ class ItemModel {
       sale: snapshot["sale"],
       cost: snapshot["cost"],
       wholeSale: snapshot["wholeSale"],
+      stock: snapshot["stock"],
+      categori: snapshot["categori"],
       tax: snapshot["tax"],
       companyName: snapshot["companyName"],
       saleDate: snapshot["saleDate"],
@@ -40,6 +46,8 @@ class ItemModel {
     data['sale'] = this.sale;
     data['cost'] = this.cost;
     data['wholeSale'] = this.wholeSale;
+    data['stock'] = this.stock;
+    data['categori'] = this.categori;
     data['tax'] = this.tax;
     data['companyName'] = this.companyName;
     data['saleDate'] = this.saleDate;

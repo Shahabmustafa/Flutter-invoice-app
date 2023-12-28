@@ -4,7 +4,6 @@ import 'package:flutter_invoice_app/res/colors/app_colors.dart';
 import 'package:flutter_invoice_app/res/component/app_button.dart';
 import 'package:flutter_invoice_app/res/component/text_widget.dart';
 import 'package:flutter_invoice_app/res/routes/routes.dart';
-import 'package:flutter_invoice_app/view%20model/firebase/item_controller.dart';
 import 'package:get/get.dart';
 
 class ItemScreen extends StatefulWidget {
@@ -33,7 +32,7 @@ class _ItemScreenState extends State<ItemScreen> {
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
                   child: Container(
-                    height: size.height * 0.26,
+                    height: size.height * 0.32,
                     width: size.width,
                     padding: EdgeInsets.symmetric(horizontal: 15,vertical: 10),
                     decoration: BoxDecoration(
@@ -67,12 +66,20 @@ class _ItemScreenState extends State<ItemScreen> {
                           subtitle: item["wholeSale"],
                         ),
                         TextWidgets(
+                          title: "Stocks",
+                          subtitle: item["stock"],
+                        ),
+                        TextWidgets(
                           title: "Tax",
                           subtitle: item["tax"],
                         ),
                         TextWidgets(
                           title: "Supplier",
                           subtitle: item["companyName"],
+                        ),
+                        TextWidgets(
+                          title: "Categori",
+                          subtitle: item["categori"],
                         ),
                         TextWidgets(
                           title: "Expiry Date",

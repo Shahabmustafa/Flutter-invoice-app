@@ -103,7 +103,7 @@ class _SupplierScreenState extends State<SupplierScreen> {
                                   title: "Delete",
                                   content: Text("You Delete This Item"),
                                   onConfirm: (){
-                                    AppApiService.customer.doc(snapshot.data!.docs[index].id).delete().then((value) => Get.back());
+                                    AppApiService.supplier.doc(snapshot.data!.docs[index].id).delete().then((value) => Get.back());
                                   },
                                   onCancel: (){
                                     Get.back();

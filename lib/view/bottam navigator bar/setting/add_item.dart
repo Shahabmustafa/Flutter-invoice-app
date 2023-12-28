@@ -60,7 +60,7 @@ class _AddItemsState extends State<AddItems> {
                     child: InvoiceTextField(
                       title: "Cost",
                       controller: item.cost.value,
-                      suffix: Text("%"),
+                      keyboardType: TextInputType.number,
                       validator: (value){
                         return value!.isEmpty ? "Enter Your Item Whole Price" : null;
                       },
@@ -88,6 +88,7 @@ class _AddItemsState extends State<AddItems> {
                     child: InvoiceTextField(
                       title: "Tax",
                       controller: item.tax.value,
+                      keyboardType: TextInputType.number,
                       suffix: Text("%"),
                       validator: (value){
                         return value!.isEmpty ? "Enter Your Item Whole Price" : null;
@@ -100,7 +101,28 @@ class _AddItemsState extends State<AddItems> {
                 height: size.height * 0.02,
               ),
               InvoiceTextField(
-                title: "Company Name",
+                title: "Stocks",
+                controller: item.stock.value,
+                keyboardType: TextInputType.number,
+                validator: (value){
+                  return value!.isEmpty ? "Enter Your Item Name" : null;
+                },
+              ),
+              SizedBox(
+                height: size.height * 0.02,
+              ),
+              InvoiceTextField(
+                title: "Categori",
+                controller: item.categori.value,
+                validator: (value){
+                  return value!.isEmpty ? "Enter Your Item Name" : null;
+                },
+              ),
+              SizedBox(
+                height: size.height * 0.02,
+              ),
+              InvoiceTextField(
+                title: "Company",
                 controller: item.companyName.value,
                 validator: (value){
                   return value!.isEmpty ? "Enter Your Item Name" : null;

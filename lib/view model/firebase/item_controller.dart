@@ -16,6 +16,8 @@ class ItemController extends GetxController{
   final sale = TextEditingController().obs;
   final cost = TextEditingController().obs;
   final wholeSale = TextEditingController().obs;
+  final stock = TextEditingController().obs;
+  final categori = TextEditingController().obs;
   final tax = TextEditingController().obs;
   final companyName = TextEditingController().obs;
   final saleDate = TextEditingController().obs;
@@ -34,6 +36,8 @@ class ItemController extends GetxController{
         sale: sale.value.text,
         cost: cost.value.text,
         wholeSale: wholeSale.value.text,
+        stock: stock.value.text,
+        categori: categori.value.text,
         tax: tax.value.text,
         companyName: companyName.value.text,
         saleDate: saleDate.value.text,
