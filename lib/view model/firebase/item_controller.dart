@@ -19,7 +19,6 @@ class ItemController extends GetxController{
   final stock = TextEditingController().obs;
   final categori = TextEditingController().obs;
   final tax = TextEditingController().obs;
-  final companyName = TextEditingController().obs;
   final saleDate = TextEditingController().obs;
   final expiryDate = TextEditingController().obs;
 
@@ -28,7 +27,7 @@ class ItemController extends GetxController{
 
 
   // items add data in Firebase Data base
-  addItemData()async{
+  addItemData(String companyName)async{
     loading.setLoading(true);
     try{
       ItemModel itemModel = ItemModel(
@@ -39,7 +38,7 @@ class ItemController extends GetxController{
         stock: stock.value.text,
         categori: categori.value.text,
         tax: tax.value.text,
-        companyName: companyName.value.text,
+        companyName: companyName,
         saleDate: saleDate.value.text,
         expiryDate: expiryDate.value.text,
       );
@@ -54,18 +53,18 @@ class ItemController extends GetxController{
     }
   }
 
-  // // items get data in Firebase Database
-  // @override
-  // void onInit() {
-  //   // TODO: implement onInit
-  //   super.onInit();
-  //   _itemList.bindStream(AppApiService.item.snapshots().map((QuerySnapshot querySnapshot){
-  //     List<ItemModel> relVale = [];
-  //     for(var element in querySnapshot.docs){
-  //       relVale.add(ItemModel.fromSnap(element));
-  //     }
-  //     return relVale;
-  //   }));
-  // }
+  // items get data in Firebase Database
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    _itemList.bindStream(AppApiService.item.snapshots().map((QuerySnapshot querySnapshot){
+      List<ItemModel> relVale = [];
+      for(var element in querySnapshot.docs){
+        relVale.add(ItemModel.fromSnap(element));
+      }
+      return relVale;
+    }));
+  }
 
 }

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/view%20model/firebase/supplier_controller.dart';
 import 'package:get/get.dart';
 
-import '../../../../../res/component/app_button.dart';
-import '../../../../../res/component/invoice_text_field.dart';
+import '../../../../../../res/component/app_button.dart';
+import '../../../../../../res/component/invoice_text_field.dart';
 
 class AddSupplier extends StatefulWidget {
   const AddSupplier({Key? key}) : super(key: key);

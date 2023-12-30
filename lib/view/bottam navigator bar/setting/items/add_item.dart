@@ -1,10 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
+import 'package:flutter_invoice_app/res/colors/app_colors.dart';
+import 'package:flutter_invoice_app/res/component/drop_down_textfield.dart';
 import 'package:flutter_invoice_app/view%20model/firebase/item_controller.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../../res/component/app_button.dart';
-import '../../../../../res/component/invoice_text_field.dart';
+import '../../../../../../res/component/app_button.dart';
+import '../../../../../../res/component/invoice_text_field.dart';
 
 class AddItems extends StatefulWidget {
   const AddItems({Key? key}) : super(key: key);
@@ -17,8 +21,35 @@ class _AddItemsState extends State<AddItems> {
   final _key = GlobalKey<FormState>();
   DateTime selectedDate = DateTime.now();
   final item = Get.put(ItemController());
+  String? selectedDropdownValue;
+  List<String> dropdownItems = [];
+
+  Future<List<String>> fetchDropdownDataFromFirebase() async {
+    List<String> dropdownItems = [];
+    try {
+      QuerySnapshot querySnapshot = await AppApiService.supplier.get();
+      if (querySnapshot.docs.isNotEmpty) {
+        dropdownItems = querySnapshot.docs.map((doc) => doc['companyName'].toString()).toList();
+      }
+    } catch (e) {
+      print('Error fetching data: $e');
+    }
+    return dropdownItems;
+  }
+
+  Future<void> fetchDataAndSetState() async {
+    List<String> data = await fetchDropdownDataFromFirebase();
+    setState(() {
+      dropdownItems = data;
+    });
+  }
+
 
   @override
+  void initState() {
+    super.initState();
+    fetchDataAndSetState();
+  }
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
@@ -121,12 +152,54 @@ class _AddItemsState extends State<AddItems> {
               SizedBox(
                 height: size.height * 0.02,
               ),
-              InvoiceTextField(
-                title: "Company",
-                controller: item.companyName.value,
-                validator: (value){
-                  return value!.isEmpty ? "Enter Your Item Name" : null;
-                },
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Container(
+                  height: size.height * 0.08,
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: AppColor.primaryColor,
+                    ),
+                  ),
+                  child: FormField<String>(
+                    builder: (FormFieldState<String> state) {
+                      return InputDecorator(
+                        decoration: InputDecoration(
+                          labelText: 'Company Name',
+                          errorText: state.errorText,
+                          border: InputBorder.none,
+                        ),
+                        isEmpty: selectedDropdownValue == null || selectedDropdownValue!.isEmpty,
+                        child: DropdownButtonFormField<String>(
+                          value: selectedDropdownValue,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                          ),
+                          items: dropdownItems.map((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              selectedDropdownValue = value;
+                            });
+                            state.didChange(value);
+                          },
+                        ),
+                      );
+                    },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please select an option';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
               ),
               SizedBox(
                 height: size.height * 0.02,
@@ -164,7 +237,9 @@ class _AddItemsState extends State<AddItems> {
                   loading: item.loading.loading.value,
                   onTap: (){
                     if(_key.currentState!.validate()){
-                      item.addItemData();
+                      item.addItemData(
+                        dropdownItems.toString(),
+                      );
                     }
                   },
                 );

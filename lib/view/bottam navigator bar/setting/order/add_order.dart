@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../res/component/app_button.dart';
-import '../../../res/component/invoice_text_field.dart';
+import '../../../../res/component/app_button.dart';
+import '../../../../res/component/invoice_text_field.dart';
 
 class AddOrder extends StatefulWidget {
   const AddOrder({Key? key}) : super(key: key);
