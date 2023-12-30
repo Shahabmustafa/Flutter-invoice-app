@@ -153,54 +153,58 @@ class _AddItemsState extends State<AddItems> {
                 height: size.height * 0.02,
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Container(
-                  height: size.height * 0.08,
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(
-                      color: AppColor.primaryColor,
-                    ),
-                  ),
-                  child: FormField<String>(
-                    builder: (FormFieldState<String> state) {
-                      return InputDecorator(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: FormField<String>(
+                  builder: (FormFieldState<String> state) {
+                    return InputDecorator(
+                      decoration: InputDecoration(
+                        labelText: 'Company Name',
+                        errorText: state.errorText,
+                        border: InputBorder.none,
+                      ),
+                      isEmpty: selectedDropdownValue == null || selectedDropdownValue!.isEmpty,
+                      child: DropdownButtonFormField<String>(
+                        value: selectedDropdownValue,
                         decoration: InputDecoration(
-                          labelText: 'Company Name',
-                          errorText: state.errorText,
                           border: InputBorder.none,
                         ),
-                        isEmpty: selectedDropdownValue == null || selectedDropdownValue!.isEmpty,
-                        child: DropdownButtonFormField<String>(
-                          value: selectedDropdownValue,
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                          ),
-                          items: dropdownItems.map((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                          onChanged: (value) {
-                            setState(() {
-                              selectedDropdownValue = value;
-                            });
-                            state.didChange(value);
-                          },
-                        ),
-                      );
-                    },
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please select an option';
-                      }
-                      return null;
-                    },
-                  ),
+                        items: dropdownItems.map((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            selectedDropdownValue = value;
+                          });
+                          state.didChange(value);
+                        },
+                      ),
+                    );
+                  },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please select an option';
+                    }
+                    return null;
+                  },
                 ),
               ),
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(horizontal: 10),
+              //   child: Container(
+              //     height: size.height * 0.08,
+              //     padding: EdgeInsets.symmetric(horizontal: 10),
+              //     decoration: BoxDecoration(
+              //       borderRadius: BorderRadius.circular(8),
+              //       border: Border.all(
+              //         color: AppColor.primaryColor,
+              //       ),
+              //     ),
+              //     child:
+              //   ),
+              // ),
               SizedBox(
                 height: size.height * 0.02,
               ),
@@ -238,7 +242,7 @@ class _AddItemsState extends State<AddItems> {
                   onTap: (){
                     if(_key.currentState!.validate()){
                       item.addItemData(
-                        dropdownItems.toString(),
+                        selectedDropdownValue.toString(),
                       );
                     }
                   },

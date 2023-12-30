@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_invoice_app/res/colors/app_colors.dart';
 
+import '../../../../res/app_api/app_api_service.dart';
 import '../../../../res/component/app_button.dart';
 import '../../../../res/component/invoice_text_field.dart';
 
@@ -13,6 +16,29 @@ class AddOrder extends StatefulWidget {
 class _AddOrderState extends State<AddOrder> {
 
   final _key = GlobalKey<FormState>();
+
+  String? selectedDropdownValue;
+  List<String> dropdownItems = [];
+
+  Future<List<String>> fetchDropdownDataFromFirebase() async {
+    List<String> dropdownItems = [];
+    try {
+      QuerySnapshot querySnapshot = await AppApiService.item.get();
+      if (querySnapshot.docs.isNotEmpty) {
+        dropdownItems = querySnapshot.docs.map((doc) => doc['itemName'].toString()).toList();
+      }
+    } catch (e) {
+      print('Error fetching data: $e');
+    }
+    return dropdownItems;
+  }
+
+  Future<void> fetchDataAndSetState() async {
+    List<String> data = await fetchDropdownDataFromFirebase();
+    setState(() {
+      dropdownItems = data;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
@@ -26,14 +52,46 @@ class _AddOrderState extends State<AddOrder> {
           child: Column(
             children: [
               SizedBox(
-                height: size.height * 0.05,
+                height: size.height * 0.02,
               ),
-              InvoiceTextField(
-                title: "Item Name",
-                // controller: addSupplier.companyName.value,
-                validator: (value){
-                  return value!.isEmpty ? "Enter Your Company Name" : null;
-                },
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: FormField<String>(
+                  builder: (FormFieldState<String> state) {
+                    return InputDecorator(
+                      decoration: InputDecoration(
+                        labelText: 'Item Name',
+                        errorText: state.errorText,
+                        border: InputBorder.none,
+                      ),
+                      isEmpty: selectedDropdownValue == null || selectedDropdownValue!.isEmpty,
+                      child: DropdownButtonFormField<String>(
+                        value: selectedDropdownValue,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                        ),
+                        items: dropdownItems.map((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            selectedDropdownValue = value;
+                          });
+                          state.didChange(value);
+                        },
+                      ),
+                    );
+                  },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please select an option';
+                    }
+                    return null;
+                  },
+                ),
               ),
               SizedBox(
                 height: size.height * 0.02,
@@ -110,7 +168,7 @@ class _AddOrderState extends State<AddOrder> {
                 // loading: addSupplier.loading.loading.value,
                 onTap: (){
                   if(_key.currentState!.validate()){
-                    // addSupplier.addSupplier();
+                    dropdownItems.toString();
                   }
                 },
               ),

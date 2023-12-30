@@ -100,20 +100,10 @@ class _SupplierDetailState extends State<SupplierDetail> {
                     width: size.width * 0.3,
                     color: AppColor.errorColor,
                     onTap: (){
-                      Get.defaultDialog(
-                        title: "Delete",
-                        content: Text("You Delete This Item"),
-                        onConfirm: (){
-                          AppApiService.item.doc(supplier[7]).delete().then((value){
-                            Get.back();
-                            Get.back();
-                          });
-                        },
-                        onCancel: (){
-                          Get.back();
-                        },
-
-                      );
+                      print(supplier[7]);
+                      AppApiService.item.doc(supplier[7]).delete().then((value){
+                        Get.back();
+                      });
                     },
                   ),
                 ],
