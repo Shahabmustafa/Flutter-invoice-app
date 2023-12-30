@@ -53,18 +53,23 @@ class ItemController extends GetxController{
     }
   }
 
+  // static Future<List<ItemModel>> searchItem(String itamName)async{
+  //   final snapshot = await AppApiService.item.where("itemName",isGreaterThanOrEqualTo: itamName).get();
+  //   return snapshot.docs.map((doc) => ItemModel.fromJson(doc.data())).toList();
+  // }
+
   // items get data in Firebase Database
-  @override
-  void onInit() {
-    // TODO: implement onInit
-    super.onInit();
-    _itemList.bindStream(AppApiService.item.snapshots().map((QuerySnapshot querySnapshot){
-      List<ItemModel> relVale = [];
-      for(var element in querySnapshot.docs){
-        relVale.add(ItemModel.fromSnap(element));
-      }
-      return relVale;
-    }));
-  }
+  // @override
+  // void onInit() {
+  //   // TODO: implement onInit
+  //   super.onInit();
+  //   _itemList.bindStream(AppApiService.item.snapshots().map((QuerySnapshot querySnapshot){
+  //     List<ItemModel> relVale = [];
+  //     for(var element in querySnapshot.docs){
+  //       relVale.add(ItemModel.fromSnap(element));
+  //     }
+  //     return relVale;
+  //   }));
+  // }
 
 }

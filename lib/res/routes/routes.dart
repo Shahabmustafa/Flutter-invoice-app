@@ -17,6 +17,7 @@ import '../../view/bottam navigator bar/setting/languages_change.dart';
 import '../../view/bottam navigator bar/setting/order/order.dart';
 import '../../view/bottam navigator bar/setting/setting.dart';
 import '../../view/bottam navigator bar/setting/supplier/supplier.dart';
+import '../../view/bottam navigator bar/setting/supplier/supplier_detail.dart';
 
 class AppRoutes{
 
@@ -37,6 +38,7 @@ class AppRoutes{
   static const String itemDetail = "/itemDetail_screen";
   static const String addSupplier = "/add_supplier";
   static const String Supplier = "/supplier_screen";
+  static const String SupplierDetails = "/supplierDetail_screen";
   static const String addCustomer = "/add_customer";
   static const String Customer = "/customer_screen";
   static const String CustomersDetail = "/CustomerDetail_screen";
@@ -119,6 +121,12 @@ class AppRoutes{
     GetPage(
       name: Supplier,
       page: () => SupplierScreen(),
+      transition: Transition.rightToLeftWithFade,
+      transitionDuration: const Duration(microseconds: 250),
+    ),
+    GetPage(
+      name: SupplierDetails,
+      page: () => SupplierDetail(),
       transition: Transition.rightToLeftWithFade,
       transitionDuration: const Duration(microseconds: 250),
     ),

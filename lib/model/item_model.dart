@@ -24,21 +24,20 @@ class ItemModel {
         this.saleDate,
         this.expiryDate});
 
-  static ItemModel fromSnap(DocumentSnapshot snap){
-    var snapshot = snap.data() as Map<String,dynamic>;
-    return ItemModel(
-      itemName: snapshot["itemName"],
-      sale: snapshot["sale"],
-      cost: snapshot["cost"],
-      wholeSale: snapshot["wholeSale"],
-      stock: snapshot["stock"],
-      categori: snapshot["categori"],
-      tax: snapshot["tax"],
-      companyName: snapshot["companyName"],
-      saleDate: snapshot["saleDate"],
-      expiryDate: snapshot["expiryDate"],
-    );
-  }
+  factory ItemModel.fromJson(Map<String, dynamic> json) =>
+      ItemModel(
+        itemName: json['itemName'],
+        sale: json['sale'],
+        cost: json['cost'],
+        wholeSale: json['wholeSale'],
+        stock: json['stock'],
+        categori: json['categori'],
+        tax: json['tax'],
+        companyName: json['companyName'],
+        saleDate: json['saleDate'],
+        expiryDate: json['expiryDate'],
+      );
+
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
