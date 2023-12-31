@@ -35,6 +35,8 @@ class OrderController extends GetxController{
     loading.setLoading(true);
     try{
       await AppApiService.order.add(orderModel.toJson()).then((value){
+        AppApiService.dashboard.set({});
+        
         loading.setLoading(false);
       }).onError((error, stackTrace){
         loading.setLoading(false);

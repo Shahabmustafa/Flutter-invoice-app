@@ -33,4 +33,8 @@ class AppApiService{
   firestore.collection("users")
       .doc(userId)
       .collection("orders");
+
+  static final dashboard =
+  firestore.collection("dashboard")
+      .doc(userId);
 }
