@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_invoice_app/res/calculation/calculation.dart';
 import 'package:get/get.dart';
 
 import '../../../../res/app_api/app_api_service.dart';
@@ -6,28 +7,30 @@ import '../../../../res/colors/app_colors.dart';
 import '../../../../res/component/app_button.dart';
 import '../../../../res/component/text_widget.dart';
 
-class ItemDetail extends StatefulWidget {
-  const ItemDetail({Key? key}) : super(key: key);
+class OrderDetail extends StatefulWidget {
+  const OrderDetail({Key? key}) : super(key: key);
 
   @override
-  State<ItemDetail> createState() => _ItemDetailState();
+  State<OrderDetail> createState() => _OrderDetailState();
 }
 
-class _ItemDetailState extends State<ItemDetail> {
+class _OrderDetailState extends State<OrderDetail> {
 
-  var itemData = Get.arguments;
+  var orderData = Get.arguments;
+
+  final multiply = Calculation();
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text("Item Detils"),
+        title: Text("Order Detail"),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
         child: Container(
-          height: size.height * 0.55,
+          height: size.height * 0.57,
           width: size.width,
           padding: EdgeInsets.symmetric(horizontal: 15,vertical: 10),
           decoration: BoxDecoration(
@@ -45,54 +48,55 @@ class _ItemDetailState extends State<ItemDetail> {
           child: Column(
             children: [
               TextWidgets(
-                title: "Name",
-                subtitle: itemData[0],
+                title: "Item Name",
+                subtitle: orderData[0],
+              ),
+              Divider(),
+              TextWidgets(
+                title: "Company Name",
+                subtitle: orderData[1],
               ),
               Divider(),
               TextWidgets(
                 title: "Sale",
-                subtitle: itemData[1],
+                subtitle: orderData[2],
               ),
               Divider(),
               TextWidgets(
                 title: "Cost",
-                subtitle: itemData[2],
+                subtitle: orderData[3],
               ),
               Divider(),
               TextWidgets(
                 title: "Whole Sale",
-                subtitle: itemData[3],
+                subtitle: orderData[4],
               ),
               Divider(),
               TextWidgets(
-                title: "Stocks",
-                subtitle: itemData[4],
+                title: "Discount",
+                subtitle: orderData[5],
               ),
               Divider(),
               TextWidgets(
                 title: "Tax",
-                subtitle: itemData[5],
+                subtitle: orderData[6],
               ),
               Divider(),
               TextWidgets(
-                title: "Supplier",
-                subtitle: itemData[6],
+                title: "Stocks",
+                subtitle: orderData[7],
               ),
               Divider(),
               TextWidgets(
-                title: "Categori",
-                subtitle: itemData[7],
+                title: "Type",
+                subtitle: orderData[8],
               ),
               Divider(),
               TextWidgets(
-                title: "Date",
-                subtitle: itemData[8],
+                title: "Total",
+                subtitle: multiply.multiply(orderData[3], orderData[7]),
               ),
               Divider(),
-              TextWidgets(
-                title: "Expiry Date",
-                subtitle: itemData[9],
-              ),
               SizedBox(
                 height: size.height * 0.03,
               ),
@@ -118,7 +122,7 @@ class _ItemDetailState extends State<ItemDetail> {
                         title: "Delete",
                         content: Text("You Delete This Item"),
                         onConfirm: (){
-                          AppApiService.item.doc(itemData[10]).delete().then((value){
+                          AppApiService.item.doc(orderData[9]).delete().then((value){
                             Get.back();
                             Get.back();
                           });

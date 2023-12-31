@@ -1,8 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_invoice_app/res/colors/app_colors.dart';
-
-import '../../../../res/app_api/app_api_service.dart';
+import 'package:flutter_invoice_app/view%20model/firebase/order_controller.dart';
+import 'package:get/get.dart';
 import '../../../../res/component/app_button.dart';
 import '../../../../res/component/invoice_text_field.dart';
 
@@ -17,29 +15,40 @@ class _AddOrderState extends State<AddOrder> {
 
   final _key = GlobalKey<FormState>();
 
-  String? selectedDropdownValue;
-  List<String> dropdownItems = [];
+  String? itemName;
+  String? companyName;
+  String? orderType;
+  List<String> orderTypeDropDownItems = [
+    "Sender",
+    "Receiver",
+  ];
+  List<String> itemNameDropdownItems = [];
+  List<String> companyNameDropdownItems = [];
 
-  Future<List<String>> fetchDropdownDataFromFirebase() async {
-    List<String> dropdownItems = [];
-    try {
-      QuerySnapshot querySnapshot = await AppApiService.item.get();
-      if (querySnapshot.docs.isNotEmpty) {
-        dropdownItems = querySnapshot.docs.map((doc) => doc['itemName'].toString()).toList();
-      }
-    } catch (e) {
-      print('Error fetching data: $e');
-    }
-    return dropdownItems;
-  }
 
-  Future<void> fetchDataAndSetState() async {
-    List<String> data = await fetchDropdownDataFromFirebase();
+
+  final orderController = Get.put(OrderController());
+
+  Future<void> itemNameSetState() async {
+    List<String> data = await orderController.itemsName();
     setState(() {
-      dropdownItems = data;
+      itemNameDropdownItems = data;
     });
   }
+  Future<void> companyNameSetState() async {
+    List<String> data = await orderController.companysName();
+    setState(() {
+      companyNameDropdownItems = data;
+    });
+  }
+
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    itemNameSetState();
+    companyNameSetState();
+  }
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
     return Scaffold(
@@ -64,13 +73,13 @@ class _AddOrderState extends State<AddOrder> {
                         errorText: state.errorText,
                         border: InputBorder.none,
                       ),
-                      isEmpty: selectedDropdownValue == null || selectedDropdownValue!.isEmpty,
+                      isEmpty: itemName == null || itemName!.isEmpty,
                       child: DropdownButtonFormField<String>(
-                        value: selectedDropdownValue,
+                        value: itemName,
                         decoration: InputDecoration(
                           border: InputBorder.none,
                         ),
-                        items: dropdownItems.map((String value) {
+                        items: itemNameDropdownItems.map((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
                             child: Text(value),
@@ -78,7 +87,46 @@ class _AddOrderState extends State<AddOrder> {
                         }).toList(),
                         onChanged: (value) {
                           setState(() {
-                            selectedDropdownValue = value;
+                            itemName = value;
+                          });
+                          state.didChange(value);
+                        },
+                      ),
+                    );
+                  },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please select an option';
+                    }
+                    return null;
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: FormField<String>(
+                  builder: (FormFieldState<String> state) {
+                    return InputDecorator(
+                      decoration: InputDecoration(
+                        labelText: 'Company Name',
+                        errorText: state.errorText,
+                        border: InputBorder.none,
+                      ),
+                      isEmpty: companyName == null || companyName!.isEmpty,
+                      child: DropdownButtonFormField<String>(
+                        value: companyName,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                        ),
+                        items: companyNameDropdownItems.map((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            companyName = value;
                           });
                           state.didChange(value);
                         },
@@ -96,82 +144,143 @@ class _AddOrderState extends State<AddOrder> {
               SizedBox(
                 height: size.height * 0.02,
               ),
-              InvoiceTextField(
-                title: "",
-                keyboardType: TextInputType.emailAddress,
-                validator: (value){
-                  return value!.isEmpty ? "Enter Your Email Address" : null;
-                },
+              Row(
+               children: [
+                 Flexible(
+                   child: InvoiceTextField(
+                     title: "Sale",
+                     keyboardType: TextInputType.emailAddress,
+                     controller: orderController.sale.value,
+                     validator: (value){
+                       return value!.isEmpty ? "Enter Your Email Address" : null;
+                     },
+                   ),
+                 ),
+                 Flexible(
+                   child: InvoiceTextField(
+                     title: "Cost",
+                     controller: orderController.cost.value,
+                     keyboardType: TextInputType.phone,
+                     validator: (value){
+                       return value!.isEmpty ? "Enter Your Phone Number" : null;
+                     },
+                   ),
+                 ),
+               ],
+             ),
+              SizedBox(
+                height: size.height * 0.02,
+              ),
+              Row(
+                children: [
+                  Flexible(
+                    child: InvoiceTextField(
+                      title: "Whole Sale",
+                      controller: orderController.wholeSale.value,
+                      keyboardType: TextInputType.emailAddress,
+                      validator: (value){
+                        return value!.isEmpty ? "Enter Your Email Address" : null;
+                      },
+                    ),
+                  ),
+                  Flexible(
+                    child: InvoiceTextField(
+                      title: "Discount",
+                      controller: orderController.discount.value,
+                      keyboardType: TextInputType.phone,
+                      validator: (value){
+                        return value!.isEmpty ? "Enter Your Phone Number" : null;
+                      },
+                    ),
+                  ),
+                ],
               ),
               SizedBox(
                 height: size.height * 0.02,
               ),
-              InvoiceTextField(
-                title: "Company Phone Number",
-                // controller: addSupplier.companyPhoneNumber.value,
-                keyboardType: TextInputType.phone,
-                validator: (value){
-                  return value!.isEmpty ? "Enter Your Phone Number" : null;
-                },
+              Row(
+                children: [
+                  Flexible(
+                    child: InvoiceTextField(
+                      title: "Tax",
+                      controller: orderController.Tax.value,
+                      keyboardType: TextInputType.emailAddress,
+                      validator: (value){
+                        return value!.isEmpty ? "Enter Your Email Address" : null;
+                      },
+                    ),
+                  ),
+                  Flexible(
+                    child: InvoiceTextField(
+                      title: "Stock",
+                      controller: orderController.Stock.value,
+                      keyboardType: TextInputType.phone,
+                      validator: (value){
+                        return value!.isEmpty ? "Enter Your Phone Number" : null;
+                      },
+                    ),
+                  ),
+                ],
               ),
               SizedBox(
                 height: size.height * 0.02,
               ),
-              InvoiceTextField(
-                title: "Company Address",
-                // controller: addSupplier.companyAddress.value,
-                keyboardType: TextInputType.multiline,
-                maxLines: 5,
-                validator: (value){
-                  return value!.isEmpty ? "Enter Your Address" : null;
-                },
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: FormField<String>(
+                  builder: (FormFieldState<String> state) {
+                    return InputDecorator(
+                      decoration: InputDecoration(
+                        labelText: 'Type',
+                        errorText: state.errorText,
+                        border: InputBorder.none,
+                      ),
+                      isEmpty: orderType == null || orderType!.isEmpty,
+                      child: DropdownButtonFormField<String>(
+                        value: orderType,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                        ),
+                        items: orderTypeDropDownItems.map((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            orderType = value;
+                          });
+                          state.didChange(value);
+                        },
+                      ),
+                    );
+                  },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please select an option';
+                    }
+                    return null;
+                  },
+                ),
               ),
-              SizedBox(
-                height: size.height * 0.02,
-              ),
-              InvoiceTextField(
-                title: "Supplier Name",
-                // controller: addSupplier.supplierName.value,
-                validator: (value){
-                  return value!.isEmpty ? "Enter Your Item Name" : null;
-                },
-              ),
-              SizedBox(
-                height: size.height * 0.02,
-              ),
-              InvoiceTextField(
-                title: "Supplier Phone Number",
-                // controller: addSupplier.supplierPhoneNumber.value,
-                keyboardType: TextInputType.number,
-                validator: (value){
-                  return value!.isEmpty ? "Enter Your Item Price" : null;
-                },
-              ),
-              SizedBox(
-                height: size.height * 0.02,
-              ),
-              InvoiceTextField(
-                title: "Supplier Email",
-                // controller: addSupplier.supplierEmail.value,
-                suffix: Text("%"),
-                validator: (value){
-                  return value!.isEmpty ? "Enter Your Item Whole Price" : null;
-                },
-              ),
-              SizedBox(
-                height: size.height * 0.02,
-              ),
-              AppButton(
-                title: "Add Order",
-                height: size.height * 0.05,
-                width: size.width * 0.94,
-                // loading: addSupplier.loading.loading.value,
-                onTap: (){
-                  if(_key.currentState!.validate()){
-                    dropdownItems.toString();
-                  }
-                },
-              ),
+              Obx((){
+                return AppButton(
+                  title: "Add Order",
+                  height: size.height * 0.05,
+                  width: size.width * 0.94,
+                  loading: orderController.loading.loading.value,
+                  onTap: (){
+                    if(_key.currentState!.validate()){
+                      orderController.addOrder(
+                        itemName.toString(),
+                        companyName.toString(),
+                        orderType.toString(),
+                      );
+                    }
+                  },
+                );
+              }),
             ],
           ),
         ),

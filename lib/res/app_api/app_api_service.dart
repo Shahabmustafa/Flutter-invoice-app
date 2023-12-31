@@ -28,4 +28,9 @@ class AppApiService{
   firestore.collection("users")
       .doc(userId)
       .collection("supplier");
+
+  static final order =
+  firestore.collection("users")
+      .doc(userId)
+      .collection("orders");
 }

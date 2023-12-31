@@ -1,5 +1,6 @@
 import 'package:flutter_invoice_app/view/auth/login_screen.dart';
 import 'package:flutter_invoice_app/view/auth/sign_up_screen.dart';
+import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/setting/order/order_details.dart';
 import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/setting/prodile_screen.dart';
 import 'package:flutter_invoice_app/view/home/home_screen.dart';
 import 'package:flutter_invoice_app/view/splash/splash_screen.dart';
@@ -44,6 +45,7 @@ class AppRoutes{
   static const String CustomersDetail = "/CustomerDetail_screen";
   static const String addOrder = "/add_order";
   static const String Order = "/order_screen";
+  static const String orderDetail = "/orderDetail_screen";
 
   static appRoutes() => [
     GetPage(
@@ -157,6 +159,12 @@ class AppRoutes{
     GetPage(
       name: Order,
       page: () => OrderScreen(),
+      transition: Transition.rightToLeftWithFade,
+      transitionDuration: const Duration(microseconds: 250),
+    ),
+    GetPage(
+      name: orderDetail,
+      page: () => OrderDetail(),
       transition: Transition.rightToLeftWithFade,
       transitionDuration: const Duration(microseconds: 250),
     ),
