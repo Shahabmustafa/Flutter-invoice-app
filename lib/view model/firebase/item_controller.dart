@@ -59,17 +59,18 @@ class ItemController extends GetxController{
   // }
 
   // items get data in Firebase Database
-  // @override
-  // void onInit() {
-  //   // TODO: implement onInit
-  //   super.onInit();
-  //   _itemList.bindStream(AppApiService.item.snapshots().map((QuerySnapshot querySnapshot){
-  //     List<ItemModel> relVale = [];
-  //     for(var element in querySnapshot.docs){
-  //       relVale.add(ItemModel.fromSnap(element));
-  //     }
-  //     return relVale;
-  //   }));
-  // }
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    _itemList.bindStream(AppApiService.item.snapshots().map((QuerySnapshot querySnapshot){
+      List<ItemModel> relVale = [];
+      for(var element in querySnapshot.docs){
+        relVale.add(ItemModel.fromSnap(element));
+        print(querySnapshot.docs.first);
+      }
+      return relVale;
+    }));
+  }
 
 }

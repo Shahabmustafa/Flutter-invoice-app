@@ -191,20 +191,6 @@ class _AddItemsState extends State<AddItems> {
                   },
                 ),
               ),
-              // Padding(
-              //   padding: const EdgeInsets.symmetric(horizontal: 10),
-              //   child: Container(
-              //     height: size.height * 0.08,
-              //     padding: EdgeInsets.symmetric(horizontal: 10),
-              //     decoration: BoxDecoration(
-              //       borderRadius: BorderRadius.circular(8),
-              //       border: Border.all(
-              //         color: AppColor.primaryColor,
-              //       ),
-              //     ),
-              //     child:
-              //   ),
-              // ),
               SizedBox(
                 height: size.height * 0.02,
               ),

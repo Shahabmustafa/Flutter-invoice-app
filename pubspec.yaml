@@ -63,6 +63,7 @@ dependencies:
   url_launcher: ^6.2.2
   emailjs: ^1.3.0
   flutter_launcher_icons: ^0.13.1
+  flutter_social_media_button: ^0.0.1
 
 
 dev_dependencies:

@@ -9,6 +9,7 @@ import 'package:flutter_invoice_app/res/routes/routes.dart';
 import 'package:flutter_invoice_app/utils/utils.dart';
 import 'package:flutter_invoice_app/view%20model/auth%20service/google_sign_in.dart';
 import 'package:flutter_invoice_app/view%20model/auth%20service/login_service.dart';
+import 'package:flutter_social_media_button/flutter_social_media_button.dart';
 import 'package:get/get.dart';
 
 import '../../res/assets/assets_url.dart';
@@ -178,9 +179,13 @@ class _LoginPageState extends State<LoginPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SocialMediaButton(
-                      imageUrl: AssetsUrl.gmailLogo,
-                      onTap: (){
+                    FlutterSocialMediaButton(
+                        title: '',
+                        imageUrl: AssetsUrl.gmailLogo,
+                        height: 50,
+                        width: 50,
+                        onlyImageAvailable: true,
+                      onPress: (){
                         var date = DateTime.now();
                         var specificId = date.millisecondsSinceEpoch;
                         googleSignIn().signInWithGoogle().then((value){
@@ -202,10 +207,33 @@ class _LoginPageState extends State<LoginPage> {
                         });
                       },
                     ),
-                    SocialMediaButton(
+                    SizedBox(width: size.width * 0.04,),
+                    FlutterSocialMediaButton(
+                      title: '',
                       imageUrl: AssetsUrl.appleLogo,
-                      onTap: (){
-                        Get.toNamed(AppRoutes.listInvoice);
+                      height: 50,
+                      width: 50,
+                      onlyImageAvailable: true,
+                      onPress: (){
+                        var date = DateTime.now();
+                        var specificId = date.millisecondsSinceEpoch;
+                        googleSignIn().signInWithGoogle().then((value){
+                          UserModel userModel = UserModel(
+                            uid: value.user!.uid,
+                            userName: value.user!.displayName,
+                            profileImage: value.user!.photoURL,
+                            email: value.user!.email,
+                            phoneNumber: "",
+                          );
+                          FirebaseFirestore.instance
+                              .collection("users")
+                              .doc(value.user!.uid)
+                              .set(userModel.toJson()).then((value){
+                            Get.toNamed(AppRoutes.homeScreen);
+                          });
+                        }).onError((error, stackTrace){
+                          Utils.flutterToast(error.toString());
+                        });
                       },
                     ),
                   ],

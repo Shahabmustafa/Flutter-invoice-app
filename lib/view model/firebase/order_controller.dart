@@ -2,7 +2,9 @@ import 'dart:ffi';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_invoice_app/model/dashboard_model.dart';
 import 'package:flutter_invoice_app/model/order_model.dart';
+import 'package:flutter_invoice_app/res/calculation/calculation.dart';
 import 'package:flutter_invoice_app/view%20model/loading_controller.dart';
 import 'package:get/get.dart';
 
@@ -33,10 +35,16 @@ class OrderController extends GetxController{
       type: type,
     );
     loading.setLoading(true);
+    Map<String,dynamic> supplierPayment = {
+      "supplierPayment" : FieldValue.arrayUnion(
+        [
+          Calculation().multiply(cost.value.text, Stock.value.text),
+        ],
+      ),
+    };
     try{
       await AppApiService.order.add(orderModel.toJson()).then((value){
-        AppApiService.dashboard.set({});
-        
+        // AppApiService.dashboard.set(supplierPayment);
         loading.setLoading(false);
       }).onError((error, stackTrace){
         loading.setLoading(false);

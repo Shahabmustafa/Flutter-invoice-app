@@ -24,7 +24,7 @@ class ItemModel {
         this.saleDate,
         this.expiryDate});
 
-  factory ItemModel.fromJson(Map<String, dynamic> json) =>
+  factory ItemModel.fromSnap(DocumentSnapshot json) =>
       ItemModel(
         itemName: json['itemName'],
         sale: json['sale'],
