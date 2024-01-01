@@ -14,9 +14,11 @@ class SalesPage extends StatefulWidget {
 }
 
 class _SalesPageState extends State<SalesPage> {
-  int count = 0;
+  List<bool> checked = [];
+
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.sizeOf(context);
     return Scaffold(
       appBar: AppBar(
         title: Text("Sale"),
@@ -30,42 +32,18 @@ class _SalesPageState extends State<SalesPage> {
               itemCount: snapshot.data!.docs.length,
               itemBuilder: (context,index){
                 var data = snapshot.data!.docs[index];
-                return Card(
-                  child: ListTile(
-                    title: Text(data["itemName"]),
-                    subtitle: Text(data["sale"]),
-                    trailing: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                  child: Container(
+                    height: size.height * 0.12,
+                    width: size.width * 1,
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade300,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Row(
                       children: [
-                        InkWell(
-                          onTap: (){
-                            setState(() {
-                               data.id;
-                            });
-                            count++;
-                          },
-                          child: Icon(
-                            Icons.add,
-                            size: 20,
-                          ),
-                        ),
-                        Text(
-                          count.toString(),
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold
-                          ),
-                        ),
-                        InkWell(
-                          onTap: (){
-                            setState(() {
-                              count--;
-                            });
-                          },
-                          child: Icon(
-                            Icons.minimize,
-                            size: 20,
-                          ),
-                        ),
+                        Text("")
                       ],
                     ),
                   ),

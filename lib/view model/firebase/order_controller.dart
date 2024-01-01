@@ -35,16 +35,16 @@ class OrderController extends GetxController{
       type: type,
     );
     loading.setLoading(true);
-    Map<String,dynamic> supplierPayment = {
-      "supplierPayment" : FieldValue.arrayUnion(
-        [
-          Calculation().multiply(cost.value.text, Stock.value.text),
-        ],
-      ),
-    };
+    DashboardModel dashboardModel = DashboardModel(
+      cashSaleAmount: "",
+      creditSale: "",
+      totalInstallment: "",
+      totalSaleAmount: "",
+      supplierPayment: Calculation().multiply(cost.value.text, Stock.value.text),
+    );
     try{
       await AppApiService.order.add(orderModel.toJson()).then((value){
-        // AppApiService.dashboard.set(supplierPayment);
+        AppApiService.dashboard.set(dashboardModel.toJson());
         loading.setLoading(false);
       }).onError((error, stackTrace){
         loading.setLoading(false);

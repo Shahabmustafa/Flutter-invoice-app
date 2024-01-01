@@ -5,8 +5,8 @@ import 'package:intl/intl.dart';
 class Calculation{
 
   multiply(String firstNumber,String secondNumber){
-    final a = int.parse(firstNumber);
-    final b = int.parse(secondNumber);
+    final a = double.parse(firstNumber);
+    final b = double.parse(secondNumber);
     var c = a * b;
     return c.toString();
   }

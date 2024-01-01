@@ -40,5 +40,6 @@ class AppApiService{
   static final dashboard =
   firestore.collection("users")
       .doc(userId)
-      .collection("dashboard");
+      .collection("dashboard")
+      .doc(calculation.date());
 }
