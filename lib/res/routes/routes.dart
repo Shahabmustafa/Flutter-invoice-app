@@ -49,7 +49,7 @@ class AppRoutes{
   static const String addOrder = "/add_order";
   static const String Order = "/order_screen";
   static const String orderDetail = "/orderDetail_screen";
-  static const String editOrder = "/orderDetail_screen";
+  static const String editOrder = "/editOrder_screen";
 
   static appRoutes() => [
     GetPage(

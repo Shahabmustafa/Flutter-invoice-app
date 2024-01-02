@@ -114,7 +114,7 @@ class _OrderDetailState extends State<OrderDetail> {
                       Get.toNamed(
                         AppRoutes.editOrder,
                         arguments: [
-
+                          orderData[9],
                         ]
                       );
                     },

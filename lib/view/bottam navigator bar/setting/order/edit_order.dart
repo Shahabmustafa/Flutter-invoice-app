@@ -25,18 +25,18 @@ class _EditOrderState extends State<EditOrder> {
   List<String> itemNameDropdownItems = [];
   List<String> companyNameDropdownItems = [];
 
+  final orderId = Get.arguments;
 
-
-  final orderController = Get.put(OrderController());
+  final editOrder = Get.put(OrderController());
 
   Future<void> itemNameSetState() async {
-    List<String> data = await orderController.itemsName();
+    List<String> data = await editOrder.itemsName();
     setState(() {
       itemNameDropdownItems = data;
     });
   }
   Future<void> companyNameSetState() async {
-    List<String> data = await orderController.companysName();
+    List<String> data = await editOrder.companysName();
     setState(() {
       companyNameDropdownItems = data;
     });
@@ -150,7 +150,7 @@ class _EditOrderState extends State<EditOrder> {
                     child: InvoiceTextField(
                       title: "Sale",
                       keyboardType: TextInputType.emailAddress,
-                      controller: orderController.sale.value,
+                      controller: editOrder.sale.value,
                       validator: (value){
                         return value!.isEmpty ? "Enter Your Email Address" : null;
                       },
@@ -159,7 +159,7 @@ class _EditOrderState extends State<EditOrder> {
                   Flexible(
                     child: InvoiceTextField(
                       title: "Cost",
-                      controller: orderController.cost.value,
+                      controller: editOrder.cost.value,
                       keyboardType: TextInputType.phone,
                       validator: (value){
                         return value!.isEmpty ? "Enter Your Phone Number" : null;
@@ -176,7 +176,7 @@ class _EditOrderState extends State<EditOrder> {
                   Flexible(
                     child: InvoiceTextField(
                       title: "Whole Sale",
-                      controller: orderController.wholeSale.value,
+                      controller: editOrder.wholeSale.value,
                       keyboardType: TextInputType.emailAddress,
                       validator: (value){
                         return value!.isEmpty ? "Enter Your Email Address" : null;
@@ -186,7 +186,7 @@ class _EditOrderState extends State<EditOrder> {
                   Flexible(
                     child: InvoiceTextField(
                       title: "Discount",
-                      controller: orderController.discount.value,
+                      controller: editOrder.discount.value,
                       keyboardType: TextInputType.phone,
                       validator: (value){
                         return value!.isEmpty ? "Enter Your Phone Number" : null;
@@ -203,7 +203,7 @@ class _EditOrderState extends State<EditOrder> {
                   Flexible(
                     child: InvoiceTextField(
                       title: "Tax",
-                      controller: orderController.Tax.value,
+                      controller: editOrder.Tax.value,
                       keyboardType: TextInputType.emailAddress,
                       validator: (value){
                         return value!.isEmpty ? "Enter Your Email Address" : null;
@@ -213,7 +213,7 @@ class _EditOrderState extends State<EditOrder> {
                   Flexible(
                     child: InvoiceTextField(
                       title: "Stock",
-                      controller: orderController.Stock.value,
+                      controller: editOrder.Stock.value,
                       keyboardType: TextInputType.phone,
                       validator: (value){
                         return value!.isEmpty ? "Enter Your Phone Number" : null;
@@ -269,13 +269,14 @@ class _EditOrderState extends State<EditOrder> {
                   title: "Edit Order",
                   height: size.height * 0.05,
                   width: size.width * 0.94,
-                  loading: orderController.loading.loading.value,
+                  loading: editOrder.loading.loading.value,
                   onTap: (){
                     if(_key.currentState!.validate()){
-                      orderController.addOrder(
+                      editOrder.editOrder(
                         itemName.toString(),
                         companyName.toString(),
                         orderType.toString(),
+                        orderId[0],
                       );
                     }
                   },

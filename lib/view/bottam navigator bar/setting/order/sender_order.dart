@@ -30,15 +30,8 @@ class _OrderSenderState extends State<OrderSender> {
               return Card(
                 child: ListTile(
                   title: Text(order["itemName"]),
-                  subtitle: Text("Stock ${order["Stock"]}"),
-                  trailing: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Cost ${order["cost"]}"),
-                      Text("total ${multiply.doubleConvertInt(multiply.multiply(order["cost"], order["sale"]))}"),
-                    ],
-                  ),
+                  subtitle: Text(order["date"]),
+                  trailing: Text("Stock ${order["Stock"]}"),
                   onTap: (){
                     Get.toNamed(
                       AppRoutes.orderDetail,

@@ -11,6 +11,7 @@ class OrderModel {
   String? Tax;
   String? Stock;
   String? type;
+  String? date;
 
   OrderModel(
       {this.itemName,
@@ -22,6 +23,7 @@ class OrderModel {
         this.Tax,
         this.Stock,
         this.type,
+        this.date,
       });
 
   OrderModel.fromJson(Map<String, dynamic> json) {
@@ -34,6 +36,7 @@ class OrderModel {
     Tax = json['Tax'];
     Stock = json['Stock'];
     type = json['type'];
+    date = json['date'];
   }
 
   Map<String, dynamic> toJson() {
@@ -47,6 +50,7 @@ class OrderModel {
     data['Tax'] = this.Tax;
     data['Stock'] = this.Stock;
     data['type'] = this.type;
+    data['date'] = this.date;
     return data;
   }
 }

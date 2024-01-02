@@ -18,9 +18,8 @@ class OrderController extends GetxController{
   Rx<TextEditingController> discount = TextEditingController().obs;
   Rx<TextEditingController> Tax = TextEditingController().obs;
   Rx<TextEditingController> Stock = TextEditingController().obs;
-  
-  
   final loading = Get.put(LoadingController());
+  final date = Calculation();
 
   addOrder(String itemName,String companyName,String type)async{
     OrderModel orderModel = OrderModel(
@@ -33,6 +32,7 @@ class OrderController extends GetxController{
       Tax: Tax.value.text,
       Stock: Stock.value.text,
       type: type,
+      date: date.date(),
     );
     loading.setLoading(true);
     DashboardModel dashboardModel = DashboardModel(
@@ -54,7 +54,32 @@ class OrderController extends GetxController{
     }
   }
 
-
+  editOrder(String itemName,String companyName,String type,orderId)async{
+    OrderModel orderModel = OrderModel(
+      itemName: itemName,
+      companyName: companyName,
+      sale: sale.value.text,
+      cost: cost.value.text,
+      wholeSale: wholeSale.value.text,
+      discount: discount.value.text,
+      Tax: Tax.value.text,
+      Stock: Stock.value.text,
+      type: type,
+      date: date.date(),
+    );
+    loading.setLoading(true);
+    try{
+      await AppApiService.order.doc(orderId).update(orderModel.toJson()).then((value){
+        loading.setLoading(false);
+      }).onError((error, stackTrace){
+        loading.setLoading(false);
+        print("Error : ${error}");
+      });
+    }catch(e){
+      loading.setLoading(false);
+      print("Error : ${e}");
+    }
+  }
 
   Future<List<String>> itemsName() async {
     List<String> dropdownItems = [];
