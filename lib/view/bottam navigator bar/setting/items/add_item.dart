@@ -21,8 +21,13 @@ class _AddItemsState extends State<AddItems> {
   final _key = GlobalKey<FormState>();
   DateTime selectedDate = DateTime.now();
   final item = Get.put(ItemController());
+
+
   String? selectedDropdownValue;
   List<String> dropdownItems = [];
+
+  String? selectedDropdownValueCategori;
+  List<String> dropdownItemCategori = [];
 
   Future<List<String>> fetchDropdownDataFromFirebase() async {
     List<String> dropdownItems = [];
@@ -36,19 +41,40 @@ class _AddItemsState extends State<AddItems> {
     }
     return dropdownItems;
   }
+  Future<List<String>> categoriGetDataDropDown() async {
+    List<String> dropdownItems = [];
+    try {
+      QuerySnapshot querySnapshot = await AppApiService.categori.get();
+      if (querySnapshot.docs.isNotEmpty) {
+        dropdownItems = querySnapshot.docs.map((doc) => doc['categori'].toString()).toList();
+      }
+    } catch (e) {
+      print('Error fetching data: $e');
+    }
+    return dropdownItems;
+  }
 
-  Future<void> fetchDataAndSetState() async {
+  Future<void> categoriFetchDataAndSetState() async {
     List<String> data = await fetchDropdownDataFromFirebase();
     setState(() {
       dropdownItems = data;
     });
   }
 
+  Future<void> fetchDataAndSetState() async {
+    List<String> data = await categoriGetDataDropDown();
+    setState(() {
+      dropdownItemCategori = data;
+    });
+  }
+
+  TextEditingController categori = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     fetchDataAndSetState();
+    categoriFetchDataAndSetState();
   }
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -142,12 +168,91 @@ class _AddItemsState extends State<AddItems> {
               SizedBox(
                 height: size.height * 0.02,
               ),
-              InvoiceTextField(
-                title: "Categori",
-                controller: item.categori.value,
-                validator: (value){
-                  return value!.isEmpty ? "Enter Your Item Name" : null;
-                },
+              Row(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: FormField<String>(
+                        builder: (FormFieldState<String> state) {
+                          return InputDecorator(
+                            decoration: InputDecoration(
+                              labelText: 'Categori Name',
+                              errorText: state.errorText,
+                              border: InputBorder.none,
+                            ),
+                            isEmpty: selectedDropdownValueCategori == null || selectedDropdownValueCategori!.isEmpty,
+                            child: DropdownButtonFormField<String>(
+                              value: selectedDropdownValueCategori,
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                              ),
+                              items: dropdownItemCategori.map((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  selectedDropdownValueCategori = value;
+                                });
+                                state.didChange(value);
+                              },
+                            ),
+                          );
+                        },
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please select an option';
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 10,top: 15),
+                    child: GestureDetector(
+                      onTap: (){
+                        Get.defaultDialog(
+                          title: "Add Categori",
+                          content: InvoiceTextField(
+                            title: "Categori",
+                            controller: categori,
+                            validator: (value){
+                              return value!.isEmpty ? "Please Fill this Field" : null;
+                            },
+                          ),
+                          confirm: AppButton(
+                            title: "Add",
+                            color: Colors.green,
+                            height: size.height * 0.04,
+                            width: size.width * 0.2,
+                            onTap: (){
+                              AppApiService.categori.add({
+                                "categori" : categori.text,
+                              }).then((value){
+                                categori.clear();
+                                Get.back();
+                              });
+                            },
+                          ),
+                          cancel: AppButton(
+                            title: "Cancel",
+                            color: AppColor.errorColor,
+                            height: size.height * 0.04,
+                            width: size.width * 0.2,
+                            onTap: (){
+                              Get.back();
+                            },
+                          ),
+                        );
+                      },
+                      child: Icon(Icons.add),
+                    ),
+                  ),
+                ],
               ),
               SizedBox(
                 height: size.height * 0.02,

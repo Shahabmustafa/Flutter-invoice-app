@@ -42,4 +42,9 @@ class AppApiService{
       .doc(userId)
       .collection("dashboard")
       .doc(calculation.date());
+
+  static final categori =
+  firestore.collection("users")
+      .doc(userId)
+      .collection("categori");
 }
