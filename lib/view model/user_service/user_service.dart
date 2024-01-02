@@ -30,7 +30,7 @@ class UserService extends GetxController{
           .collection("users")
           .doc(AppApiService.userId)
           .set(userModel.toJson()).then((value)async{
-            Get.toNamed(AppRoutes.listInvoice);
+            Get.toNamed(AppRoutes.homeScreen);
             signupService.setLoading(false);
       }).onError((error, stackTrace){
         signupService.setLoading(false);

@@ -1,35 +1,35 @@
 import 'package:flutter/material.dart';
 
-class DropDownTextField extends StatelessWidget {
-  DropDownTextField({Key? key,this.selectedDropdownValue,required this.dropdownItems}) : super(key: key);
-  String? selectedDropdownValue;
-  List<String> dropdownItems;
+class CustomDropDownButton extends StatelessWidget {
+  CustomDropDownButton({
+    Key? key,
+    required this.selectedDropdownValue,
+    required this.itemList,
+    required this.onChange,
+  }) : super(key: key);
+  String selectedDropdownValue;
+  List<DropdownMenuItem<String>> itemList;
+  void Function(String?)? onChange;
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: FormField<String>(
         builder: (FormFieldState<String> state) {
           return InputDecorator(
             decoration: InputDecoration(
-              labelText: 'Select an option',
+              labelText: 'Categori Name',
               errorText: state.errorText,
               border: InputBorder.none,
             ),
             isEmpty: selectedDropdownValue == null || selectedDropdownValue!.isEmpty,
             child: DropdownButtonFormField<String>(
               value: selectedDropdownValue,
-              items: dropdownItems.map((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-              onChanged: (value) {
-                // Update the state when a new value is selected
-                selectedDropdownValue = value!;
-                state.didChange(value);
-              },
+              decoration: InputDecoration(
+                border: InputBorder.none,
+              ),
+              items: itemList,
+              onChanged: onChange,
             ),
           );
         },

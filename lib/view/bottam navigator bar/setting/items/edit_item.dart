@@ -5,24 +5,29 @@ import 'package:flutter_invoice_app/res/colors/app_colors.dart';
 import 'package:flutter_invoice_app/view%20model/firebase/item_controller.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+
 import '../../../../../../res/component/app_button.dart';
 import '../../../../../../res/component/invoice_text_field.dart';
 
-class AddItems extends StatefulWidget {
-  const AddItems({Key? key}) : super(key: key);
+class EditItem extends StatefulWidget {
+  const EditItem({Key? key}) : super(key: key);
 
   @override
-  State<AddItems> createState() => _AddItemsState();
+  State<EditItem> createState() => _EditItemState();
 }
 
-class _AddItemsState extends State<AddItems> {
+class _EditItemState extends State<EditItem> {
   final _key = GlobalKey<FormState>();
   DateTime selectedDate = DateTime.now();
   final item = Get.put(ItemController());
 
+  final itemId = Get.arguments;
 
-  String? selectedDropdownValue;
+  String? companyName;
   List<String> dropdownItems = [];
+
+  String? Categori;
+  List<String> dropdownItemCategori = [];
 
 
   Future<void> categoriFetchDataAndSetState() async {
@@ -32,16 +37,26 @@ class _AddItemsState extends State<AddItems> {
     });
   }
 
+  Future<void> fetchDataAndSetState() async {
+    List<String> data = await item.categoriGetDataDropDown();
+    setState(() {
+      dropdownItemCategori = data;
+    });
+  }
+
+  TextEditingController categori = TextEditingController();
+
   @override
   void initState() {
     super.initState();
+    fetchDataAndSetState();
     categoriFetchDataAndSetState();
   }
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Add Item"),
+        title: Text("Edit Item"),
       ),
       body: SingleChildScrollView(
         child: Form(
@@ -129,12 +144,44 @@ class _AddItemsState extends State<AddItems> {
               SizedBox(
                 height: size.height * 0.02,
               ),
-              InvoiceTextField(
-                title: "Categori",
-                controller: item.categori.value,
-                validator: (value){
-                  return value!.isEmpty ? "Please Fill this Field" : null;
-                },
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: FormField<String>(
+                  builder: (FormFieldState<String> state) {
+                    return InputDecorator(
+                      decoration: InputDecoration(
+                        labelText: 'Categori Name',
+                        errorText: state.errorText,
+                        border: InputBorder.none,
+                      ),
+                      isEmpty: Categori == null || Categori!.isEmpty,
+                      child: DropdownButtonFormField<String>(
+                        value: Categori,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                        ),
+                        items: dropdownItemCategori.map((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            Categori = value;
+                          });
+                          state.didChange(value);
+                        },
+                      ),
+                    );
+                  },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please select an option';
+                    }
+                    return null;
+                  },
+                ),
               ),
               SizedBox(
                 height: size.height * 0.02,
@@ -149,9 +196,9 @@ class _AddItemsState extends State<AddItems> {
                         errorText: state.errorText,
                         border: InputBorder.none,
                       ),
-                      isEmpty: selectedDropdownValue == null || selectedDropdownValue!.isEmpty,
+                      isEmpty: companyName == null || companyName!.isEmpty,
                       child: DropdownButtonFormField<String>(
-                        value: selectedDropdownValue,
+                        value: companyName,
                         decoration: InputDecoration(
                           border: InputBorder.none,
                         ),
@@ -163,7 +210,7 @@ class _AddItemsState extends State<AddItems> {
                         }).toList(),
                         onChanged: (value) {
                           setState(() {
-                            selectedDropdownValue = value;
+                            companyName = value;
                           });
                           state.didChange(value);
                         },
@@ -208,15 +255,13 @@ class _AddItemsState extends State<AddItems> {
               ),
               Obx((){
                 return AppButton(
-                  title: "Add Item",
+                  title: "Update Item",
                   height: size.height * 0.05,
                   width: size.width * 0.94,
                   loading: item.loading.loading.value,
                   onTap: (){
                     if(_key.currentState!.validate()){
-                      item.addItemData(
-                        selectedDropdownValue.toString(),
-                      );
+                      item.editItem(companyName.toString(), itemId, Categori.toString());
                     }
                   },
                 );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_invoice_app/res/routes/routes.dart';
 import 'package:get/get.dart';
 
 import '../../../../res/app_api/app_api_service.dart';
@@ -105,7 +106,12 @@ class _ItemDetailState extends State<ItemDetail> {
                     width: size.width * 0.3,
                     color: Colors.green,
                     onTap: (){
-
+                      Get.toNamed(
+                        AppRoutes.editItem,
+                        arguments: [
+                          itemData[10],
+                        ],
+                      );
                     },
                   ),
                   AppButton(

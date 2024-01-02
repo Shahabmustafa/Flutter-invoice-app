@@ -44,6 +44,14 @@ class OrderController extends GetxController{
     );
     try{
       await AppApiService.order.add(orderModel.toJson()).then((value){
+        AppApiService.item.doc(itemName).update({
+          "sale" : sale.value.text,
+          "cost" : cost.value.text,
+          "wholeSale" : wholeSale.value.text,
+          "discount" : discount.value.text,
+          "Tax" : Tax.value.text,
+          "Stock" : Stock.value.text,
+        });
         AppApiService.dashboard.set(dashboardModel.toJson());
         loading.setLoading(false);
       }).onError((error, stackTrace){
@@ -70,6 +78,14 @@ class OrderController extends GetxController{
     loading.setLoading(true);
     try{
       await AppApiService.order.doc(orderId).update(orderModel.toJson()).then((value){
+        AppApiService.item.doc(itemName).update({
+          "sale" : sale.value.text,
+          "cost" : cost.value.text,
+          "wholeSale" : wholeSale.value.text,
+          "discount" : discount.value.text,
+          "Tax" : Tax.value.text,
+          "Stock" : Stock.value.text,
+        });
         loading.setLoading(false);
       }).onError((error, stackTrace){
         loading.setLoading(false);

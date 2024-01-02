@@ -1,5 +1,6 @@
 import 'package:flutter_invoice_app/view/auth/login_screen.dart';
 import 'package:flutter_invoice_app/view/auth/sign_up_screen.dart';
+import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/setting/items/edit_item.dart';
 import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/setting/order/edit_order.dart';
 import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/setting/order/order_details.dart';
 import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/setting/prodile_screen.dart';
@@ -37,6 +38,7 @@ class AppRoutes{
   static const String changeProfileDetail = "/change_profile_detail";
   static const String homeScreen = "/home_screen";
   static const String addItems = "/add_items";
+  static const String editItem = "/editItem_screen";
   static const String Items = "/items_screen";
   static const String itemDetail = "/itemDetail_screen";
   static const String addSupplier = "/add_supplier";
@@ -109,6 +111,12 @@ class AppRoutes{
     GetPage(
       name: Items,
       page: () => ItemScreen(),
+      transition: Transition.rightToLeftWithFade,
+      transitionDuration: const Duration(microseconds: 250),
+    ),
+    GetPage(
+      name: editItem,
+      page: () => EditItem(),
       transition: Transition.rightToLeftWithFade,
       transitionDuration: const Duration(microseconds: 250),
     ),

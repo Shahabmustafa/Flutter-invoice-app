@@ -42,7 +42,40 @@ class ItemController extends GetxController{
         saleDate: saleDate.value.text,
         expiryDate: expiryDate.value.text,
       );
-      await AppApiService.item.add(itemModel.toJson()).then((value){
+      await AppApiService.item.doc(itemName.value.text).set(itemModel.toJson()).then((value){
+        loading.setLoading(false);
+        AppApiService.categori.add({
+          "categori" : categori.value.text,
+        }).then((value){
+          loading.setLoading(false);
+        }).onError((error, stackTrace){
+          loading.setLoading(false);
+        });
+        Get.back();
+      }).onError((error, stackTrace){
+        loading.setLoading(false);
+      });
+    }catch(e){
+      loading.setLoading(false);
+    }
+  }
+
+  editItem(String companyName,String itemId,String categoriName)async{
+    loading.setLoading(true);
+    try{
+      ItemModel itemModel = ItemModel(
+        itemName: itemName.value.text,
+        sale: sale.value.text,
+        cost: cost.value.text,
+        wholeSale: wholeSale.value.text,
+        stock: stock.value.text,
+        categori: categoriName,
+        tax: tax.value.text,
+        companyName: companyName,
+        saleDate: saleDate.value.text,
+        expiryDate: expiryDate.value.text,
+      );
+      await AppApiService.item.doc(itemId).update(itemModel.toJson()).then((value){
         loading.setLoading(false);
         Get.back();
       }).onError((error, stackTrace){
@@ -53,24 +86,31 @@ class ItemController extends GetxController{
     }
   }
 
-  // static Future<List<ItemModel>> searchItem(String itamName)async{
-  //   final snapshot = await AppApiService.item.where("itemName",isGreaterThanOrEqualTo: itamName).get();
-  //   return snapshot.docs.map((doc) => ItemModel.fromJson(doc.data())).toList();
-  // }
 
-  // items get data in Firebase Database
-  @override
-  void onInit() {
-    // TODO: implement onInit
-    super.onInit();
-    _itemList.bindStream(AppApiService.item.snapshots().map((QuerySnapshot querySnapshot){
-      List<ItemModel> relVale = [];
-      for(var element in querySnapshot.docs){
-        relVale.add(ItemModel.fromSnap(element));
-        print(querySnapshot.docs.first);
+  Future<List<String>> fetchDropdownDataFromFirebase() async {
+    List<String> dropdownItems = [];
+    try {
+      QuerySnapshot querySnapshot = await AppApiService.supplier.get();
+      if (querySnapshot.docs.isNotEmpty) {
+        dropdownItems = querySnapshot.docs.map((doc) => doc['companyName'].toString()).toList();
       }
-      return relVale;
-    }));
+    } catch (e) {
+      print('Error fetching data: $e');
+    }
+    return dropdownItems;
+  }
+
+  Future<List<String>> categoriGetDataDropDown() async {
+    List<String> dropdownItems = [];
+    try {
+      QuerySnapshot querySnapshot = await AppApiService.categori.get();
+      if (querySnapshot.docs.isNotEmpty) {
+        dropdownItems = querySnapshot.docs.map((doc) => doc['categori'].toString()).toList();
+      }
+    } catch (e) {
+      print('Error fetching data: $e');
+    }
+    return dropdownItems;
   }
 
 }
