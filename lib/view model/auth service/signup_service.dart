@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_invoice_app/model/dashboard_model.dart';
 import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
 import 'package:flutter_invoice_app/utils/utils.dart';
 import 'package:flutter_invoice_app/view%20model/user_service/user_service.dart';
@@ -35,6 +37,13 @@ class SignUpService extends GetxController{
           userName.value.text,
           email.value.text,
         );
+        AppApiService.dashboard.set({
+          "supplierPayment" : FieldValue.arrayUnion(["0"]),
+          "totalSaleAmount" : FieldValue.arrayUnion(["0"]),
+          "totalInstallment" : FieldValue.arrayUnion(["0"]),
+          "creditSale" : FieldValue.arrayUnion(["0"]),
+          "cashSaleAmount" : FieldValue.arrayUnion(["0"]),
+        });
         Utils.flutterToast("Your account has been create");
         userName.value.clear();
         email.value.clear();

@@ -35,13 +35,6 @@ class OrderController extends GetxController{
       date: date.date(),
     );
     loading.setLoading(true);
-    DashboardModel dashboardModel = DashboardModel(
-      cashSaleAmount: "",
-      creditSale: "",
-      totalInstallment: "",
-      totalSaleAmount: "",
-      supplierPayment: Calculation().multiply(cost.value.text, Stock.value.text),
-    );
     try{
       await AppApiService.order.add(orderModel.toJson()).then((value){
         AppApiService.item.doc(itemName).update({
@@ -49,10 +42,16 @@ class OrderController extends GetxController{
           "cost" : cost.value.text,
           "wholeSale" : wholeSale.value.text,
           "discount" : discount.value.text,
-          "Tax" : Tax.value.text,
-          "Stock" : Stock.value.text,
+          "tax" : Tax.value.text,
+          "stock" : Stock.value.text,
         });
-        AppApiService.dashboard.set(dashboardModel.toJson());
+        AppApiService.dashboard.update({
+          "supplierPayment" : FieldValue.arrayUnion(
+              [
+                Calculation().doubleConvertInt(date.multiply(cost.value.text,Stock.value.text),),
+              ]
+          ),
+        });
         loading.setLoading(false);
       }).onError((error, stackTrace){
         loading.setLoading(false);
