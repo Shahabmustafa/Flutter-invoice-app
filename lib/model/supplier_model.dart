@@ -3,27 +3,30 @@ class SupplierModel {
   String? companyEmail;
   String? phoneNumber;
   String? address;
+  String? payment;
   String? supplierName;
   String? supplierPhoneNumber;
-  String? supplieremail;
+  String? supplierEmail;
 
   SupplierModel(
       {this.companyName,
         this.companyEmail,
         this.phoneNumber,
         this.address,
+        this.payment,
         this.supplierName,
         this.supplierPhoneNumber,
-        this.supplieremail});
+        this.supplierEmail});
 
   SupplierModel.fromJson(Map<String, dynamic> json) {
     companyName = json['companyName'];
     companyEmail = json['companyEmail'];
     phoneNumber = json['phoneNumber'];
     address = json['address'];
+    payment = json['payment'];
     supplierName = json['supplierName'];
     supplierPhoneNumber = json['supplierPhoneNumber'];
-    supplieremail = json['supplieremail'];
+    supplierEmail = json['supplierEmail'];
   }
 
   Map<String, dynamic> toJson() {
@@ -32,9 +35,10 @@ class SupplierModel {
     data['companyEmail'] = this.companyEmail;
     data['phoneNumber'] = this.phoneNumber;
     data['address'] = this.address;
+    data['payment'] = this.payment;
     data['supplierName'] = this.supplierName;
     data['supplierPhoneNumber'] = this.supplierPhoneNumber;
-    data['supplieremail'] = this.supplieremail;
+    data['supplierEmail'] = this.supplierEmail;
     return data;
   }
 }

@@ -34,6 +34,7 @@ class _SupplierScreenState extends State<SupplierScreen> {
                   child: ListTile(
                     title: Text(supplier["companyName"]),
                     subtitle: Text(supplier["supplierName"]),
+                    trailing: Text(supplier["payment"]),
                     onTap: (){
                       Get.toNamed(
                         AppRoutes.SupplierDetails,
@@ -44,7 +45,8 @@ class _SupplierScreenState extends State<SupplierScreen> {
                           supplier["address"],
                           supplier["supplierName"],
                           supplier["supplierPhoneNumber"],
-                          supplier["supplieremail"],
+                          supplier["supplierEmail"],
+                          supplier["payment"],
                           snapshot.data!.docs[index].id,
                         ],
                       );

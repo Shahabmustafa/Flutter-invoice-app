@@ -39,7 +39,7 @@ class _OrderReceiverState extends State<OrderReceiver> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text("Cost ${order["cost"]}"),
-                      Text("total ${multiply.multiply(order["cost"], order["Stock"])}"),
+                      Text("total ${multiply.doubleConvertInt(multiply.multiply(order["cost"], order["sale"]))}"),
                     ],
                   ),
                   onTap: (){

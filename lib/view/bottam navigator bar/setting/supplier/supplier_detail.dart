@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_invoice_app/res/routes/routes.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
@@ -27,7 +28,7 @@ class _SupplierDetailState extends State<SupplierDetail> {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
         child: Container(
-          height: size.height * 0.42,
+          height: size.height * 0.45,
           width: size.width,
           padding: EdgeInsets.symmetric(horizontal: 15,vertical: 10),
           decoration: BoxDecoration(
@@ -79,6 +80,11 @@ class _SupplierDetailState extends State<SupplierDetail> {
                 subtitle: supplier[6],
               ),
               Divider(),
+              TextWidgets(
+                title: "Payment",
+                subtitle: supplier[7],
+              ),
+              Divider(),
               SizedBox(
                 height: size.height * 0.03,
               ),
@@ -91,7 +97,10 @@ class _SupplierDetailState extends State<SupplierDetail> {
                     width: size.width * 0.3,
                     color: Colors.green,
                     onTap: (){
-
+                      Get.toNamed(
+                          AppRoutes.editSupplier,
+                          arguments: [supplier[8]],
+                      );
                     },
                   ),
                   AppButton(
@@ -101,7 +110,7 @@ class _SupplierDetailState extends State<SupplierDetail> {
                     color: AppColor.errorColor,
                     onTap: (){
                       print(supplier[7]);
-                      AppApiService.item.doc(supplier[7]).delete().then((value){
+                      AppApiService.item.doc(supplier[8]).delete().then((value){
                         Get.back();
                       });
                     },

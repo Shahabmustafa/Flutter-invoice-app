@@ -1,5 +1,3 @@
-
-
 import 'package:intl/intl.dart';
 
 class Calculation{
@@ -15,5 +13,11 @@ class Calculation{
     DateTime now = DateTime.now();
     String todayDate = DateFormat('MMMM dd, yyyy').format(now);
     return todayDate;
+  }
+
+  doubleConvertInt(String a){
+    String val = a.toString();
+    val = val.replaceAll(RegExp(r"([.]*0)(?!.*\d)"), "");
+    return val;
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/res/calculation/calculation.dart';
+import 'package:flutter_invoice_app/res/routes/routes.dart';
 import 'package:get/get.dart';
 
 import '../../../../res/app_api/app_api_service.dart';
@@ -19,6 +20,7 @@ class _OrderDetailState extends State<OrderDetail> {
   var orderData = Get.arguments;
 
   final multiply = Calculation();
+
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +96,7 @@ class _OrderDetailState extends State<OrderDetail> {
               Divider(),
               TextWidgets(
                 title: "Total",
-                subtitle: multiply.multiply(orderData[3], orderData[7]),
+                subtitle: multiply.doubleConvertInt(multiply.multiply(orderData[3], orderData[7])),
               ),
               Divider(),
               SizedBox(
@@ -109,7 +111,12 @@ class _OrderDetailState extends State<OrderDetail> {
                     width: size.width * 0.3,
                     color: Colors.green,
                     onTap: (){
+                      Get.toNamed(
+                        AppRoutes.editOrder,
+                        arguments: [
 
+                        ]
+                      );
                     },
                   ),
                   AppButton(

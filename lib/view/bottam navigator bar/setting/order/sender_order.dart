@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
 import '../../../../res/app_api/app_api_service.dart';
+import '../../../../res/calculation/calculation.dart';
 import '../../../../res/routes/routes.dart';
 
 class OrderSender extends StatefulWidget {
@@ -14,6 +15,8 @@ class OrderSender extends StatefulWidget {
 
 class _OrderSenderState extends State<OrderSender> {
   final senderOrder = AppApiService.order.where("type",isEqualTo: "Sender").snapshots();
+  final multiply = Calculation();
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
@@ -27,8 +30,15 @@ class _OrderSenderState extends State<OrderSender> {
               return Card(
                 child: ListTile(
                   title: Text(order["itemName"]),
-                  trailing: Text(order["sale"]),
                   subtitle: Text("Stock ${order["Stock"]}"),
+                  trailing: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Cost ${order["cost"]}"),
+                      Text("total ${multiply.doubleConvertInt(multiply.multiply(order["cost"], order["sale"]))}"),
+                    ],
+                  ),
                   onTap: (){
                     Get.toNamed(
                       AppRoutes.orderDetail,

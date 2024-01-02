@@ -20,8 +20,9 @@ class SupplierController extends GetxController{
       companyName: companyName.value.text,
       companyEmail: companyEmail.value.text,
       address: companyAddress.value.text,
+      payment: "0",
       phoneNumber: companyPhoneNumber.value.text,
-      supplieremail: supplierEmail.value.text,
+      supplierEmail: supplierEmail.value.text,
       supplierName: supplierName.value.text,
       supplierPhoneNumber: supplierPhoneNumber.value.text,
     );
@@ -30,11 +31,51 @@ class SupplierController extends GetxController{
       await AppApiService.supplier.add(supplierModel.toJson()).then((value){
         loading.setLoading(false);
         Get.back();
+        companyName.value.clear();
+        companyEmail.value.clear();
+        companyAddress.value.clear();
+        companyPhoneNumber.value.clear();
+        supplierEmail.value.clear();
+        supplierName.value.clear();
+        supplierPhoneNumber.value.clear();
       }).onError((error, stackTrace){
         loading.setLoading(false);
       });
     }catch(e){
       loading.setLoading(false);
+    }
+  }
+
+  editSupplier({required String supplierId})async{
+    SupplierModel supplierModel = SupplierModel(
+      companyName: companyName.value.text,
+      companyEmail: companyEmail.value.text,
+      address: companyAddress.value.text,
+      payment: "0",
+      phoneNumber: companyPhoneNumber.value.text,
+      supplierEmail: supplierEmail.value.text,
+      supplierName: supplierName.value.text,
+      supplierPhoneNumber: supplierPhoneNumber.value.text,
+    );
+    loading.setLoading(true);
+    try{
+      await AppApiService.supplier.doc(supplierId).update(supplierModel.toJson()).then((value){
+        Get.back();
+        loading.setLoading(false);
+        companyName.value.clear();
+        companyEmail.value.clear();
+        companyAddress.value.clear();
+        companyPhoneNumber.value.clear();
+        supplierEmail.value.clear();
+        supplierName.value.clear();
+        supplierPhoneNumber.value.clear();
+      }).onError((error, stackTrace){
+        print("Error : ${error}");
+        loading.setLoading(false);
+      });
+    }catch(e){
+      loading.setLoading(false);
+      print("Error : ${e}");
     }
   }
 }
