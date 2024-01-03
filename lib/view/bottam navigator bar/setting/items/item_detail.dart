@@ -18,6 +18,15 @@ class _ItemDetailState extends State<ItemDetail> {
 
   var itemData = Get.arguments;
 
+  cashSaleAmount() {
+    List<dynamic> supplierPayment = itemData[4];
+    int sum = 0;
+    for (String amount in supplierPayment) {
+      sum += int.tryParse(amount) ?? 0; // Parse string to int, default to 0 if parsing fails
+    }
+    return sum;
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
@@ -67,7 +76,7 @@ class _ItemDetailState extends State<ItemDetail> {
               Divider(),
               TextWidgets(
                 title: "Stocks",
-                subtitle: itemData[4],
+                subtitle: "${cashSaleAmount()}",
               ),
               Divider(),
               TextWidgets(

@@ -81,6 +81,11 @@ class SaleController extends GetxController{
           loading.setLoading(false);
         });
         loading.setLoading(false);
+        sale.value.clear();
+        quantity.value.clear();
+        total.value.clear();
+        receivePayment.value.clear();
+        duePayment.value.clear();
       }).onError((error, stackTrace){
         print(error);
         loading.setLoading(false);

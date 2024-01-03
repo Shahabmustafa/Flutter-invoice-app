@@ -27,7 +27,7 @@ class ItemController extends GetxController{
 
 
   // items add data in Firebase Data base
-  addItemData(String companyName)async{
+  addItemData(String companyName,String category)async{
     loading.setLoading(true);
     try{
       ItemModel itemModel = ItemModel(
@@ -35,8 +35,10 @@ class ItemController extends GetxController{
         sale: sale.value.text,
         cost: cost.value.text,
         wholeSale: wholeSale.value.text,
-        stock: stock.value.text,
-        categori: categori.value.text,
+        stock: [
+          stock.value.text,
+        ],
+        categori: category,
         tax: tax.value.text,
         companyName: companyName,
         saleDate: saleDate.value.text,
@@ -68,7 +70,9 @@ class ItemController extends GetxController{
         sale: sale.value.text,
         cost: cost.value.text,
         wholeSale: wholeSale.value.text,
-        stock: stock.value.text,
+        stock: [
+          stock.value.text,
+        ],
         categori: categoriName,
         tax: tax.value.text,
         companyName: companyName,
@@ -87,7 +91,7 @@ class ItemController extends GetxController{
   }
 
 
-  Future<List<String>> fetchDropdownDataFromFirebase() async {
+  Future<List<String>> companyNameGetDataDropDown() async {
     List<String> dropdownItems = [];
     try {
       QuerySnapshot querySnapshot = await AppApiService.supplier.get();
@@ -105,7 +109,7 @@ class ItemController extends GetxController{
     try {
       QuerySnapshot querySnapshot = await AppApiService.categori.get();
       if (querySnapshot.docs.isNotEmpty) {
-        dropdownItems = querySnapshot.docs.map((doc) => doc['categori'].toString()).toList();
+        dropdownItems = querySnapshot.docs.map((doc) => doc['category'].toString()).toList();
       }
     } catch (e) {
       print('Error fetching data: $e');

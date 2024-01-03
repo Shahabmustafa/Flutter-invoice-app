@@ -22,17 +22,28 @@ class _AddItemsState extends State<AddItems> {
   String? selectedDropdownValue;
   List<String> dropdownItems = [];
 
+  String? categori;
+  List<String> categoriDropdownItems = [];
 
-  Future<void> categoriFetchDataAndSetState() async {
-    List<String> data = await item.fetchDropdownDataFromFirebase();
+  Future<void> companyNameFetchDataAndSetState() async {
+    List<String> data = await item.companyNameGetDataDropDown();
     setState(() {
       dropdownItems = data;
     });
   }
 
+  Future<void> categoriFetchDataAndSetState() async {
+    List<String> data = await item.categoriGetDataDropDown();
+    setState(() {
+      categoriDropdownItems = data;
+    });
+  }
+
+
   @override
   void initState() {
     super.initState();
+    companyNameFetchDataAndSetState();
     categoriFetchDataAndSetState();
   }
   Widget build(BuildContext context) {
@@ -127,12 +138,44 @@ class _AddItemsState extends State<AddItems> {
               SizedBox(
                 height: size.height * 0.02,
               ),
-              InvoiceTextField(
-                title: "Categori",
-                controller: item.categori.value,
-                validator: (value){
-                  return value!.isEmpty ? "Please Fill this Field" : null;
-                },
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: FormField<String>(
+                  builder: (FormFieldState<String> state) {
+                    return InputDecorator(
+                      decoration: InputDecoration(
+                        labelText: 'Category Name',
+                        errorText: state.errorText,
+                        border: InputBorder.none,
+                      ),
+                      isEmpty: categori == null || categori!.isEmpty,
+                      child: DropdownButtonFormField<String>(
+                        value: categori,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                        ),
+                        items: categoriDropdownItems.map((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            categori = value;
+                          });
+                          state.didChange(value);
+                        },
+                      ),
+                    );
+                  },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please select an option';
+                    }
+                    return null;
+                  },
+                ),
               ),
               SizedBox(
                 height: size.height * 0.02,
@@ -214,6 +257,7 @@ class _AddItemsState extends State<AddItems> {
                     if(_key.currentState!.validate()){
                       item.addItemData(
                         selectedDropdownValue.toString(),
+                        categori.toString(),
                       );
                     }
                   },

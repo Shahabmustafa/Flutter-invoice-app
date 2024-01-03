@@ -28,7 +28,7 @@ class _EditItemState extends State<EditItem> {
 
 
   Future<void> categoriFetchDataAndSetState() async {
-    List<String> data = await item.fetchDropdownDataFromFirebase();
+    List<String> data = await item.categoriGetDataDropDown();
     setState(() {
       dropdownItems = data;
     });

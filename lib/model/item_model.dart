@@ -5,7 +5,7 @@ class ItemModel {
   String? sale;
   String? cost;
   String? wholeSale;
-  String? stock;
+  List? stock;
   String? categori;
   String? tax;
   String? companyName;

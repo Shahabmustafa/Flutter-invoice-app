@@ -56,6 +56,13 @@ class OrderController extends GetxController{
               ]
           ),
         });
+        AppApiService.item.doc(itemName).update({
+          "stock" : FieldValue.arrayUnion(
+              [
+                Stock.value.text,
+              ]
+          ),
+        });
         loading.setLoading(false);
       }).onError((error, stackTrace){
         loading.setLoading(false);
