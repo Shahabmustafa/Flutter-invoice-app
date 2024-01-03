@@ -3,9 +3,6 @@ import 'package:flutter_invoice_app/res/routes/routes.dart';
 import 'package:get/get.dart';
 
 import '../../../../res/app_api/app_api_service.dart';
-import '../../../../res/colors/app_colors.dart';
-import '../../../../res/component/app_button.dart';
-import '../../../../res/component/text_widget.dart';
 
 class CustomerScreen extends StatefulWidget {
   const CustomerScreen({Key? key}) : super(key: key);

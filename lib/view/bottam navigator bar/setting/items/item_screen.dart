@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_invoice_app/model/item_model.dart';
 import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
-import 'package:flutter_invoice_app/res/colors/app_colors.dart';
 import 'package:flutter_invoice_app/res/routes/routes.dart';
-import 'package:flutter_invoice_app/view%20model/firebase/item_controller.dart';
 import 'package:get/get.dart';
 
 class ItemScreen extends StatefulWidget {

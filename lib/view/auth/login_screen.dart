@@ -4,7 +4,6 @@ import 'package:flutter_invoice_app/model/user_model.dart';
 import 'package:flutter_invoice_app/res/colors/app_colors.dart';
 import 'package:flutter_invoice_app/res/component/app_button.dart';
 import 'package:flutter_invoice_app/res/component/invoice_text_field.dart';
-import 'package:flutter_invoice_app/res/component/social_media_button.dart';
 import 'package:flutter_invoice_app/res/routes/routes.dart';
 import 'package:flutter_invoice_app/utils/utils.dart';
 import 'package:flutter_invoice_app/view%20model/auth%20service/google_sign_in.dart';

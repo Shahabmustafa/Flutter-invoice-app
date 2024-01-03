@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+
 import '../../../res/app_api/app_api_service.dart';
 import '../../../res/colors/app_colors.dart';
 import '../../../view model/image_picker/image_picker_service.dart';

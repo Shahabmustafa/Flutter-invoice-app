@@ -1,7 +1,5 @@
-import 'package:d_chart/d_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
-import 'package:flutter_invoice_app/res/calculation/calculation.dart';
 import 'package:flutter_invoice_app/res/colors/app_colors.dart';
 
 class DashboardScreen extends StatefulWidget {

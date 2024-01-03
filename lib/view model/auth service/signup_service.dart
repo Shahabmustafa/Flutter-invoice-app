@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_invoice_app/model/dashboard_model.dart';
 import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
 import 'package:flutter_invoice_app/utils/utils.dart';
 import 'package:flutter_invoice_app/view%20model/user_service/user_service.dart';

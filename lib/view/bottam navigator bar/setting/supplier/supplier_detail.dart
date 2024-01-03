@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/res/routes/routes.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 import '../../../../res/app_api/app_api_service.dart';
 import '../../../../res/colors/app_colors.dart';

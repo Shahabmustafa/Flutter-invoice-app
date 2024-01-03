@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 import '../../../../res/app_api/app_api_service.dart';
 import '../../../../res/calculation/calculation.dart';

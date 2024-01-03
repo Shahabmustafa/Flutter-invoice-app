@@ -1,15 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
-import 'package:flutter_invoice_app/res/calculation/calculation.dart';
 import 'package:flutter_invoice_app/res/colors/app_colors.dart';
 import 'package:flutter_invoice_app/res/component/app_button.dart';
-import 'package:flutter_invoice_app/view%20model/firebase/item_controller.dart';
 import 'package:flutter_invoice_app/view%20model/firebase/sale_controller.dart';
 import 'package:get/get.dart';
-
-import '../../../view model/firebase/order_controller.dart';
 
 class SalesPage extends StatefulWidget {
   const SalesPage({Key? key}) : super(key: key);
@@ -20,7 +14,7 @@ class SalesPage extends StatefulWidget {
 
 class _SalesPageState extends State<SalesPage> {
 
-  String? itemName;
+  String itemName = "Mango";
   List<String> itemDropdown = [];
   String? customerName;
   List<String> customerDropdown = [];
@@ -28,6 +22,9 @@ class _SalesPageState extends State<SalesPage> {
 
   final quantity = TextEditingController();
   final itemSale = TextEditingController();
+  final totalController = TextEditingController();
+  final receiver = TextEditingController();
+  final due = TextEditingController();
 
   Future<void> itemNameSetState() async {
     List<String> data = await sale.itemsName();
@@ -41,12 +38,48 @@ class _SalesPageState extends State<SalesPage> {
       customerDropdown = data;
     });
   }
+
+  @override
+  void dispose() {
+    itemSale.dispose();
+    quantity.dispose();
+    totalController.dispose();
+    receiver.dispose();
+    due.dispose();
+    super.dispose();
+  }
+
+  calculateTotalAndReceive(){
+    int value1 = int.tryParse(totalController.text) ?? 00;
+    int value2 = int.tryParse(receiver.text) ?? 00;
+    var total = value1 - value2;
+    setState(() {
+      due.text = total.toString();
+    });
+  }
+
+  void calculateTotal() {
+    int value1 = int.tryParse(itemSale.text) ?? 00;
+    int value2 = int.tryParse(quantity.text) ?? 00;
+
+    var total = value1 * value2;
+
+    setState(() {
+      totalController.text = total.toString();
+    });
+  }
+
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     itemNameSetState();
     customerNameSetState();
+    itemSale.addListener(calculateTotal);
+    quantity.addListener(calculateTotal);
+    due.addListener(calculateTotalAndReceive);
+    receiver.addListener(calculateTotalAndReceive);
   }
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
@@ -82,7 +115,7 @@ class _SalesPageState extends State<SalesPage> {
                       }).toList(),
                       onChanged: (value) {
                         setState(() {
-                          itemName = value;
+                          itemName = value!;
                         });
                         state.didChange(value);
                       },
@@ -101,7 +134,7 @@ class _SalesPageState extends State<SalesPage> {
               padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
               child: Container(
                 padding: EdgeInsets.all(10),
-                height: size.height * 0.6,
+                height: size.height * 0.7,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: Colors.grey.shade300,
@@ -117,7 +150,7 @@ class _SalesPageState extends State<SalesPage> {
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 20),
                             child: Container(
-                              height: size.height * 0.3,
+                              height: size.height * 0.4,
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                                 children: [
@@ -125,17 +158,29 @@ class _SalesPageState extends State<SalesPage> {
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        "Whole Sale",
+                                        "Sale",
                                         style: TextStyle(
                                             fontSize: 17,
                                             fontWeight: FontWeight.w500
                                         ),
                                       ),
-                                      Text(
-                                        data["wholeSale"],
-                                        style: TextStyle(
-                                            fontSize: 17,
-                                            fontWeight: FontWeight.w500
+                                      Container(
+                                        height: 40,
+                                        width: 90,
+                                        padding: EdgeInsets.only(left: 15),
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                            color: AppColor.primaryColor,
+                                          ),
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
+                                        child: Center(
+                                          child: TextFormField(
+                                            controller: TextEditingController(text: data["sale"]),
+                                            decoration: InputDecoration(
+                                              border: InputBorder.none,
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ],
@@ -152,7 +197,7 @@ class _SalesPageState extends State<SalesPage> {
                                       ),
                                       Container(
                                         height: 40,
-                                        width: 70,
+                                        width: 90,
                                         padding: EdgeInsets.only(left: 15),
                                         decoration: BoxDecoration(
                                           border: Border.all(
@@ -183,7 +228,7 @@ class _SalesPageState extends State<SalesPage> {
                                       ),
                                       Container(
                                         height: 40,
-                                        width: 70,
+                                        width: 90,
                                         padding: EdgeInsets.only(left: 15),
                                         decoration: BoxDecoration(
                                           border: Border.all(
@@ -213,11 +258,25 @@ class _SalesPageState extends State<SalesPage> {
                                             fontWeight: FontWeight.w500
                                         ),
                                       ),
-                                      Text(
-                                        data["wholeSale"],
-                                        style: TextStyle(
-                                            fontSize: 17,
-                                            fontWeight: FontWeight.w500
+                                      Container(
+                                        height: 40,
+                                        width: 90,
+                                        padding: EdgeInsets.only(left: 15),
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                            color: AppColor.primaryColor,
+                                          ),
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
+                                        child: Center(
+                                          child: TextFormField(
+                                            controller: totalController,
+                                            keyboardType: TextInputType.number,
+                                            enabled: false,
+                                            decoration: InputDecoration(
+                                              border: InputBorder.none,
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ],
@@ -234,7 +293,7 @@ class _SalesPageState extends State<SalesPage> {
                                       ),
                                       Container(
                                         height: 40,
-                                        width: 70,
+                                        width: 90,
                                         padding: EdgeInsets.only(left: 15),
                                         decoration: BoxDecoration(
                                           border: Border.all(
@@ -244,7 +303,7 @@ class _SalesPageState extends State<SalesPage> {
                                         ),
                                         child: Center(
                                           child: TextFormField(
-                                            controller: quantity,
+                                            controller: receiver,
                                             keyboardType: TextInputType.number,
                                             decoration: InputDecoration(
                                               border: InputBorder.none,
@@ -264,11 +323,25 @@ class _SalesPageState extends State<SalesPage> {
                                             fontWeight: FontWeight.w500
                                         ),
                                       ),
-                                      Text(
-                                        data["wholeSale"],
-                                        style: TextStyle(
-                                            fontSize: 17,
-                                            fontWeight: FontWeight.w500
+                                      Container(
+                                        height: 40,
+                                        width: 90,
+                                        padding: EdgeInsets.only(left: 15),
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                            color: AppColor.primaryColor,
+                                          ),
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
+                                        child: Center(
+                                          child: TextFormField(
+                                            controller: due,
+                                            keyboardType: TextInputType.number,
+                                            enabled: false,
+                                            decoration: InputDecoration(
+                                              border: InputBorder.none,
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ],

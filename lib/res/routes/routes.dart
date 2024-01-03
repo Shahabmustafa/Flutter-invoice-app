@@ -8,18 +8,19 @@ import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/setting/suppli
 import 'package:flutter_invoice_app/view/home/home_screen.dart';
 import 'package:flutter_invoice_app/view/splash/splash_screen.dart';
 import 'package:get/get.dart';
+
+import '../../view/bottam navigator bar/setting/change_profile_detail.dart';
 import '../../view/bottam navigator bar/setting/customer/add_customer.dart';
 import '../../view/bottam navigator bar/setting/customer/customer_detail.dart';
-import '../../view/bottam navigator bar/setting/items/add_item.dart';
-import '../../view/bottam navigator bar/setting/order/add_order.dart';
-import '../../view/bottam navigator bar/setting/supplier/add_supplier.dart';
-import '../../view/bottam navigator bar/setting/change_profile_detail.dart';
 import '../../view/bottam navigator bar/setting/customer/customer_screen.dart';
+import '../../view/bottam navigator bar/setting/items/add_item.dart';
 import '../../view/bottam navigator bar/setting/items/item_detail.dart';
 import '../../view/bottam navigator bar/setting/items/item_screen.dart';
 import '../../view/bottam navigator bar/setting/languages_change.dart';
+import '../../view/bottam navigator bar/setting/order/add_order.dart';
 import '../../view/bottam navigator bar/setting/order/order.dart';
 import '../../view/bottam navigator bar/setting/setting.dart';
+import '../../view/bottam navigator bar/setting/supplier/add_supplier.dart';
 import '../../view/bottam navigator bar/setting/supplier/supplier.dart';
 import '../../view/bottam navigator bar/setting/supplier/supplier_detail.dart';
 
