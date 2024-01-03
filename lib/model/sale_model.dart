@@ -1,40 +1,40 @@
 class SaleModel {
+  String? itemName;
+  String? sale;
+  String? quantity;
+  String? total;
   String? customerName;
-  String? email;
-  String? phoneNumber;
-  String? address;
-  String? payment;
-  String? cnic;
-  String? category;
+  String? duePayment;
+  String? receivePayment;
 
   SaleModel(
-      {this.customerName,
-        this.email,
-        this.phoneNumber,
-        this.address,
-        this.payment,
-        this.cnic,
-        this.category});
+      {this.itemName,
+        this.sale,
+        this.quantity,
+        this.total,
+        this.customerName,
+        this.duePayment,
+        this.receivePayment});
 
   SaleModel.fromJson(Map<String, dynamic> json) {
+    itemName = json['itemName'];
+    sale = json['sale'];
+    quantity = json['quantity'];
+    total = json['total'];
     customerName = json['customerName'];
-    email = json['email'];
-    phoneNumber = json['phoneNumber'];
-    address = json['address'];
-    payment = json['payment'];
-    cnic = json['cnic'];
-    category = json['category'];
+    duePayment = json['duePayment'];
+    receivePayment = json['receivePayment'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['itemName'] = this.itemName;
+    data['sale'] = this.sale;
+    data['quantity'] = this.quantity;
+    data['total'] = this.total;
     data['customerName'] = this.customerName;
-    data['email'] = this.email;
-    data['phoneNumber'] = this.phoneNumber;
-    data['address'] = this.address;
-    data['payment'] = this.payment;
-    data['cnic'] = this.cnic;
-    data['category'] = this.category;
+    data['duePayment'] = this.duePayment;
+    data['receivePayment'] = this.receivePayment;
     return data;
   }
 }
