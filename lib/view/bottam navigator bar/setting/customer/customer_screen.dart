@@ -27,10 +27,18 @@ class _CustomerScreenState extends State<CustomerScreen> {
               itemCount: snapshot.data!.docs.length,
               itemBuilder: (context,index){
                 var customer = snapshot.data!.docs[index];
+                customerPayment() {
+                  List<dynamic> supplierPayment = customer["payment"];
+                  int sum = 0;
+                  for (String amount in supplierPayment) {
+                    sum += int.tryParse(amount) ?? 0; // Parse string to int, default to 0 if parsing fails
+                  }
+                  return sum;
+                }
                 return Card(
                   child: ListTile(
                     title: Text(customer["customerName"]),
-                    trailing: Text("${customer["payment"]}"),
+                    trailing: Text("${customerPayment()}"),
                     onTap: (){
                       Get.toNamed(
                           AppRoutes.CustomersDetail,

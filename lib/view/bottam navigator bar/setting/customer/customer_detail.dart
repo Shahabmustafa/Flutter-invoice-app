@@ -16,6 +16,15 @@ class CustomerDetail extends StatefulWidget {
 class _CustomerDetailState extends State<CustomerDetail> {
 
   var customerData = Get.arguments;
+
+  customerPayment() {
+    List<dynamic> supplierPayment = customerData[4];
+    int sum = 0;
+    for (String amount in supplierPayment) {
+      sum += int.tryParse(amount) ?? 0; // Parse string to int, default to 0 if parsing fails
+    }
+    return sum;
+  }
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
@@ -65,7 +74,7 @@ class _CustomerDetailState extends State<CustomerDetail> {
               Divider(),
               TextWidgets(
                 title: "Payment",
-                subtitle: customerData[4],
+                subtitle: customerPayment().toString(),
               ),
               Divider(),
               TextWidgets(

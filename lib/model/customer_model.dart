@@ -3,7 +3,7 @@ class CustomerModel {
   String? email;
   String? phoneNumber;
   String? address;
-  String? payment;
+  List? payment;
   String? cnic;
   String? category;
 

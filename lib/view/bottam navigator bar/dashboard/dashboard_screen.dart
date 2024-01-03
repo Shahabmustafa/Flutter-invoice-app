@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
+import 'package:flutter_invoice_app/res/calculation/calculation.dart';
 import 'package:flutter_invoice_app/res/colors/app_colors.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -32,6 +33,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
               }
               return sum;
             }
+            cashSaleAmount() {
+              List<dynamic> supplierPayment = data["cashSaleAmount"];
+              int sum = 0;
+              for (String amount in supplierPayment) {
+                sum += int.tryParse(amount) ?? 0; // Parse string to int, default to 0 if parsing fails
+              }
+              return sum;
+            }
+            creditSale() {
+              List<dynamic> supplierPayment = data["creditSale"];
+              int sum = 0;
+              for (String amount in supplierPayment) {
+                sum += int.tryParse(amount) ?? 0; // Parse string to int, default to 0 if parsing fails
+              }
+              return sum;
+            }
+            var totalSaleAmount = Calculation().addTwoValue(cashSaleAmount().toString(), creditSale().toString());
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
               child: Container(
@@ -58,7 +76,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           width: 30,
                         ),
                         Text(
-                          "0",
+                          "${cashSaleAmount()}",
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 17,
@@ -80,7 +98,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           width: 30,
                         ),
                         Text(
-                          "0",
+                          "${creditSale()}",
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 17,
@@ -102,7 +120,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           width: 30,
                         ),
                         Text(
-                          "0",
+                          "${totalSaleAmount}",
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 17,
@@ -163,62 +181,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
           }
         },
       ),
-      // Column(
-      //   children: [
-      //     Padding(
-      //       padding: const EdgeInsets.all(8.0),
-      //       child: Container(
-      //         height: size.height * 0.5,
-      //         width: size.width * 1,
-      //         child: StreamBuilder(
-      //           stream: AppApiService.order.snapshots(),
-      //           builder: (context,snapshot){
-      //             if(snapshot.hasData){
-      //               return ListView.builder(
-      //                 itemCount: snapshot.data!.docs.length,
-      //                 itemBuilder: (context,index){
-      //                   return AspectRatio(
-      //                     aspectRatio: 1,
-      //                     child: DChartBarO(
-      //                       animate: true,
-      //                       configRenderBar: ConfigRenderBar(
-      //                           maxBarWidthPx: 50,
-      //                           minBarLengthPx: 100
-      //                       ),
-      //                       animationDuration: Duration(seconds: 3),
-      //                       groupList: [
-      //                         OrdinalGroup(
-      //                             id: "ssss",
-      //                             chartType: ChartType.line,
-      //                             data: [
-      //                               OrdinalData(
-      //                                 domain: "2000",
-      //                                 measure: 100,
-      //                               ),
-      //                               OrdinalData(
-      //                                 domain: "5000",
-      //                                 measure: 8000,
-      //                               ),
-      //                               OrdinalData(
-      //                                 domain: "3000",
-      //                                 measure: 1600,
-      //                               ),
-      //                             ]
-      //                         )
-      //                       ],
-      //                     ),
-      //                   );
-      //                 },
-      //               );
-      //             }else{
-      //               return Center(child: CircularProgressIndicator());
-      //             }
-      //           },
-      //         ),
-      //       ),
-      //     ),
-      //   ],
-      // ),
     );
   }
 }

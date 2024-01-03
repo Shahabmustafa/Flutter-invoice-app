@@ -20,11 +20,8 @@ class _SalesPageState extends State<SalesPage> {
   List<String> customerDropdown = [];
   final sale = Get.put(SaleController());
 
-  final quantity = TextEditingController();
-  final itemSale = TextEditingController();
-  final totalController = TextEditingController();
-  final receiver = TextEditingController();
-  final due = TextEditingController();
+
+  final saleData = Get.put(SaleController());
 
   Future<void> itemNameSetState() async {
     List<String> data = await sale.itemsName();
@@ -41,34 +38,33 @@ class _SalesPageState extends State<SalesPage> {
 
   @override
   void dispose() {
-    itemSale.dispose();
-    quantity.dispose();
-    totalController.dispose();
-    receiver.dispose();
-    due.dispose();
+    saleData.sale.value.dispose();
+    saleData.quantity.value.dispose();
+    saleData.total.value.dispose();
+    saleData.receivePayment.value.dispose();
+    saleData.duePayment.value.dispose();
     super.dispose();
   }
 
   calculateTotalAndReceive(){
-    int value1 = int.tryParse(totalController.text) ?? 00;
-    int value2 = int.tryParse(receiver.text) ?? 00;
+    int value1 = int.tryParse(saleData.total.value.text) ?? 00;
+    int value2 = int.tryParse(saleData.receivePayment.value.text) ?? 00;
     var total = value1 - value2;
     setState(() {
-      due.text = total.toString();
+      saleData.duePayment.value.text = total.toString();
     });
   }
 
   void calculateTotal() {
-    int value1 = int.tryParse(itemSale.text) ?? 00;
-    int value2 = int.tryParse(quantity.text) ?? 00;
+    int value1 = int.tryParse(saleData.sale.value.text) ?? 00;
+    int value2 = int.tryParse(saleData.quantity.value.text) ?? 00;
 
     var total = value1 * value2;
 
     setState(() {
-      totalController.text = total.toString();
+      saleData.total.value.text = total.toString();
     });
   }
-
 
   @override
   void initState() {
@@ -76,10 +72,10 @@ class _SalesPageState extends State<SalesPage> {
     super.initState();
     itemNameSetState();
     customerNameSetState();
-    itemSale.addListener(calculateTotal);
-    quantity.addListener(calculateTotal);
-    due.addListener(calculateTotalAndReceive);
-    receiver.addListener(calculateTotalAndReceive);
+    saleData.sale.value.addListener(calculateTotal);
+    saleData.quantity.value.addListener(calculateTotal);
+    saleData.duePayment.value.addListener(calculateTotalAndReceive);
+    saleData.receivePayment.value.addListener(calculateTotalAndReceive);
   }
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
@@ -158,7 +154,7 @@ class _SalesPageState extends State<SalesPage> {
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        "Sale",
+                                        "Whole Sale",
                                         style: TextStyle(
                                             fontSize: 17,
                                             fontWeight: FontWeight.w500
@@ -176,6 +172,7 @@ class _SalesPageState extends State<SalesPage> {
                                         ),
                                         child: Center(
                                           child: TextFormField(
+                                            enabled: false,
                                             controller: TextEditingController(text: data["sale"]),
                                             decoration: InputDecoration(
                                               border: InputBorder.none,
@@ -207,7 +204,7 @@ class _SalesPageState extends State<SalesPage> {
                                         ),
                                         child: Center(
                                           child: TextFormField(
-                                            controller: itemSale,
+                                            controller: saleData.sale.value,
                                             decoration: InputDecoration(
                                               border: InputBorder.none,
                                             ),
@@ -238,7 +235,7 @@ class _SalesPageState extends State<SalesPage> {
                                         ),
                                         child: Center(
                                           child: TextFormField(
-                                            controller: quantity,
+                                            controller: saleData.quantity.value,
                                             keyboardType: TextInputType.number,
                                             decoration: InputDecoration(
                                               border: InputBorder.none,
@@ -270,7 +267,7 @@ class _SalesPageState extends State<SalesPage> {
                                         ),
                                         child: Center(
                                           child: TextFormField(
-                                            controller: totalController,
+                                            controller: saleData.total.value,
                                             keyboardType: TextInputType.number,
                                             enabled: false,
                                             decoration: InputDecoration(
@@ -303,7 +300,7 @@ class _SalesPageState extends State<SalesPage> {
                                         ),
                                         child: Center(
                                           child: TextFormField(
-                                            controller: receiver,
+                                            controller: saleData.receivePayment.value,
                                             keyboardType: TextInputType.number,
                                             decoration: InputDecoration(
                                               border: InputBorder.none,
@@ -335,7 +332,7 @@ class _SalesPageState extends State<SalesPage> {
                                         ),
                                         child: Center(
                                           child: TextFormField(
-                                            controller: due,
+                                            controller: saleData.duePayment.value,
                                             keyboardType: TextInputType.number,
                                             enabled: false,
                                             decoration: InputDecoration(
@@ -393,8 +390,12 @@ class _SalesPageState extends State<SalesPage> {
                             title: "Sale",
                             height: size.height * 0.06,
                             width: size.width * 1,
+                            loading: saleData.loading.loading.value,
                             onTap: (){
-
+                              saleData.addSale(
+                                itemName,
+                                customerName.toString(),
+                              );
                             },
                           ),
                         ],

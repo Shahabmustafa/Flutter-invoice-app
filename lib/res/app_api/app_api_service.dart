@@ -47,4 +47,9 @@ class AppApiService{
   firestore.collection("users")
       .doc(userId)
       .collection("categori");
+
+  static final sale =
+  firestore.collection("users")
+      .doc(userId)
+      .collection("sale");
 }

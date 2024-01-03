@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_invoice_app/model/customer_model.dart';
 import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
@@ -22,13 +23,13 @@ class CustomerController extends GetxController{
       email: customerEmail.value.text,
       phoneNumber: customerPhone.value.text,
       address: customerAddress.value.text,
-      payment: customerPayment.value.text,
+      payment: ["0"],
       cnic: customerCNIC.value.text,
       category: customerCategory.value.text,
     );
     loading.setLoading(true);
     try{
-      await AppApiService.customer.add(customerModel.toJson()).then((value){
+      await AppApiService.customer.doc(customerName.value.text).set(customerModel.toJson()).then((value){
         loading.setLoading(false);
         Get.back();
       }).onError((error, stackTrace){
