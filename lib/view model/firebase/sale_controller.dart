@@ -19,5 +19,25 @@ class SaleController extends GetxController{
     return dropdownItems;
   }
 
+  Future<List<String>> customerName() async {
+    List<String> dropdownItems = [];
+    try {
+      QuerySnapshot querySnapshot = await AppApiService.customer.get();
+      if (querySnapshot.docs.isNotEmpty) {
+        dropdownItems = querySnapshot.docs.map((doc) => doc['customerName'].toString()).toList();
+      }
+    } catch (e) {
+      print('Error fetching data: $e');
+    }
+    return dropdownItems;
+  }
+
+  addSale(){
+    try{
+
+    }catch(e){
+      
+    }
+  }
 
 }
