@@ -3,7 +3,7 @@ class SupplierModel {
   String? companyEmail;
   String? phoneNumber;
   String? address;
-  String? payment;
+  List<dynamic>? payment;
   String? supplierName;
   String? supplierPhoneNumber;
   String? supplierEmail;

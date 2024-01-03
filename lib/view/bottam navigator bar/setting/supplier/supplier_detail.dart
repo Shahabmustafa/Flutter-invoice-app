@@ -18,6 +18,15 @@ class SupplierDetail extends StatefulWidget {
 class _SupplierDetailState extends State<SupplierDetail> {
 
   var supplier = Get.arguments;
+
+  supplierPayment() {
+    List<dynamic> supplierPayment = supplier[7];
+    int sum = 0;
+    for (String amount in supplierPayment) {
+      sum += int.tryParse(amount) ?? 0; // Parse string to int, default to 0 if parsing fails
+    }
+    return sum;
+  }
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
@@ -82,7 +91,7 @@ class _SupplierDetailState extends State<SupplierDetail> {
               Divider(),
               TextWidgets(
                 title: "Payment",
-                subtitle: supplier[7],
+                subtitle: supplierPayment().toString(),
               ),
               Divider(),
               SizedBox(
@@ -109,7 +118,6 @@ class _SupplierDetailState extends State<SupplierDetail> {
                     width: size.width * 0.3,
                     color: AppColor.errorColor,
                     onTap: (){
-                      print(supplier[7]);
                       AppApiService.item.doc(supplier[8]).delete().then((value){
                         Get.back();
                       });

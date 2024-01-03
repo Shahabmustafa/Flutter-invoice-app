@@ -45,6 +45,13 @@ class OrderController extends GetxController{
           "tax" : Tax.value.text,
           "stock" : Stock.value.text,
         });
+        AppApiService.supplier.doc(companyName).update({
+          "payment" : FieldValue.arrayUnion(
+              [
+                Calculation().doubleConvertInt(date.multiply(cost.value.text,Stock.value.text),),
+              ]
+          ),
+        });
         AppApiService.dashboard.update({
           "supplierPayment" : FieldValue.arrayUnion(
               [

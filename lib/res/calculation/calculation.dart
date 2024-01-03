@@ -40,4 +40,6 @@ class Calculation{
     val = val.replaceAll(RegExp(r"([.]*0)(?!.*\d)"), "");
     return val;
   }
+
+
 }

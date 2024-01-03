@@ -26,10 +26,15 @@ class _SalesPageState extends State<SalesPage> {
         title: Text("Sale"),
         automaticallyImplyLeading: false,
       ),
-      body: Column(
-        children: [
-
-        ],
+      body: StreamBuilder(
+        stream: AppApiService.item.snapshots(),
+        builder: (context,snapshot){
+          if(snapshot.hasData){
+            return Text("");
+          }else{
+            return Center(child: CircularProgressIndicator());
+          }
+        },
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_invoice_app/model/supplier_model.dart';
 import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
@@ -20,7 +21,7 @@ class SupplierController extends GetxController{
       companyName: companyName.value.text,
       companyEmail: companyEmail.value.text,
       address: companyAddress.value.text,
-      payment: "0",
+      payment: [],
       phoneNumber: companyPhoneNumber.value.text,
       supplierEmail: supplierEmail.value.text,
       supplierName: supplierName.value.text,
@@ -28,7 +29,7 @@ class SupplierController extends GetxController{
     );
     loading.setLoading(true);
     try{
-      await AppApiService.supplier.add(supplierModel.toJson()).then((value){
+      await AppApiService.supplier.doc(companyName.value.text).set(supplierModel.toJson()).then((value){
         loading.setLoading(false);
         Get.back();
         companyName.value.clear();
@@ -51,7 +52,7 @@ class SupplierController extends GetxController{
       companyName: companyName.value.text,
       companyEmail: companyEmail.value.text,
       address: companyAddress.value.text,
-      payment: "0",
+      payment: [],
       phoneNumber: companyPhoneNumber.value.text,
       supplierEmail: supplierEmail.value.text,
       supplierName: supplierName.value.text,

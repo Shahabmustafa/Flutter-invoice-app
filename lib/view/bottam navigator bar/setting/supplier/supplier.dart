@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_invoice_app/res/calculation/calculation.dart';
 import 'package:flutter_invoice_app/res/routes/routes.dart';
 import 'package:get/get.dart';
 
@@ -30,11 +31,19 @@ class _SupplierScreenState extends State<SupplierScreen> {
               itemCount: snapshot.data!.docs.length,
               itemBuilder: (context,index){
                 var supplier = snapshot.data!.docs[index];
+                supplierPayment() {
+                  List<dynamic> supplierPayment = supplier["payment"];
+                  int sum = 0;
+                  for (String amount in supplierPayment) {
+                    sum += int.tryParse(amount) ?? 0; // Parse string to int, default to 0 if parsing fails
+                  }
+                  return sum;
+                }
                 return Card(
                   child: ListTile(
                     title: Text(supplier["companyName"]),
                     subtitle: Text(supplier["supplierName"]),
-                    trailing: Text(supplier["payment"]),
+                    trailing: Text("${supplierPayment()}"),
                     onTap: (){
                       Get.toNamed(
                         AppRoutes.SupplierDetails,
