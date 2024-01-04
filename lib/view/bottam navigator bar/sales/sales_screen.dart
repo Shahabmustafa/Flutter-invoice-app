@@ -36,15 +36,15 @@ class _SalesPageState extends State<SalesPage> {
     });
   }
 
-  @override
-  void dispose() {
-    saleData.sale.value.dispose();
-    saleData.quantity.value.dispose();
-    saleData.total.value.dispose();
-    saleData.receivePayment.value.dispose();
-    saleData.duePayment.value.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   saleData.sale.value.dispose();
+  //   saleData.quantity.value.dispose();
+  //   saleData.total.value.dispose();
+  //   saleData.receivePayment.value.dispose();
+  //   saleData.duePayment.value.dispose();
+  //   super.dispose();
+  // }
 
   calculateTotalAndReceive(){
     int value1 = int.tryParse(saleData.total.value.text) ?? 00;
@@ -173,7 +173,7 @@ class _SalesPageState extends State<SalesPage> {
                                         child: Center(
                                           child: TextFormField(
                                             enabled: false,
-                                            controller: TextEditingController(text: data["sale"]),
+                                            controller: TextEditingController(text: data["wholeSale"]),
                                             decoration: InputDecoration(
                                               border: InputBorder.none,
                                             ),

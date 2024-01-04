@@ -26,7 +26,15 @@ class LoginService extends GetxController{
         email: email.value.text,
         password: password.value.text,
       ).then((value)async{
+
         setLoading(false);
+        // AppApiService.dashboard.set({
+        //   "supplierPayment" : FieldValue.arrayUnion(["0"]),
+        //   "totalSaleAmount" : FieldValue.arrayUnion(["0"]),
+        //   "totalInstallment" : FieldValue.arrayUnion(["0"]),
+        //   "creditSale" : FieldValue.arrayUnion(["0"]),
+        //   "cashSaleAmount" : FieldValue.arrayUnion(["0"]),
+        // });
         Utils.flutterToast("You have Sucessfully Login");
         email.value.clear();
         password.value.clear();

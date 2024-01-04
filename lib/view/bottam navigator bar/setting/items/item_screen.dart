@@ -14,6 +14,7 @@ class ItemScreen extends StatefulWidget {
 
 class _ItemScreenState extends State<ItemScreen> {
   TextEditingController category = TextEditingController();
+  final _key = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
@@ -25,21 +26,29 @@ class _ItemScreenState extends State<ItemScreen> {
               onPressed: (){
                 Get.defaultDialog(
                   title: "Add Category",
-                  content: InvoiceTextField(
-                    title: "Enter Your Category",
-                    controller: category,
+                  content: Form(
+                    key: _key,
+                    child: InvoiceTextField(
+                      title: "Enter Your Category",
+                      controller: category,
+                      validator: (value){
+                        return value!.isEmpty ? "Please Fill This Field" : null;
+                      },
+                    ),
                   ),
                   cancel: AppButton(
                     title: "Add",
                     height: size.height * 0.03,
                     width: size.width * 0.3,
                     onTap: (){
-                      AppApiService.categori.add({
-                        "category" : category.text.trim(),
-                      }).then((value){
-                        category.clear();
-                        Get.back();
-                      });
+                     if(_key.currentState!.validate()){
+                       AppApiService.categori.add({
+                         "category" : category.text.trim(),
+                       }).then((value){
+                         category.clear();
+                         Get.back();
+                       });
+                     }
                     },
                   ),
                   confirm: AppButton(

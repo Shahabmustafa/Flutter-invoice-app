@@ -46,13 +46,6 @@ class ItemController extends GetxController{
       );
       await AppApiService.item.doc(itemName.value.text).set(itemModel.toJson()).then((value){
         loading.setLoading(false);
-        AppApiService.categori.add({
-          "categori" : categori.value.text,
-        }).then((value){
-          loading.setLoading(false);
-        }).onError((error, stackTrace){
-          loading.setLoading(false);
-        });
         Get.back();
       }).onError((error, stackTrace){
         loading.setLoading(false);
