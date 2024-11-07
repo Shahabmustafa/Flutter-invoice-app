@@ -1,12 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:d_chart/commons/config_render.dart';
-import 'package:d_chart/commons/data_model.dart';
-import 'package:d_chart/commons/enums.dart';
-import 'package:d_chart/ordinal/combo.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
-import 'package:flutter_invoice_app/res/calculation/calculation.dart';
+import 'package:flutter_invoice_app/res/assets/assets_url.dart';
 import 'package:flutter_invoice_app/res/colors/app_colors.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -26,202 +21,104 @@ class _DashboardScreenState extends State<DashboardScreen> {
         title: Text("Dashboard"),
         automaticallyImplyLeading: false,
       ),
-      body: StreamBuilder(
-        stream: AppApiService.dashboard.snapshots(),
-        builder: (context,snapshot){
-          if(snapshot.hasData){
-            Map<String, dynamic>? data = snapshot.data!.data() as Map<String,dynamic>;
-            supplierPayment() {
-              List<dynamic> supplierPayment = data["supplierPayment"];
-              int sum = 0;
-              for (String amount in supplierPayment) {
-                sum += int.tryParse(amount) ?? 0; // Parse string to int, default to 0 if parsing fails
-              }
-              return sum;
-            }
-            cashSaleAmount() {
-              List<dynamic> supplierPayment = data["cashSaleAmount"];
-              int sum = 0;
-              for (String amount in supplierPayment) {
-                sum += int.tryParse(amount) ?? 0; // Parse string to int, default to 0 if parsing fails
-              }
-              return sum;
-            }
-            creditSale() {
-              List<dynamic> supplierPayment = data["creditSale"];
-              int sum = 0;
-              for (String amount in supplierPayment) {
-                sum += int.tryParse(amount) ?? 0; // Parse string to int, default to 0 if parsing fails
-              }
-              return sum;
-            }
-            var totalSaleAmount = Calculation().addTwoValue(cashSaleAmount().toString(), creditSale().toString());
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-              child: Column(
-                children: [
-                  Container(
-                    height: size.height * 0.3,
-                    width: size.width * 1,
-                    padding: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade200,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              "Cash Sale Amount",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 17,
-                              ),
-                            ),
-                            SizedBox(
-                              width: 30,
-                            ),
-                            Text(
-                              "${cashSaleAmount()}",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 17,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Divider(color: AppColor.primaryColor,),
-                        Row(
-                          children: [
-                            Text(
-                              "Credit Sale",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 17,
-                              ),
-                            ),
-                            SizedBox(
-                              width: 30,
-                            ),
-                            Text(
-                              "${creditSale()}",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 17,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Divider(color: AppColor.primaryColor,),
-                        Row(
-                          children: [
-                            Text(
-                              "Total Sale Amount",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 17,
-                              ),
-                            ),
-                            SizedBox(
-                              width: 30,
-                            ),
-                            Text(
-                              "${totalSaleAmount}",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 17,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Divider(color: AppColor.primaryColor,),
-                        Row(
-                          children: [
-                            Text(
-                              "Total Installment",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 17,
-                              ),
-                            ),
-                            SizedBox(
-                              width: 30,
-                            ),
-                            Text(
-                              "0",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 17,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Divider(color: AppColor.primaryColor,),
-                        Row(
-                          children: [
-                            Text(
-                              "Supplier Payment",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 17,
-                              ),
-                            ),
-                            SizedBox(
-                              width: 30,
-                            ),
-                            Text(
-                              "${supplierPayment()}",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 17,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ]
-                    ),
-                  ),
-                  SizedBox(
-                    height: size.height * 0.04,
-                  ),
-                  SizedBox(
-                    height: 340,
-                    child: AspectRatio(
-                      aspectRatio: 16/9,
-                      child: DChartComboO(
-                        configRenderBar: ConfigRenderBar(maxBarWidthPx: 30),
-                        groupList: [
-                          OrdinalGroup(
-                            id: "1",
-                            chartType: ChartType.bar,
-                            data: [
-                              OrdinalData(
-                                domain: "Cash Sale Amount",
-                                measure: cashSaleAmount(),
-                              ),
-                              OrdinalData(
-                                domain: "Credit Sale",
-                                measure: creditSale(),
-                              ),
-                              OrdinalData(
-                                domain: "Supplier Payment",
-                                measure: supplierPayment(),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                      ),
-                ],
+      body: Column(
+        children: [
+          SizedBox(height: 10,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              DashboardSummary(
+                imageAssets: AssetsUrl.cashSaleSvgIcon,
+                title: "Cash Sale",
+                subtitle: "1200",
               ),
-            );
-          }else{
-            return Center(child: CircularProgressIndicator());
-          }
-        },
+              DashboardSummary(
+                imageAssets: AssetsUrl.creditCardSvgIcon,
+                title: "Credit Card",
+                subtitle: "1200",
+              ),
+            ],
+          ),
+          SizedBox(height: 10,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              DashboardSummary(
+                imageAssets: AssetsUrl.creditSaleSvgIcon,
+                title: "Credit Sale",
+                subtitle: "1200",
+              ),
+              DashboardSummary(
+                imageAssets: AssetsUrl.supplierSaleSvgIcon,
+                title: "Supplier Payment",
+                subtitle: "1200",
+              ),
+            ],
+          ),
+          SizedBox(height: 10,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              DashboardSummary(
+                imageAssets: AssetsUrl.totalInstallmentSvgIcon,
+                title: "Total Installment",
+                subtitle: "1200",
+              ),
+              DashboardSummary(
+                imageAssets: AssetsUrl.totalSaleSvgIcon,
+                title: "Total Sale",
+                subtitle: "1200",
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class DashboardSummary extends StatelessWidget {
+  DashboardSummary({
+    required this.imageAssets,
+    required this.title,
+    required this.subtitle,
+    super.key,
+  });
+  String title;
+  String subtitle;
+  Widget imageAssets;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(10),
+      height: 90,
+      width: 190,
+      decoration: BoxDecoration(
+        color: AppColor.whiteColor,
+        boxShadow: [
+          BoxShadow(
+            color: AppColor.grayColor.withOpacity(0.2),
+            blurRadius: 10,
+            offset: Offset(0.2, 0.1),
+          ),
+        ],
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          imageAssets,
+          // AssetsUrl.cashSaleSvgIcon,
+          SizedBox(width: 10,),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(title,style: GoogleFonts.lora(fontSize: 12,fontWeight: FontWeight.bold),),
+              Text(subtitle,style: GoogleFonts.lora(fontSize: 12,fontWeight: FontWeight.w400),),
+            ],
+          ),
+        ],
       ),
     );
   }

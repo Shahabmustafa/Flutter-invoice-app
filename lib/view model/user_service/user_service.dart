@@ -11,7 +11,7 @@ class UserService extends GetxController{
   static final signupService = Get.put(SignUpService());
   static var date = DateTime.now();
   static var specificId = date.millisecondsSinceEpoch;
-  static final notification = NotificationService();
+  // static final notification = NotificationService();
 
 
 

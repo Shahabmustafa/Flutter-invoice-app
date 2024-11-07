@@ -10,7 +10,7 @@ class LoginService extends GetxController{
   RxBool loading = false.obs;
   Rx<TextEditingController> email = TextEditingController().obs;
   Rx<TextEditingController> password = TextEditingController().obs;
-  static final notification = NotificationService();
+  // static final notification = NotificationService();
 
 
   RxBool visibility = true.obs;

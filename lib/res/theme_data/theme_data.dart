@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../colors/app_colors.dart';
 
@@ -11,7 +12,7 @@ class AppThemeData{
       backgroundColor: AppColor.primaryColor,
       foregroundColor: AppColor.whiteColor,
     ),
-    scaffoldBackgroundColor: Colors.grey.shade100,
+    scaffoldBackgroundColor: Colors.white,
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: AppColor.whiteColor,
     ),
@@ -20,9 +21,9 @@ class AppThemeData{
       iconTheme: IconThemeData(
         color: AppColor.whiteColor,
       ),
-      titleTextStyle: TextStyle(
+      titleTextStyle: GoogleFonts.lora(
         color: AppColor.whiteColor,
-        fontSize: 25,
+        fontSize: 16,
         fontWeight: FontWeight.w500,
       ),
       backgroundColor: AppColor.primaryColor,
@@ -30,10 +31,20 @@ class AppThemeData{
     cardTheme: CardTheme(
       surfaceTintColor: AppColor.whiteColor,
       color: AppColor.whiteColor,
-      elevation: 5,
+      elevation: 1,
     ),
     listTileTheme: ListTileThemeData(
       iconColor: AppColor.primaryColor,
+      titleTextStyle: GoogleFonts.lato(
+        fontWeight: FontWeight.w500,
+        fontSize: 16,
+        color: AppColor.blackColor,
+      ),
+      leadingAndTrailingTextStyle:  GoogleFonts.lato(
+        fontWeight: FontWeight.w400,
+        fontSize: 16,
+        color: AppColor.blackColor,
+      ),
     ),
     inputDecorationTheme: InputDecorationTheme(
       prefixIconColor: AppColor.primaryColor,

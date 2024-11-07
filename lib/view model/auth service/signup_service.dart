@@ -17,7 +17,7 @@ class SignUpService extends GetxController{
   RxBool Visibility = true.obs;
   RxBool confirmVisibility = true.obs;
 
-  static final notification = NotificationService();
+  // static final notification = NotificationService();
 
 
   setLoading(bool value){
