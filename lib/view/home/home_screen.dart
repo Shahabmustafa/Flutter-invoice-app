@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_invoice_app/res/assets/assets_url.dart';
 import 'package:flutter_invoice_app/res/colors/app_colors.dart';
 import 'package:flutter_invoice_app/res/component/image_convert_to_icons.dart';
 import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/dashboard/dashboard_screen.dart';
@@ -29,10 +30,6 @@ class _HomePageState extends State<HomePage> {
         child: PageIndex[pageIndex],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: AppColor.primaryColor,
-        selectedItemColor: AppColor.whiteColor,
-        unselectedItemColor: AppColor.whiteColor,
-        type: BottomNavigationBarType.fixed,
         currentIndex: pageIndex,
         onTap: (index){
           setState(() {
@@ -41,15 +38,15 @@ class _HomePageState extends State<HomePage> {
         },
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.dashboard_outlined,color: Colors.white,),
+            icon:  AssetsUrl.bottomNavBarDashboardSvgIcon,
             label: "Dashboard",
           ),
           BottomNavigationBarItem(
-            icon: IconWidget(imageUrl: "assets/images/bottom/svg.png",color: AppColor.whiteColor,),
+            icon: AssetsUrl.bottomNavBarSaleSvgIcon,
             label: "Sales",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
+            icon: AssetsUrl.bottomNavBarSettingSvgIcon,
             label: "Setting",
           ),
         ],

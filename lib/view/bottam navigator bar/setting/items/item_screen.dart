@@ -1,9 +1,14 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
 import 'package:flutter_invoice_app/res/component/app_button.dart';
 import 'package:flutter_invoice_app/res/component/invoice_text_field.dart';
 import 'package:flutter_invoice_app/res/routes/routes.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+import '../../../../res/assets/assets_url.dart';
+import '../../../../res/colors/app_colors.dart';
 
 class ItemScreen extends StatefulWidget {
   const ItemScreen({Key? key}) : super(key: key);
@@ -15,51 +20,49 @@ class ItemScreen extends StatefulWidget {
 class _ItemScreenState extends State<ItemScreen> {
   TextEditingController category = TextEditingController();
   final _key = GlobalKey<FormState>();
+  bool search = false;
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
       return Scaffold(
         appBar: AppBar(
-          title: Text("Item"),
+          title: search ?
+          TextField(
+            cursorHeight: 18,
+            cursorColor: AppColor.whiteColor,
+            style: GoogleFonts.lato(
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+              color: AppColor.whiteColor,
+            ),
+            decoration: InputDecoration(
+                hintText: "Items Name",
+                hintStyle: GoogleFonts.lato(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                  color: AppColor.whiteColor,
+                ),
+                border: InputBorder.none
+            ),
+          ) :
+          Text("Items"),
           actions: [
             IconButton(
               onPressed: (){
-                Get.defaultDialog(
-                  title: "Add Category",
-                  content: Form(
-                    key: _key,
-                    child: InvoiceTextField(
-                      title: "Enter Your Category",
-                      controller: category,
-                      validator: (value){
-                        return value!.isEmpty ? "Please Fill This Field" : null;
-                      },
-                    ),
-                  ),
-                  cancel: AppButton(
-                    title: "Add",
-                    height: size.height * 0.03,
-                    width: size.width * 0.3,
-                    onTap: (){
-                     if(_key.currentState!.validate()){
-                       AppApiService.categori.add({
-                         "category" : category.text.trim(),
-                       }).then((value){
-                         category.clear();
-                         Get.back();
-                       });
-                     }
-                    },
-                  ),
-                  confirm: AppButton(
-                    title: "Cancel",
-                    height: size.height * 0.03,
-                    width: size.width * 0.3,
-                  ),
-                );
+                if(search == false){
+                  search = true;
+                  setState(() {
+
+                  });
+                }else{
+                  search = false;
+                  setState(() {
+
+                  });
+                }
               },
-              icon: Icon(Icons.category),
-            ),
+              icon: Icon(CupertinoIcons.search),
+            )
           ],
         ),
         body: StreamBuilder(
@@ -67,31 +70,72 @@ class _ItemScreenState extends State<ItemScreen> {
           builder: (context,snapshot){
             if(snapshot.hasData){
               return ListView.builder(
-                itemCount: snapshot.data!.docs.length,
+                itemCount: 2,
                 itemBuilder: (context,index){
-                  var items = snapshot.data!.docs[index];
-                  return Card(
-                    child: ListTile(
-                      title: Text(items["itemName"]),
-                      trailing: Text("Rs ${items["sale"]}"),
-                      onTap: (){
-                        Get.toNamed(
-                          AppRoutes.itemDetail,
-                          arguments: [
-                            items["itemName"],
-                            items["sale"],
-                            items["cost"],
-                            items["wholeSale"],
-                            items["stock"],
-                            items["tax"],
-                            items["companyName"],
-                            items["categori"],
-                            items["saleDate"],
-                            items["expiryDate"],
-                            snapshot.data!.docs[index].id,
-                          ],
-                        );
-                      },
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
+                    child: Container(
+                      height: 160,
+                      width: double.infinity,
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      decoration: BoxDecoration(
+                        color: AppColor.whiteColor,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            blurRadius: 0.8,
+                            color: Colors.grey,
+                            offset: Offset(0.3, 0.2),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(5.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("Item Details",style: GoogleFonts.lato(fontWeight: FontWeight.w600,fontSize: 16),),
+                                Row(
+                                  children: [
+                                    IconButton(
+                                      onPressed: (){},
+                                      icon: AssetsUrl.categoryEditSvgIcon,
+                                    ),
+                                    IconButton(
+                                      onPressed: (){},
+                                      icon: Icon(CupertinoIcons.delete,size: 22,color: AppColor.errorColor,),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          Divider(),
+                          Padding(
+                            padding: const EdgeInsets.all(5.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("Product Name",style: GoogleFonts.lato(color: Colors.grey),),
+                                Text("Pepsi",style: GoogleFonts.lato(color: AppColor.primaryColor,fontWeight: FontWeight.w600),),
+                              ],
+                            ),
+                          ),
+                          Divider(),
+                          Padding(
+                            padding: const EdgeInsets.all(5.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("Price",style: GoogleFonts.lato(color: Colors.grey),),
+                                Text("Rs. 350",style: GoogleFonts.lato(color: AppColor.primaryColor,fontWeight: FontWeight.w600),),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 },

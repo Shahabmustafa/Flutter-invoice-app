@@ -8,8 +8,9 @@ import 'package:flutter_invoice_app/view%20model/shared_pref.dart';
 import 'package:flutter_invoice_app/view%20model/swith_service/swith_service.dart';
 import 'package:flutter_invoice_app/view/splash/splash_screen.dart';
 import 'package:get/get.dart';
-
 import 'firebase_options.dart';
+
+// import 'firebase_options.dart';
 
 
 void main()async{
@@ -25,7 +26,6 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return GetBuilder(

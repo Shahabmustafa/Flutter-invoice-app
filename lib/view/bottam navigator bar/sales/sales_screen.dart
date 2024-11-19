@@ -2,6 +2,7 @@ import 'package:badges/badges.dart' as badges;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/res/colors/app_colors.dart';
+import 'package:flutter_invoice_app/res/component/app_button.dart';
 import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/sales/add_to_card.dart';
 
 class SalesPage extends StatefulWidget {
@@ -33,7 +34,7 @@ class _SalesPageState extends State<SalesPage> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => AddToCardScreen(product: addProduct,)),
+                  MaterialPageRoute(builder: (context) => AddToCardScreen(product: addProduct)),
                 );
               },
               icon: Icon(
@@ -52,20 +53,35 @@ class _SalesPageState extends State<SalesPage> {
               leading: Text("${index + 1}"),
               title: Text(products[index].product),
               subtitle: Text("Stock " + products[index].stock.toString()),
-              trailing: IconButton(
-                onPressed: () {
-                  Product product = Product(
-                    product: products[index].product,
-                    price: products[index].price,
-                    stock: products[index].stock,
-                  );
-                  setState(() {
-                    addProduct.add(product);
-                    cartCount = addProduct.length;
-                  });
-                  print(addProduct);
+              trailing: AppButton(
+                title: "Add",
+                height: 30,
+                width: 100,
+                onTap: () {
+                  if (products[index].stock > 0) {
+                    Product product = Product(
+                      product: products[index].product,
+                      price: products[index].price,
+                      stock: products[index].stock,
+                    );
+
+                    setState(() {
+                      // Check if the product already exists in the cart
+                      int existingIndex = addProduct.indexWhere((p) => p.product == product.product);
+                      if (existingIndex == -1) {
+                        // Add new product to cart
+                        addProduct.add(product);
+                      } else {
+                        // Increment quantity if product already exists in the cart
+                        addProduct[existingIndex].stock += 1;
+                      }
+                      cartCount = addProduct.length;
+
+                      // Decrease stock of the product
+                      products[index].stock -= 1;
+                    });
+                  }
                 },
-                icon: Icon(CupertinoIcons.add_circled),
               ),
             ),
           );

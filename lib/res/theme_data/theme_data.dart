@@ -5,17 +5,35 @@ import '../colors/app_colors.dart';
 
 class AppThemeData{
   static ThemeData lightTheme = ThemeData(
+    /// scaffold background color theme
+    scaffoldBackgroundColor: Colors.white,
+
     splashColor: AppColor.primaryColor,
     canvasColor: AppColor.whiteColor,
     useMaterial3: true,
+
+    /// floating action button theme
     floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: AppColor.primaryColor,
       foregroundColor: AppColor.whiteColor,
+      shape: UnderlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
     ),
-    scaffoldBackgroundColor: Colors.white,
+
+    /// bottom navigation bar theme
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
-      backgroundColor: AppColor.whiteColor,
+      backgroundColor: AppColor.primaryColor,
+      selectedItemColor: AppColor.whiteColor,
+      unselectedItemColor: AppColor.grayColor,
+      selectedLabelStyle: GoogleFonts.lato(
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+        color: AppColor.whiteColor
+      ),
     ),
+
+    /// appbar theme
     appBarTheme: AppBarTheme(
       centerTitle: true,
       iconTheme: IconThemeData(
@@ -28,17 +46,25 @@ class AppThemeData{
       ),
       backgroundColor: AppColor.primaryColor,
     ),
+
+    /// card theme
     cardTheme: CardTheme(
       surfaceTintColor: AppColor.whiteColor,
       color: AppColor.whiteColor,
-      elevation: 1,
+      elevation: 2,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      shadowColor: Colors.grey.withOpacity(0.5),
     ),
+
+    /// listTile theme
     listTileTheme: ListTileThemeData(
       iconColor: AppColor.primaryColor,
       titleTextStyle: GoogleFonts.lato(
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.w700,
         fontSize: 16,
-        color: AppColor.blackColor,
+        color: AppColor.primaryColor,
       ),
       leadingAndTrailingTextStyle:  GoogleFonts.lato(
         fontWeight: FontWeight.w400,
@@ -46,13 +72,71 @@ class AppThemeData{
         color: AppColor.blackColor,
       ),
     ),
+
+    /// text field input decoration theme
     inputDecorationTheme: InputDecorationTheme(
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: BorderSide(
+          color: AppColor.primaryColor,
+        ),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: BorderSide(
+          color: AppColor.primaryColor,
+        ),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: BorderSide(
+          color: AppColor.primaryColor,
+        ),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: BorderSide(
+          color: AppColor.errorColor,
+        ),
+      ),
       prefixIconColor: AppColor.primaryColor,
       suffixIconColor: AppColor.primaryColor,
+      labelStyle: GoogleFonts.lato(
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
+        color: AppColor.blackColor,
+      ),
     ),
+
+    /// text theme
     textTheme: TextTheme(
       displayLarge: TextStyle(
         color: AppColor.blackColor,
+      ),
+    ),
+
+
+    /// text button theme
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
+        // backgroundColor: AppColor.primaryColor,
+        foregroundColor: AppColor.primaryColor,
+      ),
+    ),
+
+    /// alert dialog theme
+    dialogTheme: DialogTheme(
+      backgroundColor: AppColor.whiteColor,
+      alignment: Alignment.center,
+      titleTextStyle: GoogleFonts.lato(
+        fontSize: 24,
+        color: AppColor.blackColor,
+        fontWeight: FontWeight.w800,
+      ),
+
+      shape: UnderlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: BorderSide.none,
       ),
     ),
   );
@@ -79,6 +163,13 @@ class AppThemeData{
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: AppColor.blackColor,
+      selectedItemColor: AppColor.primaryColor,
+      unselectedItemColor: AppColor.grayColor,
+      selectedLabelStyle: GoogleFonts.lato(
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
+          color: AppColor.whiteColor
+      ),
     ),
     appBarTheme: AppBarTheme(
       centerTitle: true,

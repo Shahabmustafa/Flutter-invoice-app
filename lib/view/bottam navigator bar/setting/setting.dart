@@ -10,6 +10,7 @@ import 'package:flutter_invoice_app/view%20model/auth%20service/login_service.da
 import 'package:get/get.dart';
 
 import '../../../../../view model/swith_service/swith_service.dart';
+import '../../../res/assets/assets_url.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({Key? key}) : super(key: key);
@@ -27,14 +28,9 @@ class _SettingPageState extends State<SettingPage> {
   Future<void> emailChange()async{
     reLoad.setLoading(true);
    try{
-     AppApiService.auth.currentUser!
-         .updateEmail(emailController.text)
-         .then((value){
+     AppApiService.auth.currentUser!.updateEmail(emailController.text).then((value){
        reLoad.setLoading(false);
-       FirebaseFirestore.instance
-           .collection("users")
-           .doc(AppApiService.userId)
-           .update({
+       FirebaseFirestore.instance.collection("users").doc(AppApiService.userId).update({
          "email" : emailController.text,
        },).then((value){
          reLoad.setLoading(false);
@@ -64,240 +60,160 @@ class _SettingPageState extends State<SettingPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Card(
-              child: ListTile(
-                leading: Icon(Icons.person),
-                title: Text("Profile"),
-                trailing: Icon(Icons.arrow_forward_ios),
-                onTap: (){
-                  Get.toNamed(AppRoutes.userProfile);
-                },
-              ),
-            ),
-            Card(
-              child: ListTile(
-                leading: Icon(Icons.production_quantity_limits),
-                title: Text("Items"),
-                trailing: Icon(Icons.arrow_forward_ios),
-                onTap: (){
-                  Get.toNamed(AppRoutes.Items);
-                },
-              ),
-            ),
-            Card(
-              child: ListTile(
-                leading: Icon(Icons.person),
-                title: Text("Customer"),
-                trailing: Icon(Icons.arrow_forward_ios),
-                onTap: (){
-                  Get.toNamed(AppRoutes.Customer);
-                },
-              ),
-            ),
-            Card(
-              child: ListTile(
-                leading: Icon(Icons.group),
-                title: Text("Supplier"),
-                trailing: Icon(Icons.arrow_forward_ios),
-                onTap: (){
-                  Get.toNamed(AppRoutes.Supplier);
-                },
-              ),
-            ),
-            Card(
-              child: ListTile(
-                leading: Icon(Icons.shopping_cart),
-                title: Text("Order"),
-                trailing: Icon(Icons.arrow_forward_ios),
-                onTap: (){
-                  Get.toNamed(AppRoutes.Order);
-                },
-              ),
-            ),
-            Card(
-              child: ListTile(
-                leading: Icon(Icons.person),
-                title: Text("Change Profile Detail"),
-                trailing: Icon(Icons.arrow_forward_ios),
-                onTap: (){
-                  Get.toNamed(AppRoutes.changeProfileDetail);
-                },
-              ),
-            ),
-            SizedBox(
-              height: size.height * 0.01,
-            ),
-            Card(
-              child: ListTile(
-                leading: Icon(Icons.alternate_email),
-                trailing: Icon(Icons.arrow_forward_ios),
-                title: Text("Change Email"),
-                onTap: (){
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (context){
-                      return Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Text(
-                            "Change Email",
-                            style: TextStyle(
-                              fontSize: 25,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Form(
-                            key: _key,
-                            child: Column(
-                              children: [
-                                InvoiceTextField(
-                                  title: "Current Email",
-                                  controller: emailController,
-                                ),
-                              ],
-                            ),
-                          ),
-                          AppButton(
-                            title: "Change Email",
-                            height: size.height * 0.06,
-                            width: size.width * 0.95,
-                            loading: reLoad.loading.value,
-                            onTap: (){
-                              if(_key.currentState!.validate()){
-                                emailChange();
-                              }
-                            },
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
-              ),
-            ),
-            SizedBox(
-              height: size.height * 0.01,
-            ),
-            Card(
-              child: ListTile(
-                leading: Icon(Icons.key),
-                title: Text("Change Password"),
-                trailing: Icon(Icons.arrow_forward_ios),
-                onTap: (){
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (context){
-                      return Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Text(
-                            "Change Password",
-                            style: TextStyle(
-                              fontSize: 25,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Form(
-                            key: _key,
-                            child: Column(
-                              children: [
-                                InvoiceTextField(
-                                  title: "New Password",
-                                  controller: passwordController,
-                                  obscureText: visibility.value,
-                                  suffixIcon: Obx(() => GestureDetector(
-                                    onTap: (){
-                                      visibility.value =! visibility.value;
-                                    },
-                                    child: Icon(visibility.value ? Icons.visibility : Icons.visibility_off_outlined),
-                                  ),),
-                                  validator: (value){
-                                    return passwordController.text.isEmpty ?
-                                    "Please Enter New Password" :
-                                    passwordController.text.length < 8 ?
-                                    "Please Enter Eight Digits Password" :
-                                        null;
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                          AppButton(
-                            title: "Change Password",
-                            height: size.height * 0.06,
-                            width: size.width * 0.95,
-                            loading: reLoad.loading.value,
-                            onTap: (){
-                              if(_key.currentState!.validate()){
-                                reLoad.setLoading(true);
-                                try{
-                                  AppApiService.auth.currentUser!.updatePassword(
-                                    passwordController.text,
-                                  ).then((value){
-                                    reLoad.setLoading(false);
-                                    Get.back();
-                                  }).onError((error, stackTrace){
-                                    reLoad.setLoading(false);
-                                  });
-                                }catch(e){
-                                  reLoad.setLoading(false);
-                                }
-                              }
-                            },
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
-              ),
-            ),
-            SizedBox(
-              height: size.height * 0.01,
-            ),
-            Card(
-              child: ListTile(
-                leading: Icon(Icons.language),
-                title: Text("Change Language"),
-                trailing: Icon(Icons.arrow_forward_ios),
-                onTap: (){
-                  Get.toNamed("/change_languages_routes");
-                },
-              ),
-            ),
-            SizedBox(
-              height: size.height * 0.01,
-            ),
-            Card(
-              child: ListTile(
-                leading: Icon(Icons.dark_mode),
-                title: Text("Dark Mode"),
-                trailing: GetBuilder<ThemeController>(
-                  builder: (controller) {
-                    return Switch(
-                      activeColor: AppColor.primaryColor,
-                      value: controller.isDark,
-                      onChanged: (value) {
-                        controller.changeTheme(value);
-                      },
-                    );
+            SizedBox(height: 5,),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+              child: Card(
+                child: ListTile(
+                  leading: AssetsUrl.profileSvgIcon,
+                  title: Text("Profile"),
+                  onTap: (){
+                    Get.toNamed(AppRoutes.userProfile);
                   },
                 ),
               ),
             ),
-            SizedBox(
-              height: size.height * 0.01,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+              child: Card(
+                child: ListTile(
+                  leading: AssetsUrl.categorySvgIcon,
+                  title: Text("Add Category"),
+                  onTap: (){
+                    Get.toNamed(AppRoutes.categoryScreen);
+                  },
+                ),
+              ),
             ),
-            Card(
-              child: ListTile(
-                leading: Icon(Icons.exit_to_app_rounded),
-                title: Text("Logout"),
-                onTap: (){
-                  AppApiService.auth.signOut().then((value){
-                    Get.toNamed("/login_routes");
-                    Utils.flutterToast("Log Out");
-                  });
-                },
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+              child: Card(
+                child: ListTile(
+                  leading: AssetsUrl.addItemSvgIcon,
+                  title: Text("Add Items"),
+                  onTap: (){
+                    Get.toNamed(AppRoutes.Items);
+                  },
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+              child: Card(
+                child: ListTile(
+                  leading: AssetsUrl.customerSvgIcon,
+                  title: Text("Customer"),
+                  onTap: (){
+                    Get.toNamed(AppRoutes.Customer);
+                  },
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+              child: Card(
+                child: ListTile(
+                  leading: AssetsUrl.customerInstallmentSvgIcon,
+                  title: Text("Customer Installment"),
+                  onTap: (){
+                    Get.toNamed(AppRoutes.customerInstallmentScreen);
+                  },
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+              child: Card(
+                child: ListTile(
+                  leading:  AssetsUrl.supplierSvgIcon,
+                  title: Text("Supplier"),
+                  onTap: (){
+                    Get.toNamed(AppRoutes.Supplier);
+                  },
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+              child: Card(
+                child: ListTile(
+                  leading:  AssetsUrl.supplierInstallmentSvgIcon,
+                  title: Text("Supplier Installment"),
+                  onTap: (){
+                    Get.toNamed(AppRoutes.supplierInstallmentScreen);
+                  },
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+              child: Card(
+                child: ListTile(
+                  leading: AssetsUrl.orderSvgIcon,
+                  title: Text("Order"),
+                  onTap: (){
+                    Get.toNamed(AppRoutes.Order);
+                  },
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+              child: Card(
+                child: ListTile(
+                  leading: AssetsUrl.accountSvgIcon,
+                  title: Text("Account"),
+                  onTap: (){
+                    // Get.toNamed(AppRoutes.changeProfileDetail);
+                  },
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+              child: Card(
+                child: ListTile(
+                  leading:  AssetsUrl.changeLanguageSvgIcon,
+                  title: Text("Change Language"),
+                  onTap: (){
+                    Get.toNamed("/change_languages_routes");
+                  },
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+              child: Card(
+                child: ListTile(
+                  leading: AssetsUrl.darkModeSvgIcon,
+                  title: Text("Dark Mode"),
+                  trailing: GetBuilder<ThemeController>(
+                    builder: (controller) {
+                      return Switch(
+                        activeColor: AppColor.primaryColor,
+                        value: controller.isDark,
+                        onChanged: (value) {
+                          controller.changeTheme(value);
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+              child: Card(
+                child: ListTile(
+                  leading: AssetsUrl.logoutSvgIcon,
+                  title: Text("Logout"),
+                  onTap: (){
+                    AppApiService.auth.signOut().then((value){
+                      Get.toNamed("/login_routes");
+                      Utils.flutterToast("Log Out");
+                    });
+                  },
+                ),
               ),
             ),
           ],

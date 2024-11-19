@@ -1,14 +1,16 @@
 import 'package:flutter_invoice_app/view/auth/login_screen.dart';
 import 'package:flutter_invoice_app/view/auth/sign_up_screen.dart';
+import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/setting/category/category_screen.dart';
+import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/setting/installment/customer_installment_screen.dart';
+import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/setting/installment/supplier_installment_screen.dart';
 import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/setting/items/edit_item.dart';
 import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/setting/order/edit_order.dart';
 import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/setting/order/order_details.dart';
-import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/setting/prodile_screen.dart';
+import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/setting/profile/change_password_screen.dart';
 import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/setting/supplier/edit_supplier.dart';
 import 'package:flutter_invoice_app/view/home/home_screen.dart';
 import 'package:flutter_invoice_app/view/splash/splash_screen.dart';
 import 'package:get/get.dart';
-
 import '../../view/bottam navigator bar/setting/change_profile_detail.dart';
 import '../../view/bottam navigator bar/setting/customer/add_customer.dart';
 import '../../view/bottam navigator bar/setting/customer/customer_detail.dart';
@@ -19,6 +21,7 @@ import '../../view/bottam navigator bar/setting/items/item_screen.dart';
 import '../../view/bottam navigator bar/setting/languages_change.dart';
 import '../../view/bottam navigator bar/setting/order/add_order.dart';
 import '../../view/bottam navigator bar/setting/order/order.dart';
+import '../../view/bottam navigator bar/setting/profile/profile_screen.dart';
 import '../../view/bottam navigator bar/setting/setting.dart';
 import '../../view/bottam navigator bar/setting/supplier/add_supplier.dart';
 import '../../view/bottam navigator bar/setting/supplier/supplier.dart';
@@ -53,6 +56,10 @@ class AppRoutes{
   static const String Order = "/order_screen";
   static const String orderDetail = "/orderDetail_screen";
   static const String editOrder = "/editOrder_screen";
+  static const String categoryScreen = "/category_screen";
+  static const String changePasswordScreen = "/change_password_screen";
+  static const String customerInstallmentScreen = "/customer_installment_screen";
+  static const String supplierInstallmentScreen = "/supplier_installment_screen";
 
   static appRoutes() => [
     GetPage(
@@ -190,6 +197,32 @@ class AppRoutes{
     GetPage(
       name: orderDetail,
       page: () => OrderDetail(),
+      transition: Transition.rightToLeftWithFade,
+      transitionDuration: const Duration(microseconds: 250),
+    ),
+    GetPage(
+      name: categoryScreen,
+      page: () => CategoryScreen(),
+      transition: Transition.rightToLeftWithFade,
+      transitionDuration: const Duration(microseconds: 250),
+    ),
+    GetPage(
+      name: changePasswordScreen,
+      page: () => ChangePasswordScreen(),
+      transition: Transition.rightToLeftWithFade,
+      transitionDuration: const Duration(microseconds: 250),
+    ),
+
+    GetPage(
+      name: customerInstallmentScreen,
+      page: () => CustomerInstallmentScreen(),
+      transition: Transition.rightToLeftWithFade,
+      transitionDuration: const Duration(microseconds: 250),
+    ),
+
+    GetPage(
+      name: supplierInstallmentScreen,
+      page: () => SupplierInstallmentScreen(),
       transition: Transition.rightToLeftWithFade,
       transitionDuration: const Duration(microseconds: 250),
     ),

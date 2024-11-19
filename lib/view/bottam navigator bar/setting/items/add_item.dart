@@ -1,3 +1,4 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/view%20model/firebase/item_controller.dart';
 import 'package:get/get.dart';
@@ -55,215 +56,187 @@ class _AddItemsState extends State<AddItems> {
       body: SingleChildScrollView(
         child: Form(
           key: _key,
-          child: Column(
-            children: [
-              SizedBox(
-                height: size.height * 0.02,
-              ),
-              InvoiceTextField(
-                title: "Item Name",
-                controller: item.itemName.value,
-                validator: (value){
-                  return value!.isEmpty ? "Enter Your Item Name" : null;
-                },
-              ),
-              SizedBox(
-                height: size.height * 0.02,
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Flexible(
-                    child: InvoiceTextField(
-                      title: "Sale",
-                      controller: item.sale.value,
-                      keyboardType: TextInputType.number,
-                      validator: (value){
-                        return value!.isEmpty ? "Enter Your Item Price" : null;
-                      },
-                    ),
-                  ),
-                  Flexible(
-                    child: InvoiceTextField(
-                      title: "Cost",
-                      controller: item.cost.value,
-                      keyboardType: TextInputType.number,
-                      validator: (value){
-                        return value!.isEmpty ? "Enter Your Item Whole Price" : null;
-                      },
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: size.height * 0.02,
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Flexible(
-                    child: InvoiceTextField(
-                      title: "Whole Sale",
-                      controller: item.wholeSale.value,
-                      keyboardType: TextInputType.number,
-                      validator: (value){
-                        return value!.isEmpty ? "Enter Your Item Price" : null;
-                      },
-                    ),
-                  ),
-                  Flexible(
-                    child: InvoiceTextField(
-                      title: "Tax",
-                      controller: item.tax.value,
-                      keyboardType: TextInputType.number,
-                      suffix: Text("%"),
-                      validator: (value){
-                        return value!.isEmpty ? "Enter Your Item Whole Price" : null;
-                      },
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: size.height * 0.02,
-              ),
-              InvoiceTextField(
-                title: "Stocks",
-                controller: item.stock.value,
-                keyboardType: TextInputType.number,
-                validator: (value){
-                  return value!.isEmpty ? "Enter Your Item Name" : null;
-                },
-              ),
-              SizedBox(
-                height: size.height * 0.02,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: FormField<String>(
-                  builder: (FormFieldState<String> state) {
-                    return InputDecorator(
-                      decoration: InputDecoration(
-                        labelText: 'Category Name',
-                        errorText: state.errorText,
-                        border: InputBorder.none,
-                      ),
-                      isEmpty: categori == null || categori!.isEmpty,
-                      child: DropdownButtonFormField<String>(
-                        value: categori,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                        ),
-                        items: categoriDropdownItems.map((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            categori = value;
-                          });
-                          state.didChange(value);
-                        },
-                      ),
-                    );
-                  },
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please select an option';
-                    }
-                    return null;
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: Column(
+              children: [
+                SizedBox(
+                  height: size.height * 0.02,
+                ),
+                InvoiceTextField(
+                  title: "Item Name",
+                  controller: item.itemName.value,
+                  validator: (value){
+                    return value!.isEmpty ? "Enter Your Item Name" : null;
                   },
                 ),
-              ),
-              SizedBox(
-                height: size.height * 0.02,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: FormField<String>(
-                  builder: (FormFieldState<String> state) {
-                    return InputDecorator(
-                      decoration: InputDecoration(
-                        labelText: 'Company Name',
-                        errorText: state.errorText,
-                        border: InputBorder.none,
-                      ),
-                      isEmpty: selectedDropdownValue == null || selectedDropdownValue!.isEmpty,
-                      child: DropdownButtonFormField<String>(
-                        value: selectedDropdownValue,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                        ),
-                        items: dropdownItems.map((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            selectedDropdownValue = value;
-                          });
-                          state.didChange(value);
+                SizedBox(
+                  height: size.height * 0.02,
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Flexible(
+                      child: InvoiceTextField(
+                        title: "Sale",
+                        controller: item.sale.value,
+                        keyboardType: TextInputType.number,
+                        validator: (value){
+                          return value!.isEmpty ? "Enter Your Item Price" : null;
                         },
                       ),
-                    );
-                  },
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please select an option';
-                    }
-                    return null;
+                    ),
+                    SizedBox(width: size.width * 0.04,),
+                    Flexible(
+                      child: InvoiceTextField(
+                        title: "Cost",
+                        controller: item.cost.value,
+                        keyboardType: TextInputType.number,
+                        validator: (value){
+                          return value!.isEmpty ? "Enter Your Item Whole Price" : null;
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: size.height * 0.02,
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Flexible(
+                      child: InvoiceTextField(
+                        title: "Discount",
+                        controller: item.discount.value,
+                        keyboardType: TextInputType.number,
+                        validator: (value){
+                          return value!.isEmpty ? "Enter Your Item discount" : null;
+                        },
+                      ),
+                    ),
+                    SizedBox(width: size.width * 0.04,),
+                    Flexible(
+                      child: InvoiceTextField(
+                        title: "Tax",
+                        controller: item.tax.value,
+                        keyboardType: TextInputType.number,
+                        suffix: Text("%"),
+                        validator: (value){
+                          return value!.isEmpty ? "Enter Your Item Whole Price" : null;
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: size.height * 0.02,
+                ),
+                InvoiceTextField(
+                  title: "Stocks",
+                  controller: item.stock.value,
+                  keyboardType: TextInputType.number,
+                  validator: (value){
+                    return value!.isEmpty ? "Enter Your Item Name" : null;
                   },
                 ),
-              ),
-              SizedBox(
-                height: size.height * 0.02,
-              ),
-              Row(
-                children: [
-                  Flexible(
-                    child: InvoiceTextField(
-                      title: "Start Date",
-                      keyboardType: TextInputType.datetime,
-                      readOnly: true,
-                      controller: item.saleDate.value,
-                      onTap: () => _dateNow(context),
-                    ),
-                  ),
-                  Flexible(
-                    child: InvoiceTextField(
-                      title: "Expiry Date",
-                      keyboardType: TextInputType.datetime,
-                      readOnly: true,
-                      controller: item.expiryDate.value,
-                      onTap: () => _dateExpiry(context),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: size.height * 0.02,
-              ),
-              Obx((){
-                return AppButton(
-                  title: "Add Item",
-                  height: size.height * 0.05,
-                  width: size.width * 0.94,
-                  loading: item.loading.loading.value,
-                  onTap: (){
-                    if(_key.currentState!.validate()){
-                      item.addItemData(
-                        selectedDropdownValue.toString(),
-                        categori.toString(),
+                SizedBox(
+                  height: size.height * 0.02,
+                ),
+                DropdownSearch<String>(
+                  items: (f, cs) => ["a", "b", "c"],
+                  dropdownBuilder: (context, selectedItem) {
+                    if (selectedItem == null) {
+                      return SizedBox.shrink();
+                    }
+                    return ListTile(
+                      contentPadding: EdgeInsets.only(left: 0),
+                      title: Text(selectedItem),
+                    );
+                  },
+                  popupProps: PopupProps.menu(
+                    showSearchBox: true,  // Enable the search box
+                    showSelectedItems: true,
+                    itemBuilder: (ctx, item, isDisabled, isSelected) {
+                      return ListTile(
+                        selected: isSelected,
+                        title: Text(item),  // Display the item in the popup
                       );
+                    },
+                  ),
+                ),
+                SizedBox(
+                  height: size.height * 0.02,
+                ),
+                DropdownSearch<String>(
+                  items: (f, cs) => ["a", "b", "c"],
+                  dropdownBuilder: (context, selectedItem) {
+                    if (selectedItem == null) {
+                      return SizedBox.shrink();
                     }
+                    return ListTile(
+                      contentPadding: EdgeInsets.only(left: 0),
+                      title: Text(selectedItem),
+                    );
                   },
-                );
-              }),
-            ],
+                  popupProps: PopupProps.menu(
+                    showSearchBox: true,  // Enable the search box
+                    showSelectedItems: true,
+                    itemBuilder: (ctx, item, isDisabled, isSelected) {
+                      return ListTile(
+                        selected: isSelected,
+                        title: Text(item),  // Display the item in the popup
+                      );
+                    },
+                  ),
+                ),
+                SizedBox(
+                  height: size.height * 0.02,
+                ),
+                Row(
+                  children: [
+                    Flexible(
+                      child: InvoiceTextField(
+                        title: "Start Date",
+                        keyboardType: TextInputType.datetime,
+                        readOnly: true,
+                        controller: item.saleDate.value,
+                        onTap: () => _dateNow(context),
+                      ),
+                    ),
+                    SizedBox(width: size.width * 0.04,),
+                    Flexible(
+                      child: InvoiceTextField(
+                        title: "Expiry Date",
+                        keyboardType: TextInputType.datetime,
+                        readOnly: true,
+                        controller: item.expiryDate.value,
+                        onTap: () => _dateExpiry(context),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: size.height * 0.02,
+                ),
+                Obx((){
+                  return AppButton(
+                    title: "Add Item",
+                    height: size.height * 0.05,
+                    width: size.width * 0.94,
+                    loading: item.loading.loading.value,
+                    onTap: (){
+                      if(_key.currentState!.validate()){
+                        item.addItemData(
+                          selectedDropdownValue.toString(),
+                          categori.toString(),
+                        );
+                      }
+                    },
+                  );
+                }),
+              ],
+            ),
           ),
         ),
       ),

@@ -35,7 +35,7 @@ class _CustomerDetailState extends State<CustomerDetail> {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
         child: Container(
-          height: size.height * 0.43,
+          height: size.height * 0.5,
           width: size.width,
           padding: EdgeInsets.symmetric(horizontal: 15,vertical: 10),
           decoration: BoxDecoration(
@@ -46,14 +46,14 @@ class _CustomerDetailState extends State<CustomerDetail> {
                 color: Colors.grey,
                 blurRadius: 0.08,
                 spreadRadius: 0.8,
-                offset: Offset(1,1),
+                offset: Offset(0.2,0.2),
               ),
             ],
           ),
           child: Column(
             children: [
               TextWidgets(
-                title: "Customer Name",
+                title: "Name",
                 subtitle: customerData[0],
               ),
               Divider(),
@@ -63,7 +63,12 @@ class _CustomerDetailState extends State<CustomerDetail> {
               ),
               Divider(),
               TextWidgets(
-                title: "Phone Number",
+                title: "CNIC",
+                subtitle: customerData[5],
+              ),
+              Divider(),
+              TextWidgets(
+                title: "Phone No",
                 subtitle: customerData[2],
               ),
               Divider(),
@@ -78,33 +83,19 @@ class _CustomerDetailState extends State<CustomerDetail> {
               ),
               Divider(),
               TextWidgets(
-                title: "CNIC",
-                subtitle: customerData[5],
-              ),
-              Divider(),
-              TextWidgets(
-                title: "Type",
+                title: "Category",
                 subtitle: customerData[6],
               ),
-              Divider(),
-              SizedBox(height: size.height * 0.04,),
+              SizedBox(height: size.height * 0.025,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   AppButton(
-                    title: "Edit",
-                    height: size.height * 0.05,
-                    width: size.width * 0.3,
-                    color: Colors.green,
-                    onTap: (){
-
-                    },
-                  ),
-                  AppButton(
                     title: "Delete",
                     height: size.height * 0.05,
                     width: size.width * 0.3,
-                    color: AppColor.errorColor,
+                    color: AppColor.whiteColor,
+                    textColor: AppColor.primaryColor,
                     onTap: (){
                       Get.defaultDialog(
                         title: "Delete",
@@ -121,6 +112,14 @@ class _CustomerDetailState extends State<CustomerDetail> {
 
                       );
                     },
+                  ),
+                  AppButton(
+                    title: "Edit",
+                    height: size.height * 0.05,
+                    width: size.width * 0.3,
+                    color: AppColor.primaryColor,
+                    textColor: AppColor.whiteColor,
+                    onTap: (){},
                   ),
                 ],
               ),

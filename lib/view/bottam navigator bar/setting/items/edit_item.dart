@@ -107,7 +107,7 @@ class _EditItemState extends State<EditItem> {
                   Flexible(
                     child: InvoiceTextField(
                       title: "Whole Sale",
-                      controller: item.wholeSale.value,
+                      controller: item.discount.value,
                       keyboardType: TextInputType.number,
                       validator: (value){
                         return value!.isEmpty ? "Enter Your Item Price" : null;

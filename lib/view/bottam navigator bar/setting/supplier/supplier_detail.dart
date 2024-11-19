@@ -36,7 +36,7 @@ class _SupplierDetailState extends State<SupplierDetail> {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
         child: Container(
-          height: size.height * 0.45,
+          height: size.height * 0.58,
           width: size.width,
           padding: EdgeInsets.symmetric(horizontal: 15,vertical: 10),
           decoration: BoxDecoration(
@@ -59,17 +59,17 @@ class _SupplierDetailState extends State<SupplierDetail> {
               ),
               Divider(),
               TextWidgets(
-                title: "Company Email",
+                title: "Email",
                 subtitle: supplier[1],
               ),
               Divider(),
               TextWidgets(
-                title: "Company Phone Number",
+                title: "Company Phone No",
                 subtitle: supplier[2],
               ),
               Divider(),
               TextWidgets(
-                title: "Company Address",
+                title: "Address",
                 subtitle: supplier[3],
               ),
               Divider(),
@@ -100,26 +100,28 @@ class _SupplierDetailState extends State<SupplierDetail> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   AppButton(
-                    title: "Edit",
-                    height: size.height * 0.05,
-                    width: size.width * 0.3,
-                    color: Colors.green,
-                    onTap: (){
-                      Get.toNamed(
-                          AppRoutes.editSupplier,
-                          arguments: [supplier[8]],
-                      );
-                    },
-                  ),
-                  AppButton(
                     title: "Delete",
                     height: size.height * 0.05,
                     width: size.width * 0.3,
-                    color: AppColor.errorColor,
+                    color: AppColor.whiteColor,
+                    textColor: AppColor.primaryColor,
                     onTap: (){
-                      AppApiService.item.doc(supplier[8]).delete().then((value){
+                      AppApiService.supplier.doc(supplier[8]).delete().then((value){
                         Get.back();
                       });
+                    },
+                  ),
+                  AppButton(
+                    title: "Edit",
+                    height: size.height * 0.05,
+                    width: size.width * 0.3,
+                    color: AppColor.primaryColor,
+                    textColor: AppColor.whiteColor,
+                    onTap: (){
+                      Get.toNamed(
+                        AppRoutes.editSupplier,
+                        arguments: [supplier[8]],
+                      );
                     },
                   ),
                 ],
