@@ -64,6 +64,7 @@ dependencies:
   flutter_svg: ^2.0.13
   badges: ^3.1.2
   dropdown_search: ^6.0.1
+  flutter_barcode_scanner: ^2.0.0
 
 dev_dependencies:
   flutter_test:
