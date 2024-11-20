@@ -152,7 +152,7 @@ class _SettingPageState extends State<SettingPage> {
                   leading: AssetsUrl.orderSvgIcon,
                   title: Text("Order"),
                   onTap: (){
-                    Get.toNamed(AppRoutes.Order);
+                    Get.toNamed(AppRoutes.orderInvoiceScreen);
                   },
                 ),
               ),

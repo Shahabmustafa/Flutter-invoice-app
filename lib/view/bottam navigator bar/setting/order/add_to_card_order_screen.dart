@@ -1,15 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/res/component/app_button.dart';
-import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/sales/sales_screen.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../../res/colors/app_colors.dart';
+import '../../../../model/product_model.dart';
+import '../../../../res/colors/app_colors.dart';
 
 class AddToCardOrderScreen extends StatefulWidget {
-  AddToCardOrderScreen({required this.product, super.key});
-  List<Product> product;
+  AddToCardOrderScreen({required this.orderProduct, super.key});
+  List<Product> orderProduct;
 
   @override
   State<AddToCardOrderScreen> createState() => _AddToCardOrderScreenState();
@@ -29,15 +29,15 @@ class _AddToCardOrderScreenState extends State<AddToCardOrderScreen> {
   @override
   Widget build(BuildContext context) {
     // Calculate subtotal, total discount, total tax, and total amount
-    double subtotal = widget.product.fold(0, (sum, item) {
+    double subtotal = widget.orderProduct.fold(0, (sum, item) {
       return sum + (item.price * item.stock);
     });
 
-    double totalDiscount = widget.product.fold(0, (sum, item) {
+    double totalDiscount = widget.orderProduct.fold(0, (sum, item) {
       return sum + ((item.price * item.discount / 100) * item.stock);
     });
 
-    double totalTax = widget.product.fold(0, (sum, item) {
+    double totalTax = widget.orderProduct.fold(0, (sum, item) {
       double discountedPrice = item.price - (item.price * item.discount / 100);
       return sum + ((discountedPrice * item.tax / 100) * item.stock);
     });
@@ -54,7 +54,7 @@ class _AddToCardOrderScreenState extends State<AddToCardOrderScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-              child: widget.product.isEmpty ?
+              child: widget.orderProduct.isEmpty ?
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -81,7 +81,7 @@ class _AddToCardOrderScreenState extends State<AddToCardOrderScreen> {
                 ],
               ) :
               ListView.builder(
-                itemCount: widget.product.length,
+                itemCount: widget.orderProduct.length,
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -108,12 +108,12 @@ class _AddToCardOrderScreenState extends State<AddToCardOrderScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  widget.product[index].product,
+                                  widget.orderProduct[index].product,
                                   style: GoogleFonts.lato(
                                       fontWeight: FontWeight.w600, fontSize: 16),
                                 ),
                                 Text(
-                                  "Price: ${widget.product[index].price.toStringAsFixed(2)}",
+                                  "Price: ${widget.orderProduct[index].price.toStringAsFixed(2)}",
                                   style: GoogleFonts.lato(color: Colors.grey),
                                 ),
                               ],
@@ -126,11 +126,11 @@ class _AddToCardOrderScreenState extends State<AddToCardOrderScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  "Discount: ${widget.product[index].discount.toStringAsFixed(0)}%",
+                                  "Discount: ${widget.orderProduct[index].discount.toStringAsFixed(0)}%",
                                   style: GoogleFonts.lato(color: Colors.grey),
                                 ),
                                 Text(
-                                  "Tax: ${widget.product[index].tax.toStringAsFixed(0)}%",
+                                  "Tax: ${widget.orderProduct[index].tax.toStringAsFixed(0)}%",
                                   style: GoogleFonts.lato(color: Colors.grey),
                                 ),
                               ],
@@ -144,10 +144,10 @@ class _AddToCardOrderScreenState extends State<AddToCardOrderScreen> {
                               children: [
                                 Text(
                                   "Total Amount: ${calculateProductTotal(
-                                    widget.product[index].price,
-                                    widget.product[index].discount,
-                                    widget.product[index].tax,
-                                    widget.product[index].stock,
+                                    widget.orderProduct[index].price,
+                                    widget.orderProduct[index].discount,
+                                    widget.orderProduct[index].tax,
+                                    widget.orderProduct[index].stock,
                                   )}",
                                   style: GoogleFonts.lato(color: Colors.grey),),
                                 Row(
@@ -155,7 +155,7 @@ class _AddToCardOrderScreenState extends State<AddToCardOrderScreen> {
                                     IconButton(
                                       onPressed: () {
                                         setState(() {
-                                          widget.product[index].stock++;
+                                          widget.orderProduct[index].stock++;
                                         });
                                       },
                                       icon: Icon(
@@ -164,7 +164,7 @@ class _AddToCardOrderScreenState extends State<AddToCardOrderScreen> {
                                       ),
                                     ),
                                     Text(
-                                      "${widget.product[index].stock}",
+                                      "${widget.orderProduct[index].stock}",
                                       style: GoogleFonts.lato(
                                           color: AppColor.primaryColor,
                                           fontWeight: FontWeight.w600),
@@ -172,10 +172,10 @@ class _AddToCardOrderScreenState extends State<AddToCardOrderScreen> {
                                     IconButton(
                                       onPressed: () {
                                         setState(() {
-                                          if (widget.product[index].stock > 1) {
-                                            widget.product[index].stock--;
+                                          if (widget.orderProduct[index].stock > 1) {
+                                            widget.orderProduct[index].stock--;
                                           } else {
-                                            widget.product.removeAt(index);
+                                            widget.orderProduct.removeAt(index);
                                           }
                                         });
                                       },
@@ -196,7 +196,7 @@ class _AddToCardOrderScreenState extends State<AddToCardOrderScreen> {
                 },
               ),
             ),
-            widget.product.isEmpty ? SizedBox() : Padding(
+            widget.orderProduct.isEmpty ? SizedBox() : Padding(
               padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -231,12 +231,12 @@ class _AddToCardOrderScreenState extends State<AddToCardOrderScreen> {
                 ],
               ),
             ),
-            widget.product.isEmpty ? SizedBox() : AppButton(
+            widget.orderProduct.isEmpty ? SizedBox() : AppButton(
               title: "Save Invoice",
               height: 50,
               width: double.infinity,
-              textColor: widget.product.isEmpty ? AppColor.blackColor : AppColor.whiteColor,
-              color: widget.product.isEmpty ? AppColor.whiteColor : AppColor.primaryColor,
+              textColor: widget.orderProduct.isEmpty ? AppColor.blackColor : AppColor.whiteColor,
+              color: widget.orderProduct.isEmpty ? AppColor.whiteColor : AppColor.primaryColor,
               onTap: (){
 
               },

@@ -1,14 +1,16 @@
 class CustomerModel {
+  String? customerId;
   String? customerName;
   String? email;
   String? phoneNumber;
   String? address;
-  List? payment;
+  int? payment;
   String? cnic;
   String? category;
 
   CustomerModel(
       {this.customerName,
+        this.customerId,
         this.email,
         this.phoneNumber,
         this.address,
@@ -17,6 +19,7 @@ class CustomerModel {
         this.category});
 
   CustomerModel.fromJson(Map<String, dynamic> json) {
+    customerId = json['customerId'];
     customerName = json['customerName'];
     email = json['email'];
     phoneNumber = json['phoneNumber'];
@@ -28,6 +31,7 @@ class CustomerModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['customerId'] = this.customerId;
     data['customerName'] = this.customerName;
     data['email'] = this.email;
     data['phoneNumber'] = this.phoneNumber;

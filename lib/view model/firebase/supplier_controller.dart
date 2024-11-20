@@ -16,11 +16,15 @@ class SupplierController extends GetxController{
   final loading = Get.put(LoadingController());
 
   addSupplier()async{
+
+    var supplierId = await AppApiService.item.doc();
+
     SupplierModel supplierModel = SupplierModel(
+      supplierId: supplierId.id,
       companyName: companyName.value.text,
       companyEmail: companyEmail.value.text,
       address: companyAddress.value.text,
-      payment: [],
+      payment: 0,
       phoneNumber: companyPhoneNumber.value.text,
       supplierEmail: supplierEmail.value.text,
       supplierName: supplierName.value.text,
@@ -28,7 +32,7 @@ class SupplierController extends GetxController{
     );
     loading.setLoading(true);
     try{
-      await AppApiService.supplier.doc(companyName.value.text).set(supplierModel.toJson()).then((value){
+      await AppApiService.supplier.doc(supplierId.id).set(supplierModel.toJson()).then((value){
         loading.setLoading(false);
         Get.back();
         companyName.value.clear();
@@ -51,7 +55,7 @@ class SupplierController extends GetxController{
       companyName: companyName.value.text,
       companyEmail: companyEmail.value.text,
       address: companyAddress.value.text,
-      payment: [],
+      payment: 0,
       phoneNumber: companyPhoneNumber.value.text,
       supplierEmail: supplierEmail.value.text,
       supplierName: supplierName.value.text,

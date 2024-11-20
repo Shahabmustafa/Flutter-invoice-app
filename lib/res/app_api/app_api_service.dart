@@ -51,5 +51,5 @@ class AppApiService{
   static final sale =
   firestore.collection("users")
       .doc(userId)
-      .collection("sale");
+      .collection("saleInvoice");
 }

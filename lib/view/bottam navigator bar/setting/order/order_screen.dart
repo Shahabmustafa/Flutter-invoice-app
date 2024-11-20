@@ -1,15 +1,13 @@
 import 'package:badges/badges.dart' as badges;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_invoice_app/model/item_model.dart';
 import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
 import 'package:flutter_invoice_app/res/colors/app_colors.dart';
 import 'package:flutter_invoice_app/res/component/app_button.dart';
-import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/order/add_to_card_order_screen.dart';
-import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/sales/add_to_card.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_invoice_app/model/product_model.dart';
+import 'add_to_card_order_screen.dart';
 
-import '../../../model/product_model.dart';
 
 class OrderScreen extends StatefulWidget {
   const OrderScreen({Key? key}) : super(key: key);
@@ -19,7 +17,7 @@ class OrderScreen extends StatefulWidget {
 }
 
 class _OrderScreenState extends State<OrderScreen> {
-  List<Product> addProduct = [];
+  List<Product> addToCardOrderProduct = [];
   int cartCount = 0;
 
   @override
@@ -27,8 +25,7 @@ class _OrderScreenState extends State<OrderScreen> {
     final size = MediaQuery.sizeOf(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text("Sale Invoice"),
-        automaticallyImplyLeading: false,
+        title: Text("Add Product"),
         actions: [
           Padding(
             padding: const EdgeInsets.all(10.0),
@@ -40,10 +37,10 @@ class _OrderScreenState extends State<OrderScreen> {
               ),
               child: IconButton(
                 onPressed: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(builder: (context) => AddToCardScreen(product: addProduct)),
-                  // );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => AddToCardOrderScreen(orderProduct: addToCardOrderProduct)),
+                  );
                 },
                 icon: Icon(
                   CupertinoIcons.shopping_cart,
@@ -122,15 +119,15 @@ class _OrderScreenState extends State<OrderScreen> {
                                     );
                                     setState(() {
                                       // Check if the product already exists in the cart
-                                      int existingIndex = addProduct.indexWhere((p) => p.product == product.product);
+                                      int existingIndex = addToCardOrderProduct.indexWhere((p) => p.product == product.product);
                                       if (existingIndex == -1) {
                                         // Add new product to cart
-                                        addProduct.add(product);
+                                        addToCardOrderProduct.add(product);
                                       } else {
                                         // Increment stock by 1 if product already exists in the cart
-                                        addProduct[existingIndex].stock += 1;
+                                        addToCardOrderProduct[existingIndex].stock += 1;
                                       }
-                                      cartCount = addProduct.length;
+                                      cartCount = addToCardOrderProduct.length;
                                     });
 
                                   }

@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/res/assets/assets_url.dart';
-import 'package:flutter_invoice_app/res/colors/app_colors.dart';
-import 'package:flutter_invoice_app/res/component/image_convert_to_icons.dart';
 import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/dashboard/dashboard_screen.dart';
-import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/sales/sales_screen.dart';
-
+import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/sales/sale_invoice_screen.dart';
 import '../bottam navigator bar/setting/setting.dart';
 
 class HomePage extends StatefulWidget {
@@ -19,7 +16,7 @@ class _HomePageState extends State<HomePage> {
 
   List PageIndex = [
     DashboardScreen(),
-    SalesPage(),
+    SaleInvoiceScreen(),
     SettingPage(),
   ];
 
@@ -38,7 +35,7 @@ class _HomePageState extends State<HomePage> {
         },
         items: [
           BottomNavigationBarItem(
-            icon:  AssetsUrl.bottomNavBarDashboardSvgIcon,
+            icon: AssetsUrl.bottomNavBarDashboardSvgIcon,
             label: "Dashboard",
           ),
           BottomNavigationBarItem(

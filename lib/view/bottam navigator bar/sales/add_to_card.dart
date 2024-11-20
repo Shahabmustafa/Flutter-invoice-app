@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/res/component/app_button.dart';
-import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/sales/sales_screen.dart';
+import 'package:flutter_invoice_app/view%20model/firebase/saleinvoice_controller.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import '../../../model/product_model.dart';
+import '../../../res/colors/app_colors.dart';
 
 class AddToCardScreen extends StatefulWidget {
   AddToCardScreen({required this.product, super.key});
@@ -14,12 +17,34 @@ class AddToCardScreen extends StatefulWidget {
 }
 
 class _AddToCardScreenState extends State<AddToCardScreen> {
+
+  double calculateProductTotal(double itemPrice,double discount,double tax,int stock) {
+    // Calculate discounted price
+    double discountedPrice = itemPrice - (itemPrice * discount / 100);
+    // Add tax to discounted price
+    double taxedPrice = discountedPrice + (discountedPrice * tax / 100);
+    // Total amount considering stock
+    return taxedPrice * stock;
+  }
+
   @override
   Widget build(BuildContext context) {
-    double totalAmount = widget.product.fold(0, (sum, item) {
+    // Calculate subtotal, total discount, total tax, and total amount
+    double subtotal = widget.product.fold(0, (sum, item) {
       return sum + (item.price * item.stock);
     });
 
+    double totalDiscount = widget.product.fold(0, (sum, item) {
+      return sum + ((item.price * item.discount / 100) * item.stock);
+    });
+
+    double totalTax = widget.product.fold(0, (sum, item) {
+      double discountedPrice = item.price - (item.price * item.discount / 100);
+      return sum + ((discountedPrice * item.tax / 100) * item.stock);
+    });
+
+    double totalAmount = subtotal - totalDiscount + totalTax;
+    final invoice = Get.put(SaleInvoiceController());
     return Scaffold(
       appBar: AppBar(
         title: Text("Add to Cart"),
@@ -34,128 +59,136 @@ class _AddToCardScreenState extends State<AddToCardScreen> {
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(CupertinoIcons.shopping_cart,size: 100,),
-                  SizedBox(height: 20,),
-                  Center(child: Text("your product not add",style: GoogleFonts.lato(fontSize: 20,fontWeight: FontWeight.bold),)),
-                  SizedBox(height: 20,),
+                  Icon(
+                    CupertinoIcons.shopping_cart,
+                    size: 100,
+                  ),
+                  SizedBox(height: 20),
+                  Center(
+                    child: Text(
+                      "Your cart is empty",
+                      style: GoogleFonts.lato(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  SizedBox(height: 20),
                   AppButton(
                     title: "Back",
                     height: 40,
                     width: 100,
-                    onTap: (){
+                    onTap: () {
                       Get.back();
                     },
-                  )
+                  ),
                 ],
               ) :
               ListView.builder(
                 itemCount: widget.product.length,
                 itemBuilder: (context, index) {
-                  return Card(
-                    margin: EdgeInsets.only(bottom: 16),
-                    elevation: 2,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          // Product Details
-                          Row(
-                            children: [
-                              Container(
-                                width: 40,
-                                height: 40,
-                                decoration: BoxDecoration(
-                                  color: Colors.blue,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    "${index + 1}",
-                                    style: GoogleFonts.lato(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(width: 12),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    widget.product[index].product,
-                                    style: GoogleFonts.lato(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                  SizedBox(height: 8),
-                                  Text(
-                                    "Stock: ${widget.product[index].stock}",
-                                    style: GoogleFonts.lato(
-                                      color: Colors.grey[600],
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    child: Container(
+                      height: 160,
+                      width: double.infinity,
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      decoration: BoxDecoration(
+                        color: AppColor.whiteColor,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            blurRadius: 0.8,
+                            color: Colors.grey,
+                            offset: Offset(0.3, 0.2),
                           ),
-
-                          // Price and Quantity Controls
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              // Price per item * Quantity
-                              Text(
-                                "Rs. ${(widget.product[index].price * widget.product[index].stock).toStringAsFixed(2)}",
-                                style: GoogleFonts.lato(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 16,
+                        ],
+                      ),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(5.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  widget.product[index].product,
+                                  style: GoogleFonts.lato(
+                                      fontWeight: FontWeight.w600, fontSize: 16),
                                 ),
-                              ),
-                              SizedBox(height: 8),
-                              Row(
-                                children: [
-                                  IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        widget.product[index].stock++;
-                                        totalAmount = widget.product.fold(0, (sum, item) {
-                                          return sum + (item.price * item.stock);
+                                Text(
+                                  "Price: ${widget.product[index].price.toStringAsFixed(2)}",
+                                  style: GoogleFonts.lato(color: Colors.grey),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Divider(),
+                          Padding(
+                            padding: const EdgeInsets.all(5.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Discount: ${widget.product[index].discount.toStringAsFixed(0)}%",
+                                  style: GoogleFonts.lato(color: Colors.grey),
+                                ),
+                                Text(
+                                  "Tax: ${widget.product[index].tax.toStringAsFixed(0)}%",
+                                  style: GoogleFonts.lato(color: Colors.grey),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Divider(),
+                          Padding(
+                            padding: const EdgeInsets.all(5.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Total Amount: ${calculateProductTotal(
+                                    widget.product[index].price,
+                                    widget.product[index].discount,
+                                    widget.product[index].tax,
+                                    widget.product[index].stock,
+                                  )}",
+                                  style: GoogleFonts.lato(color: Colors.grey),),
+                                Row(
+                                  children: [
+                                    IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          widget.product[index].stock++;
                                         });
-                                      });
-                                    },
-                                    icon: Icon(CupertinoIcons.plus_circle, color: Colors.green),
-                                  ),
-                                  IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        // Decrease the quantity (stock) by 1 if it's greater than 1
-                                        if (widget.product[index].stock > 1) {
-                                          widget.product[index].stock--;
-                                        } else {
-                                          // If the stock is 1, remove the product from the list
-                                          widget.product.removeAt(index);
-                                        }
-
-                                        // Recalculate the total amount
-                                        totalAmount = widget.product.fold(0, (sum, item) {
-                                          return sum + (item.price * item.stock);
+                                      },
+                                      icon: Icon(
+                                        CupertinoIcons.plus_circle,
+                                        color: Colors.green,
+                                      ),
+                                    ),
+                                    Text(
+                                      "${widget.product[index].stock}",
+                                      style: GoogleFonts.lato(
+                                          color: AppColor.primaryColor,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                    IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          if (widget.product[index].stock > 1) {
+                                            widget.product[index].stock--;
+                                          } else {
+                                            widget.product.removeAt(index);
+                                          }
                                         });
-                                      });
-                                    },
-                                    icon: Icon(Icons.remove_circle_outline, color: Colors.red),
-                                  )
-
-                                ],
-                              ),
-                            ],
+                                      },
+                                      icon: Icon(
+                                        Icons.remove_circle_outline,
+                                        color: Colors.red,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
@@ -164,36 +197,63 @@ class _AddToCardScreenState extends State<AddToCardScreen> {
                 },
               ),
             ),
-            // Subtotal and Total
+            widget.product.isEmpty ? SizedBox() :
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "SubTotal",
-                    style: GoogleFonts.lato(fontSize: 18, fontWeight: FontWeight.w600),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Subtotal",
+                        style: GoogleFonts.lato(fontSize: 18, fontWeight: FontWeight.w600),
+                      ),
+                      Text(
+                        "Rs. ${subtotal.toStringAsFixed(2)}",
+                        style: GoogleFonts.lato(fontSize: 18, fontWeight: FontWeight.w600),
+                      ),
+                    ],
                   ),
-                  Text(
-                    "Rs. ${totalAmount.toStringAsFixed(2)}",
-                    style: GoogleFonts.lato(fontSize: 18, fontWeight: FontWeight.w600),
+                  Divider(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Total Amount",
+                        style: GoogleFonts.lato(fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        "Rs. ${totalAmount.toStringAsFixed(2)}",
+                        style: GoogleFonts.lato(fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                    ],
                   ),
                 ],
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Total Amount",
-                  style: GoogleFonts.lato(fontSize: 18, fontWeight: FontWeight.w600),
-                ),
-                Text(
-                  "Rs. ${totalAmount.toStringAsFixed(2)}",
-                  style: GoogleFonts.lato(fontSize: 18, fontWeight: FontWeight.w600),
-                ),
-              ],
-            ),
+            widget.product.isEmpty ?
+            SizedBox() :
+            Obx((){
+              return AppButton(
+                title: "Save Invoice",
+                height: 50,
+                width: double.infinity,
+                textColor: widget.product.isEmpty ? AppColor.blackColor : AppColor.whiteColor,
+                color: widget.product.isEmpty ? AppColor.whiteColor : AppColor.primaryColor,
+                loading: invoice.loading.value,
+                onTap: (){
+                  invoice.addSaleInvoice(
+                    widget.product,
+                    subtotal.toString(),
+                    totalAmount.toString(),
+                    totalTax.toString(),
+                    totalDiscount.toString(),
+                  );
+                },
+              );
+            }),
           ],
         ),
       ),

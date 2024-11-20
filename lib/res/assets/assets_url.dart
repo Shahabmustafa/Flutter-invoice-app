@@ -192,8 +192,8 @@ class AssetsUrl{
   static Widget categoryEditSvgIcon = SvgPicture.asset(
     categoryEdit,
     semanticsLabel: 'categoryEdit',
-    height: 22,
-    width: 22,
+    height: 20,
+    width: 20,
   );
 
   /// bottom navigation bar
@@ -201,22 +201,22 @@ class AssetsUrl{
   static Widget bottomNavBarDashboardSvgIcon = SvgPicture.asset(
     bottomNavBarDashboardIcon,
     semanticsLabel: 'bottomNavBarDashboardIcon',
-    height: 22,
-    width: 22,
+    height: 20,
+    width: 20,
   );
 
   static Widget bottomNavBarSaleSvgIcon = SvgPicture.asset(
     bottomNavBarSaleIcon,
     semanticsLabel: 'bottomNavBarSaleIcon',
-    height: 22,
-    width: 22,
+    height: 20,
+    width: 20,
   );
 
   static Widget bottomNavBarSettingSvgIcon = SvgPicture.asset(
     bottomNavBarSettingIcon,
     semanticsLabel: 'bottomNavBarSettingIcon',
-    height: 22,
-    width: 22,
+    height: 20,
+    width: 20,
   );
 
 }

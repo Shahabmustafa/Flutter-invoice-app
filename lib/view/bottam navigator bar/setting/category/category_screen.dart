@@ -29,46 +29,133 @@ class _CategoryScreenState extends State<CategoryScreen> {
       appBar: AppBar(
         title: Text("Category"),
       ),
-      body: ListView.builder(
-        itemCount: 10,
-        itemBuilder: (context,index){
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 7.5),
-            child: Container(
-              height: 60,
-              width: double.infinity,
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              decoration: BoxDecoration(
-                color: AppColor.whiteColor,
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [
-                  BoxShadow(
-                    blurRadius: 0.8,
-                    color: Colors.grey,
-                    offset: Offset(0.3, 0.2),
+      body: StreamBuilder(
+        stream: AppApiService.categori.snapshots(),
+        builder: (context,snapshot){
+          if(snapshot.hasData){
+            return ListView.builder(
+              itemCount: snapshot.data!.docs.length,
+              itemBuilder: (context,index){
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 7.5),
+                  child: Container(
+                    height: 60,
+                    width: double.infinity,
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    decoration: BoxDecoration(
+                      color: AppColor.whiteColor,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 0.8,
+                          color: Colors.grey,
+                          offset: Offset(0.3, 0.2),
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(snapshot.data!.docs[index]["category"],style: GoogleFonts.lato(fontWeight: FontWeight.w600,fontSize: 16),),
+                        Row(
+                          children: [
+                            IconButton(
+                              onPressed: (){
+                                showDialog(
+                                  context: context,
+                                  builder: (context){
+                                    TextEditingController updateCategory = TextEditingController(text: snapshot.data!.docs[index]["category"]);
+                                    return AlertDialog(
+                                      title: Center(child: Text("Update Category")),
+                                      actions: [
+                                        Form(
+                                          key: _key,
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              TextFormField(
+                                                cursorColor: AppColor.primaryColor,
+                                                cursorHeight: 18,
+                                                controller: updateCategory,
+                                                validator: (value){
+                                                  return value!.isEmpty ? "Please Enter Category" : null;
+                                                },
+                                                decoration: InputDecoration(
+                                                  labelText: "Category",
+                                                ),
+                                              ),
+                                              SizedBox(height: 20,),
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  ElevatedButton(
+                                                    style: ElevatedButton.styleFrom(
+                                                      backgroundColor: AppColor.whiteColor,
+                                                      foregroundColor: AppColor.primaryColor,
+                                                      shape: RoundedRectangleBorder(
+                                                        borderRadius: BorderRadius.circular(10),
+                                                        side: BorderSide(
+                                                          color: AppColor.primaryColor,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    onPressed: (){
+                                                      Get.back();
+                                                    },
+                                                    child: Text("Cancel"),
+                                                  ),
+                                                  ElevatedButton(
+                                                    style: ElevatedButton.styleFrom(
+                                                      backgroundColor: AppColor.primaryColor,
+                                                      foregroundColor: AppColor.whiteColor,
+                                                      shape: RoundedRectangleBorder(
+                                                        borderRadius: BorderRadius.circular(10),
+                                                        side: BorderSide(
+                                                          color: AppColor.primaryColor,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    onPressed: (){
+                                                      if(_key.currentState!.validate()){
+                                                        AppApiService.categori.doc(snapshot.data!.docs[index].id).update({
+                                                          "category" : updateCategory.text.trim(),
+                                                        }).then((value){
+                                                          category.clear();
+                                                          Get.back();
+                                                        });
+                                                      }
+                                                    },
+                                                    child: Text("Add"),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                              icon: AssetsUrl.categoryEditSvgIcon,
+                            ),
+                            IconButton(
+                              onPressed: (){
+                                AppApiService.categori.doc(snapshot.data!.docs[index].id).delete();
+                              },
+                              icon: Icon(CupertinoIcons.delete,size: 22,color: AppColor.errorColor,),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ],
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("Stock Type",style: GoogleFonts.lato(fontWeight: FontWeight.w600,fontSize: 16),),
-                  Row(
-                    children: [
-                      IconButton(
-                        onPressed: (){},
-                        icon: AssetsUrl.categoryEditSvgIcon,
-                      ),
-                      IconButton(
-                        onPressed: (){},
-                        icon: Icon(CupertinoIcons.delete,size: 22,color: AppColor.errorColor,),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          );
+                );
+              },
+            );
+          }else{
+            return Center(child: CircularProgressIndicator());
+          }
         },
       ),
       floatingActionButton: FloatingActionButton.extended(
@@ -79,62 +166,69 @@ class _CategoryScreenState extends State<CategoryScreen> {
               return AlertDialog(
                 title: Center(child: Text("Add Category")),
                 actions: [
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      TextFormField(
-                        cursorColor: AppColor.primaryColor,
-                        cursorHeight: 18,
-                        decoration: InputDecoration(
-                          labelText: "Product Category",
+                  Form(
+                    key: _key,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        TextFormField(
+                          cursorColor: AppColor.primaryColor,
+                          cursorHeight: 18,
+                          controller: category,
+                          validator: (value){
+                            return value!.isEmpty ? "Please Enter Category" : null;
+                          },
+                          decoration: InputDecoration(
+                            labelText: "Category",
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 20,),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColor.whiteColor,
-                              foregroundColor: AppColor.primaryColor,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                side: BorderSide(
-                                  color: AppColor.primaryColor,
+                        SizedBox(height: 20,),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColor.whiteColor,
+                                foregroundColor: AppColor.primaryColor,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  side: BorderSide(
+                                    color: AppColor.primaryColor,
+                                  ),
                                 ),
                               ),
+                              onPressed: (){
+                                Get.back();
+                              },
+                              child: Text("Cancel"),
                             ),
-                            onPressed: (){
-                              Get.back();
-                            },
-                            child: Text("Cancel"),
-                          ),
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColor.primaryColor,
-                              foregroundColor: AppColor.whiteColor,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                side: BorderSide(
-                                  color: AppColor.primaryColor,
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColor.primaryColor,
+                                foregroundColor: AppColor.whiteColor,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  side: BorderSide(
+                                    color: AppColor.primaryColor,
+                                  ),
                                 ),
                               ),
+                              onPressed: (){
+                                if(_key.currentState!.validate()){
+                                  AppApiService.categori.add({
+                                    "category" : category.text.trim(),
+                                  }).then((value){
+                                    category.clear();
+                                    Get.back();
+                                  });
+                                }
+                              },
+                              child: Text("Add"),
                             ),
-                            onPressed: (){
-                              if(_key.currentState!.validate()){
-                                AppApiService.categori.add({
-                                  "category" : category.text.trim(),
-                                }).then((value){
-                                  category.clear();
-                                  Get.back();
-                                });
-                              }
-                            },
-                            child: Text("Add"),
-                          ),
-                        ],
-                      ),
-                    ],
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               );

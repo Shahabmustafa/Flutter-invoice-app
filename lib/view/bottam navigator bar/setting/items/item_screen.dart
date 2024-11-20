@@ -70,7 +70,7 @@ class _ItemScreenState extends State<ItemScreen> {
           builder: (context,snapshot){
             if(snapshot.hasData){
               return ListView.builder(
-                itemCount: 2,
+                itemCount: snapshot.data!.docs.length,
                 itemBuilder: (context,index){
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
@@ -100,11 +100,30 @@ class _ItemScreenState extends State<ItemScreen> {
                                 Row(
                                   children: [
                                     IconButton(
-                                      onPressed: (){},
+                                      onPressed: (){
+                                        Get.toNamed(
+                                          AppRoutes.itemDetail,
+                                          arguments: [
+                                            snapshot.data!.docs[index]["category"],
+                                            snapshot.data!.docs[index]["companyName"],
+                                            snapshot.data!.docs[index]["expiryDate"],
+                                            snapshot.data!.docs[index]["itemName"],
+                                            snapshot.data!.docs[index]["purchasePrice"].toString(),
+                                            snapshot.data!.docs[index]["saleDate"],
+                                            snapshot.data!.docs[index]["salePrice"].toString(),
+                                            snapshot.data!.docs[index]["stock"].toString(),
+                                            snapshot.data!.docs[index]["tax"].toString(),
+                                            snapshot.data!.docs[index]["discount"].toString(),
+                                            snapshot.data!.docs[index].id,
+                                          ],
+                                        );
+                                      },
                                       icon: AssetsUrl.categoryEditSvgIcon,
                                     ),
                                     IconButton(
-                                      onPressed: (){},
+                                      onPressed: (){
+                                        AppApiService.item.doc(snapshot.data!.docs[index].id).delete();
+                                      },
                                       icon: Icon(CupertinoIcons.delete,size: 22,color: AppColor.errorColor,),
                                     ),
                                   ],
@@ -119,7 +138,7 @@ class _ItemScreenState extends State<ItemScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text("Product Name",style: GoogleFonts.lato(color: Colors.grey),),
-                                Text("Pepsi",style: GoogleFonts.lato(color: AppColor.primaryColor,fontWeight: FontWeight.w600),),
+                                Text(snapshot.data!.docs[index]["itemName"],style: GoogleFonts.lato(color: AppColor.primaryColor,fontWeight: FontWeight.w600),),
                               ],
                             ),
                           ),
@@ -130,7 +149,7 @@ class _ItemScreenState extends State<ItemScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text("Price",style: GoogleFonts.lato(color: Colors.grey),),
-                                Text("Rs. 350",style: GoogleFonts.lato(color: AppColor.primaryColor,fontWeight: FontWeight.w600),),
+                                Text(snapshot.data!.docs[index]["salePrice"].toString(),style: GoogleFonts.lato(color: AppColor.primaryColor,fontWeight: FontWeight.w600),),
                               ],
                             ),
                           ),

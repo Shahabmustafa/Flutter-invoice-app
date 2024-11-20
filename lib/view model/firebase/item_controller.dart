@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_invoice_app/model/item_model.dart';
 import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
 import 'package:flutter_invoice_app/view%20model/loading_controller.dart';
@@ -12,6 +13,13 @@ class ItemController extends GetxController{
   List<ItemModel> get itemList => _itemList.value;
 
 
+  RxList<String> dropdownCategory = <String>[].obs;
+  RxList<String> dropdownCompany = <String>[].obs;
+  RxString selectCompany = "".obs;
+  RxString selectCategory = "".obs;
+
+
+  final barcode = TextEditingController().obs;
   final itemName = TextEditingController().obs;
   final sale = TextEditingController().obs;
   final cost = TextEditingController().obs;
@@ -27,24 +35,25 @@ class ItemController extends GetxController{
 
 
   // items add data in Firebase Data base
-  addItemData(String companyName,String category)async{
+  addItemData()async{
     loading.setLoading(true);
     try{
+      var itemId = await AppApiService.item.doc();
       ItemModel itemModel = ItemModel(
+        barcode: barcode.value.text,
+        itemId: itemId.id,
         itemName: itemName.value.text,
-        sale: sale.value.text,
-        cost: cost.value.text,
-        wholeSale: discount.value.text,
-        stock: [
-          stock.value.text,
-        ],
-        categori: category,
-        tax: tax.value.text,
-        companyName: companyName,
+        salePrice: int.parse(sale.value.text),
+        purchasePrice: int.parse(cost.value.text),
+        discount: int.parse(discount.value.text),
+        stock: 0,
+        category: selectCategory.value,
+        tax: int.parse(tax.value.text),
+        companyName: selectCompany.value,
         saleDate: saleDate.value.text,
         expiryDate: expiryDate.value.text,
       );
-      await AppApiService.item.doc(itemName.value.text).set(itemModel.toJson()).then((value){
+      await AppApiService.item.add(itemModel.toJson()).then((value){
         loading.setLoading(false);
         Get.back();
       }).onError((error, stackTrace){
@@ -55,20 +64,18 @@ class ItemController extends GetxController{
     }
   }
 
-  editItem(String companyName,String itemId,String categoriName)async{
+  editItem(String itemId)async{
     loading.setLoading(true);
     try{
       ItemModel itemModel = ItemModel(
         itemName: itemName.value.text,
-        sale: sale.value.text,
-        cost: cost.value.text,
-        wholeSale: discount.value.text,
-        stock: [
-          stock.value.text,
-        ],
-        categori: categoriName,
-        tax: tax.value.text,
-        companyName: companyName,
+        salePrice: int.parse(sale.value.text),
+        purchasePrice: int.parse(cost.value.text),
+        discount: int.parse(discount.value.text),
+        stock: 0,
+        category: selectCategory.value,
+        tax: int.parse(tax.value.text),
+        companyName: selectCompany.value,
         saleDate: saleDate.value.text,
         expiryDate: expiryDate.value.text,
       );
@@ -84,30 +91,39 @@ class ItemController extends GetxController{
   }
 
 
-  Future<List<String>> companyNameGetDataDropDown() async {
-    List<String> dropdownItems = [];
-    try {
-      QuerySnapshot querySnapshot = await AppApiService.supplier.get();
-      if (querySnapshot.docs.isNotEmpty) {
-        dropdownItems = querySnapshot.docs.map((doc) => doc['companyName'].toString()).toList();
-      }
-    } catch (e) {
-      print('Error fetching data: $e');
-    }
-    return dropdownItems;
+  categoryDropdown()async{
+    var category = await AppApiService.categori.get();
+    dropdownCategory.value = category.docs.map((doc) => doc['category'] as String).toList();
   }
 
-  Future<List<String>> categoriGetDataDropDown() async {
-    List<String> dropdownItems = [];
-    try {
-      QuerySnapshot querySnapshot = await AppApiService.categori.get();
-      if (querySnapshot.docs.isNotEmpty) {
-        dropdownItems = querySnapshot.docs.map((doc) => doc['category'].toString()).toList();
-      }
-    } catch (e) {
-      print('Error fetching data: $e');
-    }
-    return dropdownItems;
+  companyDropdown() async {
+    var supplier = await AppApiService.supplier.get();
+    dropdownCompany.value = supplier.docs.map((doc) => doc['companyName'] as String).toList();
+    print(dropdownCompany); // Debug: Check if data is populated
   }
 
+
+  Future<void> scanQRCode() async {
+    try {
+      String qrCode = await FlutterBarcodeScanner.scanBarcode(
+        "#ff6666", // Color of the scan line
+        "Cancel", // Text for the cancel button
+        true, // Whether to show the flashlight button
+        ScanMode.QR, // Scan mode: QR code
+      );
+      if (qrCode != "-1") {
+          barcode.value.text = qrCode;
+      }
+    } catch (e) {
+      print("Error scanning QR code: $e");
+    }
+  }
+
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    categoryDropdown();
+    companyDropdown();
+  }
 }

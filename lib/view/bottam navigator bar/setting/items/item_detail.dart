@@ -18,14 +18,6 @@ class _ItemDetailState extends State<ItemDetail> {
 
   var itemData = Get.arguments;
 
-  cashSaleAmount() {
-    List<dynamic> supplierPayment = itemData[4];
-    int sum = 0;
-    for (String amount in supplierPayment) {
-      sum += int.tryParse(amount) ?? 0; // Parse string to int, default to 0 if parsing fails
-    }
-    return sum;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +29,7 @@ class _ItemDetailState extends State<ItemDetail> {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
         child: Container(
-          height: size.height * 0.55,
+          height: size.height * 0.69,
           width: size.width,
           padding: EdgeInsets.symmetric(horizontal: 15,vertical: 10),
           decoration: BoxDecoration(
@@ -45,10 +37,10 @@ class _ItemDetailState extends State<ItemDetail> {
             borderRadius: BorderRadius.circular(15),
             boxShadow: [
               BoxShadow(
-                color: Colors.grey,
-                blurRadius: 0.08,
-                spreadRadius: 0.8,
-                offset: Offset(1,1),
+                color: Colors.grey.shade400,
+                blurRadius: 0.8,
+                spreadRadius: 0.5,
+                offset: Offset(0.2,0.2),
               ),
             ],
           ),
@@ -56,52 +48,52 @@ class _ItemDetailState extends State<ItemDetail> {
             children: [
               TextWidgets(
                 title: "Name",
-                subtitle: itemData[0],
-              ),
-              Divider(),
-              TextWidgets(
-                title: "Sale",
-                subtitle: itemData[1],
-              ),
-              Divider(),
-              TextWidgets(
-                title: "Cost",
-                subtitle: itemData[2],
-              ),
-              Divider(),
-              TextWidgets(
-                title: "Whole Sale",
                 subtitle: itemData[3],
               ),
               Divider(),
               TextWidgets(
-                title: "Stocks",
-                subtitle: "${cashSaleAmount()}",
-              ),
-              Divider(),
-              TextWidgets(
-                title: "Tax",
-                subtitle: itemData[5],
-              ),
-              Divider(),
-              TextWidgets(
-                title: "Supplier",
+                title: "Sale Price",
                 subtitle: itemData[6],
               ),
               Divider(),
               TextWidgets(
-                title: "Categori",
+                title: "Purchase Price",
+                subtitle: itemData[4],
+              ),
+              Divider(),
+              TextWidgets(
+                title: "Discount",
+                subtitle: itemData[9] + " %",
+              ),
+              Divider(),
+              TextWidgets(
+                title: "Tax",
+                subtitle: "${itemData[8]} %",
+              ),
+              Divider(),
+              TextWidgets(
+                title: "Stock",
                 subtitle: itemData[7],
               ),
               Divider(),
               TextWidgets(
+                title: "Company Name",
+                subtitle: itemData[1],
+              ),
+              Divider(),
+              TextWidgets(
+                title: "Category",
+                subtitle: itemData[0],
+              ),
+              Divider(),
+              TextWidgets(
                 title: "Date",
-                subtitle: itemData[8],
+                subtitle: itemData[5],
               ),
               Divider(),
               TextWidgets(
                 title: "Expiry Date",
-                subtitle: itemData[9],
+                subtitle: itemData[2],
               ),
               SizedBox(
                 height: size.height * 0.03,
@@ -110,10 +102,11 @@ class _ItemDetailState extends State<ItemDetail> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   AppButton(
-                    title: "Edit",
+                    title: "Delete",
                     height: size.height * 0.05,
                     width: size.width * 0.3,
-                    color: Colors.green,
+                    color: AppColor.whiteColor,
+                    textColor: AppColor.blackColor,
                     onTap: (){
                       Get.toNamed(
                         AppRoutes.editItem,
@@ -124,10 +117,10 @@ class _ItemDetailState extends State<ItemDetail> {
                     },
                   ),
                   AppButton(
-                    title: "Delete",
+                    title: "Edit",
                     height: size.height * 0.05,
                     width: size.width * 0.3,
-                    color: AppColor.errorColor,
+                    color: AppColor.primaryColor,
                     onTap: (){
                       Get.defaultDialog(
                         title: "Delete",

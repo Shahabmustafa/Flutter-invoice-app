@@ -139,6 +139,14 @@ class AppThemeData{
         borderSide: BorderSide.none,
       ),
     ),
+
+    progressIndicatorTheme: ProgressIndicatorThemeData(
+      color: AppColor.primaryColor,
+    ),
+
+    popupMenuTheme: PopupMenuThemeData(
+      color: AppColor.whiteColor,
+    ),
   );
 
   static ThemeData darkTheme = ThemeData(
@@ -146,9 +154,11 @@ class AppThemeData{
     cardColor: AppColor.blackColor,
     useMaterial3: true,
     canvasColor: AppColor.primaryColor,
+
+    /// floating action button theme
     floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: AppColor.blackColor,
-      foregroundColor: AppColor.whiteColor,
+      foregroundColor: AppColor.primaryColor,
       shape: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),
         borderSide: BorderSide(
@@ -157,10 +167,14 @@ class AppThemeData{
         ),
       )
     ),
+
+    /// scaffold background color theme
     scaffoldBackgroundColor: AppColor.blackColor,
     bottomSheetTheme: BottomSheetThemeData(
       backgroundColor: AppColor.blackColor,
     ),
+
+    /// bottom navigation bar theme
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: AppColor.blackColor,
       selectedItemColor: AppColor.primaryColor,
@@ -171,10 +185,12 @@ class AppThemeData{
           color: AppColor.whiteColor
       ),
     ),
+
+    /// appbar theme
     appBarTheme: AppBarTheme(
       centerTitle: true,
       iconTheme: IconThemeData(
-        color: AppColor.whiteColor,
+        color: AppColor.primaryColor,
       ),
       titleTextStyle: TextStyle(
         color: AppColor.whiteColor,
@@ -183,16 +199,31 @@ class AppThemeData{
       ),
       backgroundColor: AppColor.blackColor,
     ),
+
+    /// card heme
     cardTheme: CardTheme(
       surfaceTintColor: AppColor.blackColor,
       color: AppColor.blackColor,
+      shape: UnderlineInputBorder(
+        borderSide: BorderSide(
+          color: AppColor.primaryColor,
+        )
+      ),
       elevation: 5,
     ),
+
+    iconTheme: IconThemeData(
+      color: AppColor.primaryColor,
+    ),
+
+    /// list tile theme
     listTileTheme: ListTileThemeData(
       iconColor: AppColor.primaryColor,
       textColor: AppColor.whiteColor,
       selectedTileColor: AppColor.blackColor,
     ),
+
+    /// input decoration theme
     inputDecorationTheme: InputDecorationTheme(
       prefixIconColor: AppColor.primaryColor,
       suffixIconColor: AppColor.primaryColor,
@@ -221,10 +252,16 @@ class AppThemeData{
         ),
       ),
     ),
+
+    /// text theme
     textTheme: TextTheme(
       displayLarge: TextStyle(
         color: AppColor.whiteColor,
       ),
+    ),
+
+    progressIndicatorTheme: ProgressIndicatorThemeData(
+      color: AppColor.whiteColor,
     ),
   );
 

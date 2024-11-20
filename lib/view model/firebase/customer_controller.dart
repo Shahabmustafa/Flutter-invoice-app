@@ -18,18 +18,20 @@ class CustomerController extends GetxController{
   final loading = Get.put(LoadingController());
 
   addCustomerData()async{
+    var customerId = await AppApiService.customer.doc();
     CustomerModel customerModel = CustomerModel(
+      customerId: customerId.id,
       customerName: customerName.value.text,
       email: customerEmail.value.text,
       phoneNumber: customerPhone.value.text,
       address: customerAddress.value.text,
-      payment: ["0"],
+      payment: 0,
       cnic: customerCNIC.value.text,
       category: customerCategory.value.text,
     );
     loading.setLoading(true);
     try{
-      await AppApiService.customer.doc(customerName.value.text).set(customerModel.toJson()).then((value){
+      await AppApiService.customer.doc(customerId.id).set(customerModel.toJson()).then((value){
         loading.setLoading(false);
         Get.back();
       }).onError((error, stackTrace){

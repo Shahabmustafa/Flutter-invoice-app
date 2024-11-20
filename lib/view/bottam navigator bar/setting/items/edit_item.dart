@@ -27,28 +27,10 @@ class _EditItemState extends State<EditItem> {
   List<String> dropdownItemCategori = [];
 
 
-  Future<void> categoriFetchDataAndSetState() async {
-    List<String> data = await item.categoriGetDataDropDown();
-    setState(() {
-      dropdownItems = data;
-    });
-  }
-
-  Future<void> fetchDataAndSetState() async {
-    List<String> data = await item.categoriGetDataDropDown();
-    setState(() {
-      dropdownItemCategori = data;
-    });
-  }
 
   TextEditingController categori = TextEditingController();
 
   @override
-  void initState() {
-    super.initState();
-    fetchDataAndSetState();
-    categoriFetchDataAndSetState();
-  }
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
@@ -258,7 +240,7 @@ class _EditItemState extends State<EditItem> {
                   loading: item.loading.loading.value,
                   onTap: (){
                     if(_key.currentState!.validate()){
-                      item.editItem(companyName.toString(), itemId, Categori.toString());
+                      item.editItem(itemId);
                     }
                   },
                 );
