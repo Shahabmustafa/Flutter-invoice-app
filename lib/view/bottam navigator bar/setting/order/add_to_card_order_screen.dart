@@ -1,11 +1,15 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/res/component/app_button.dart';
+import 'package:flutter_invoice_app/view%20model/firebase/order_controller.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../model/product_model.dart';
 import '../../../../res/colors/app_colors.dart';
+import '../../../../res/component/invoice_text_field.dart';
+import '../../../../utils/utils.dart';
 
 class AddToCardOrderScreen extends StatefulWidget {
   AddToCardOrderScreen({required this.orderProduct, super.key});
@@ -17,6 +21,8 @@ class AddToCardOrderScreen extends StatefulWidget {
 
 class _AddToCardOrderScreenState extends State<AddToCardOrderScreen> {
 
+  final invoice = Get.put(OrderController());
+
   double calculateProductTotal(double itemPrice,double discount,double tax,int stock) {
     // Calculate discounted price
     double discountedPrice = itemPrice - (itemPrice * discount / 100);
@@ -26,9 +32,12 @@ class _AddToCardOrderScreenState extends State<AddToCardOrderScreen> {
     return taxedPrice * stock;
   }
 
+  subtractTwoValue(int receivedAmount,var totalAmount) {
+    return totalAmount - receivedAmount;
+  }
+
   @override
   Widget build(BuildContext context) {
-    // Calculate subtotal, total discount, total tax, and total amount
     double subtotal = widget.orderProduct.fold(0, (sum, item) {
       return sum + (item.price * item.stock);
     });
@@ -43,7 +52,6 @@ class _AddToCardOrderScreenState extends State<AddToCardOrderScreen> {
     });
 
     double totalAmount = subtotal - totalDiscount + totalTax;
-
     return Scaffold(
       appBar: AppBar(
         title: Text("Add to Cart"),
@@ -196,7 +204,8 @@ class _AddToCardOrderScreenState extends State<AddToCardOrderScreen> {
                 },
               ),
             ),
-            widget.orderProduct.isEmpty ? SizedBox() : Padding(
+            widget.orderProduct.isEmpty ? SizedBox() :
+            Padding(
               padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -231,16 +240,116 @@ class _AddToCardOrderScreenState extends State<AddToCardOrderScreen> {
                 ],
               ),
             ),
-            widget.orderProduct.isEmpty ? SizedBox() : AppButton(
+            widget.orderProduct.isEmpty ?
+            SizedBox() :
+            AppButton(
               title: "Save Invoice",
               height: 50,
               width: double.infinity,
               textColor: widget.orderProduct.isEmpty ? AppColor.blackColor : AppColor.whiteColor,
               color: widget.orderProduct.isEmpty ? AppColor.whiteColor : AppColor.primaryColor,
               onTap: (){
+                showDialog(
+                  context: context,
+                  builder: (context){
+                    return AlertDialog(
+                      title: Text("Summary"),
+                      content: SingleChildScrollView(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            DropdownSearch<String>(
+                              items: (f, cs) => invoice.dropdownCompany,
+                              dropdownBuilder: (context, selectedItem) {
+                                if (selectedItem == null) {
+                                  return Text("Please Select Company");
+                                }
+                                return Text(selectedItem);
+                              },
+                              popupProps: PopupProps.menu(
+                                showSearchBox: true,
+                                showSelectedItems: true,
+                                itemBuilder: (ctx, item, isDisabled, isSelected) {
+                                  return ListTile(
+                                    title: Text(item),
+                                  );
+                                },
+                              ),
+                              onChanged: (value) {
+                                if (invoice.dropdownCompany.isNotEmpty && invoice.dropdownCompanyId.isNotEmpty) {
+                                  int index = invoice.dropdownCompany.indexOf(value!);
+
+                                  // Check if index is valid before accessing dropdownCustomerIds
+                                  if (index >= 0 && index < invoice.dropdownCompanyId.length) {
+                                    String selectedCustomerId = invoice.dropdownCompanyId[index];
+                                    String selectedCustomerName = invoice.dropdownCompany[index];
+                                    print("Selected Customer ID: $selectedCustomerId");
+                                    print("Selected Customer Name: $selectedCustomerName");
+                                    invoice.selectCompanyId.value = selectedCustomerId;
+                                    invoice.selectCompany.value = selectedCustomerName;
+                                  } else {
+                                    print("Invalid index or empty lists");
+                                  }
+                                } else {
+                                  print("Customer data is not loaded or empty");
+                                }
+                              },
+                            ),
+                            SizedBox(height: 10,),
+                            InvoiceTextField(
+                              title: "Total Amount",
+                              enabled: false,
+                              controller: TextEditingController(text: totalAmount.toString()),
+                            ),
+                            SizedBox(height: 10,),
+                            InvoiceTextField(
+                              title: "Received Amount",
+                              controller: invoice.receivedAmount,
+                            ),
+                          ],
+                        ),
+                      ),
+                      actions: [
+                        AppButton(
+                          title: "Cancel",
+                          height: 40,
+                          width: 120,
+                          color: AppColor.whiteColor,
+                          textColor: AppColor.primaryColor,
+                          onTap: (){
+
+                          },
+                        ),
+                        Obx((){
+                          return AppButton(
+                            title: "Save",
+                            height: 40,
+                            width: 120,
+                            color: AppColor.primaryColor,
+                            textColor: AppColor.whiteColor,
+                            loading: invoice.loading.value,
+                            onTap: (){
+                              if(totalAmount < int.parse(invoice.receivedAmount.text)){
+                                Utils.flutterToast("your amount is received is greater than to total amount");
+                              }else{
+                                invoice.addOrderInvoice(
+                                  widget.orderProduct,
+                                  subtotal.toInt(),
+                                  totalAmount.toInt(),
+                                  totalTax.toInt(),
+                                  totalDiscount.toInt(),
+                                );
+                              }
+                            },
+                          );
+                        }),
+                      ],
+                    );
+                  },
+                );
 
               },
-            )
+            ),
           ],
         ),
       ),

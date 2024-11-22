@@ -3,29 +3,33 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../../res/colors/app_colors.dart';
+import '../../../../res/colors/app_colors.dart';
 
-class SaleInvoiceDetailScreen extends StatefulWidget {
-  const SaleInvoiceDetailScreen({super.key});
+
+class OrderInvoiceDetailScreen extends StatefulWidget {
+  const OrderInvoiceDetailScreen({super.key});
 
   @override
-  State<SaleInvoiceDetailScreen> createState() => _SaleInvoiceDetailScreenState();
+  State<OrderInvoiceDetailScreen> createState() => _OrderInvoiceDetailScreenState();
 }
 
-class _SaleInvoiceDetailScreenState extends State<SaleInvoiceDetailScreen> {
+class _OrderInvoiceDetailScreenState extends State<OrderInvoiceDetailScreen> {
   var customerData = Get.arguments;
 
   @override
   Widget build(BuildContext context) {
-    final productList = customerData[1];
+    final productList = customerData[0];
+    final discount = customerData[1];
     final subTotal = customerData[2];
-    final totalAmount = customerData[3];
-    final invoiceId = customerData[0];
-    final customerName = customerData[4];
-    final recivedAmount = customerData[5];
+    final tax = customerData[3];
+    final totalAmount = customerData[4];
+    final invoiceId = customerData[5];
+    final customerName = customerData[6];
+    final recivedAmount = customerData[7];
+    final dueAmount = customerData[9];
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Sale Invoice Detail"),
+        title: const Text("Order Invoice Detail"),
       ),
       body: Column(
         children: [
@@ -35,7 +39,7 @@ class _SaleInvoiceDetailScreenState extends State<SaleInvoiceDetailScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Invoice # ${invoiceId.toString()}",
+                  "Invoice # $invoiceId",
                   style: GoogleFonts.lato(
                     fontWeight: FontWeight.w600,
                     fontSize: 16,
@@ -180,11 +184,11 @@ class _SaleInvoiceDetailScreenState extends State<SaleInvoiceDetailScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Received Amount",
+                      "Due Amount",
                       style: GoogleFonts.lato(fontSize: 16, fontWeight: FontWeight.w400),
                     ),
                     Text(
-                      "Rs. ${recivedAmount}",
+                      "Rs. ${dueAmount}",
                       style: GoogleFonts.lato(fontSize: 16, fontWeight: FontWeight.w400),
                     ),
                   ],

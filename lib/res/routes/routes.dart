@@ -6,6 +6,7 @@ import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/setting/catego
 import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/setting/installment/customer_installment_screen.dart';
 import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/setting/installment/supplier_installment_screen.dart';
 import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/setting/items/edit_item.dart';
+import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/setting/order/order_invoice_detail_screen.dart';
 import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/setting/profile/change_password_screen.dart';
 import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/setting/supplier/edit_supplier.dart';
 import 'package:flutter_invoice_app/view/home/home_screen.dart';
@@ -54,6 +55,7 @@ class AppRoutes{
   static const String CustomersDetail = "/CustomerDetail_screen";
   static const String orderInvoiceScreen = "/order_invoice_screen";
   static const String orderScreen = "/order_screen";
+  static const String orderInvoiceDetailScreen = "/order_invoice_detail_screen";
   static const String categoryScreen = "/category_screen";
   static const String changePasswordScreen = "/change_password_screen";
   static const String customerInstallmentScreen = "/customer_installment_screen";
@@ -193,6 +195,13 @@ class AppRoutes{
     GetPage(
       name: orderScreen,
       page: () => OrderScreen(),
+      transition: Transition.rightToLeftWithFade,
+      transitionDuration: const Duration(microseconds: 250),
+    ),
+
+    GetPage(
+      name: orderInvoiceDetailScreen,
+      page: () => OrderInvoiceDetailScreen(),
       transition: Transition.rightToLeftWithFade,
       transitionDuration: const Duration(microseconds: 250),
     ),

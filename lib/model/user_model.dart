@@ -4,6 +4,7 @@ class UserModel {
   String? email;
   String? profileImage;
   String? phoneNumber;
+  int? cashInHand;
 
   UserModel(
       {this.uid,
@@ -11,6 +12,7 @@ class UserModel {
         this.email,
         this.profileImage,
         this.phoneNumber,
+        this.cashInHand,
         });
 
   UserModel.fromJson(Map<String, dynamic> json) {
@@ -19,6 +21,7 @@ class UserModel {
     email = json['email'];
     profileImage = json['profileImage'];
     phoneNumber = json['phoneNumber'];
+    cashInHand = json['cashInHand'];
   }
 
   Map<String, dynamic> toJson() {
@@ -28,6 +31,7 @@ class UserModel {
     data['email'] = this.email;
     data['profileImage'] = this.profileImage;
     data['phoneNumber'] = this.phoneNumber;
+    data['cashInHand'] = this.cashInHand;
     return data;
   }
 }

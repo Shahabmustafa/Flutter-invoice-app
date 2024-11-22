@@ -96,7 +96,7 @@ class _ItemScreenState extends State<ItemScreen> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text("Item Details",style: GoogleFonts.lato(fontWeight: FontWeight.w600,fontSize: 16),),
+                                Text(snapshot.data!.docs[index]["barcode"],style: GoogleFonts.lato(fontWeight: FontWeight.w600,fontSize: 16),),
                                 Row(
                                   children: [
                                     IconButton(
@@ -114,6 +114,7 @@ class _ItemScreenState extends State<ItemScreen> {
                                             snapshot.data!.docs[index]["stock"].toString(),
                                             snapshot.data!.docs[index]["tax"].toString(),
                                             snapshot.data!.docs[index]["discount"].toString(),
+                                            snapshot.data!.docs[index]["barcode"],
                                             snapshot.data!.docs[index].id,
                                           ],
                                         );

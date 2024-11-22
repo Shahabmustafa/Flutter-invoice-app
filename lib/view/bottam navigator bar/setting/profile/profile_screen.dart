@@ -81,6 +81,7 @@ class _UserProfileState extends State<UserProfile> {
                             imageUrl: data["profileImage"],
                             height: 100,
                             width: 100,
+                            fit: BoxFit.cover,
                             progressIndicatorBuilder: (context, url, downloadProgress) => CircularProgressIndicator(value: downloadProgress.progress),
                             errorWidget: (context, url, error) => Icon(Icons.error),
                           ),
@@ -106,7 +107,7 @@ class _UserProfileState extends State<UserProfile> {
                           height: kToolbarHeight,
                         ),
                         Container(
-                          height: size.height * 0.28,
+                          height: size.height * 0.22,
                           width: size.width * 0.85,
                           padding: EdgeInsets.all(10),
                           decoration: BoxDecoration(
@@ -123,6 +124,7 @@ class _UserProfileState extends State<UserProfile> {
                             ],
                           ),
                           child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -137,18 +139,8 @@ class _UserProfileState extends State<UserProfile> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text("Date of Birth",style: GoogleFonts.lato(fontSize: 16,color: AppColor.primaryColor,),),
-                                  Text("05/07/2004")
-                                ],
-                              ),
-                              SizedBox(height: 10,),
-                              Divider(color: AppColor.grayColor,thickness: 0.5,),
-                              SizedBox(height: 10,),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text("Gender",style: GoogleFonts.lato(fontSize: 16,color: AppColor.primaryColor,),),
-                                  Text("Male")
+                                  Text("Cash in Hand",style: GoogleFonts.lato(fontSize: 16,color: AppColor.primaryColor,),),
+                                  Text(data["cashInHand"].toString())
                                 ],
                               ),
                               SizedBox(height: 10,),

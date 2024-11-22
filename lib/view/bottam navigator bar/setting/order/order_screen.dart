@@ -6,6 +6,7 @@ import 'package:flutter_invoice_app/res/colors/app_colors.dart';
 import 'package:flutter_invoice_app/res/component/app_button.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_invoice_app/model/product_model.dart';
+import '../../../../utils/utils.dart';
 import 'add_to_card_order_screen.dart';
 
 
@@ -17,100 +18,101 @@ class OrderScreen extends StatefulWidget {
 }
 
 class _OrderScreenState extends State<OrderScreen> {
-  List<Product> addToCardOrderProduct = [];
+  List<Product> orderAddProduct = [];
   int cartCount = 0;
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Add Product"),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: badges.Badge(
-              position: badges.BadgePosition.topEnd(top: 0, end: 5),
-              badgeContent: Text(
-                cartCount.toString(),
-                style: TextStyle(color: Colors.white, fontSize: 10),
-              ),
-              child: IconButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => AddToCardOrderScreen(orderProduct: addToCardOrderProduct)),
-                  );
-                },
-                icon: Icon(
-                  CupertinoIcons.shopping_cart,
-                  color: Colors.white,
+        appBar: AppBar(
+          title: Text("Add Product"),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: badges.Badge(
+                position: badges.BadgePosition.topEnd(top: 0, end: 5),
+                badgeContent: Text(
+                  cartCount.toString(),
+                  style: TextStyle(color: Colors.white, fontSize: 10),
+                ),
+                child: IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => AddToCardOrderScreen(orderProduct: orderAddProduct)),
+                    );
+                  },
+                  icon: Icon(
+                    CupertinoIcons.shopping_cart,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
-      ),
-      body: StreamBuilder(
-        stream: AppApiService.item.snapshots(),
-        builder: (context,snapshot){
-          if(snapshot.hasData){
-            return ListView.builder(
-              itemCount: snapshot.data!.docs.length,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
-                  child: Container(
-                    height: 140,
-                    width: double.infinity,
-                    padding: EdgeInsets.symmetric(horizontal: 20),
-                    decoration: BoxDecoration(
-                      color: AppColor.whiteColor,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: [
-                        BoxShadow(
-                          blurRadius: 0.8,
-                          color: Colors.grey,
-                          offset: Offset(0.3, 0.2),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(5.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text("item",style: GoogleFonts.lato(fontWeight: FontWeight.w600,fontSize: 16),),
-                            ],
+          ],
+        ),
+        body: StreamBuilder(
+          stream: AppApiService.item.snapshots(),
+          builder: (context,snapshot){
+            if(snapshot.hasData){
+              return ListView.builder(
+                itemCount: snapshot.data!.docs.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
+                    child: Container(
+                      height: 140,
+                      width: double.infinity,
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      decoration: BoxDecoration(
+                        color: AppColor.whiteColor,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            blurRadius: 0.8,
+                            color: Colors.grey,
+                            offset: Offset(0.3, 0.2),
                           ),
-                        ),
-                        Divider(),
-                        Padding(
-                          padding: const EdgeInsets.all(5.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(snapshot.data!.docs[index]["itemName"],style: GoogleFonts.lato(color: Colors.grey),),
-                              Text("Stock ${snapshot.data!.docs[index]["stock"]}",style: GoogleFonts.lato(color: AppColor.primaryColor,fontWeight: FontWeight.w600),),
-                            ],
+                        ],
+                      ),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(5.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("Barcode",style: GoogleFonts.lato(fontWeight: FontWeight.w600,fontSize: 16),),
+                                Text(snapshot.data!.docs[index]["barcode"],style: GoogleFonts.lato(fontWeight: FontWeight.w600,fontSize: 16),),
+                              ],
+                            ),
                           ),
-                        ),
-                        Divider(),
-                        Padding(
-                          padding: const EdgeInsets.all(5.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text("Sale Price ${snapshot.data!.docs[index]["salePrice"]}",style: GoogleFonts.lato(color: Colors.grey),),
-                              AppButton(
-                                title: "Add",
-                                height: 30,
-                                width: 80,
-                                onTap: () {
-                                  if (snapshot.data!.docs[index]["stock"] > 0) {
+                          Divider(),
+                          Padding(
+                            padding: const EdgeInsets.all(5.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(snapshot.data!.docs[index]["itemName"],style: GoogleFonts.lato(color: Colors.black),),
+                                Text("Stock ${snapshot.data!.docs[index]["stock"]}",style: GoogleFonts.lato(color: AppColor.blackColor),),
+                              ],
+                            ),
+                          ),
+                          Divider(),
+                          Padding(
+                            padding: const EdgeInsets.all(5.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("Sale Price ${snapshot.data!.docs[index]["salePrice"]}",style: GoogleFonts.lato(color: Colors.black),),
+                                AppButton(
+                                  title: "Add",
+                                  height: 30,
+                                  width: 80,
+                                  onTap: () {
                                     Product product = Product(
+                                      productId: snapshot.data!.docs[index]["itemId"],
                                       product: snapshot.data!.docs[index]["itemName"],
                                       price: (snapshot.data!.docs[index]["salePrice"] as num).toDouble(),
                                       stock: 1,
@@ -119,34 +121,32 @@ class _OrderScreenState extends State<OrderScreen> {
                                     );
                                     setState(() {
                                       // Check if the product already exists in the cart
-                                      int existingIndex = addToCardOrderProduct.indexWhere((p) => p.product == product.product);
+                                      int existingIndex = orderAddProduct.indexWhere((p) => p.product == product.product);
                                       if (existingIndex == -1) {
                                         // Add new product to cart
-                                        addToCardOrderProduct.add(product);
+                                        orderAddProduct.add(product);
                                       } else {
                                         // Increment stock by 1 if product already exists in the cart
-                                        addToCardOrderProduct[existingIndex].stock += 1;
+                                        orderAddProduct[existingIndex].stock += 1;
                                       }
-                                      cartCount = addToCardOrderProduct.length;
+                                      cartCount = orderAddProduct.length;
                                     });
-
-                                  }
-                                },
-                              ),
-                            ],
+                                  },
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              },
-            );
-          }else{
-            return Center(child: CircularProgressIndicator());
-          }
-        },
-      )
+                  );
+                },
+              );
+            }else{
+              return Center(child: CircularProgressIndicator());
+            }
+          },
+        )
     );
   }
 }

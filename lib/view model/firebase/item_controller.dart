@@ -53,7 +53,7 @@ class ItemController extends GetxController{
         saleDate: saleDate.value.text,
         expiryDate: expiryDate.value.text,
       );
-      await AppApiService.item.add(itemModel.toJson()).then((value){
+      await AppApiService.item.doc(itemId.id).set(itemModel.toJson()).then((value){
         loading.setLoading(false);
         Get.back();
       }).onError((error, stackTrace){

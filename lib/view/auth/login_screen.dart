@@ -34,212 +34,218 @@ class _LoginPageState extends State<LoginPage> {
     final size = MediaQuery.sizeOf(context);
     return Scaffold(
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(
-              height: size.height * 0.1,
-            ),
-            Center(
-              child: Image.asset(
-                AssetsUrl.appLogo,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            children: [
+              SizedBox(
                 height: size.height * 0.1,
-                width: size.width * 0.2,
               ),
-            ),
-            SizedBox(
-              height: size.height * 0.1,
-            ),
-            Form(
-              key: _key,
-              child: Column(
-                children: [
-                  InvoiceTextField(
-                    title: "login_email_hading".tr,
-                    controller: loginService.email.value,
-                    keyboardType: TextInputType.emailAddress,
-                    prefixIcon: Icon(Icons.alternate_email),
-                    validator: (value){
-                      return value!.isEmpty ? "login_email_validator".tr : null;
-                    },
-                  ),
-                  SizedBox(
-                    height: size.height * 0.02,
-                  ),
-                  Obx(() =>
-                      InvoiceTextField(
-                        title: "login_password_hading".tr,
-                        controller: loginService.password.value,
-                        prefixIcon: Icon(Icons.key),
-                        suffixIcon: GestureDetector(
-                          onTap: (){
-                            loginService.visibility.value =! loginService.visibility.value;
-                          },
-                          child: Icon(
-                            loginService.visibility.value ?
-                            Icons.visibility_off_outlined :
-                            Icons.visibility,
+              Center(
+                child: Image.asset(
+                  AssetsUrl.appLogo,
+                  height: size.height * 0.1,
+                  width: size.width * 0.2,
+                ),
+              ),
+              SizedBox(
+                height: size.height * 0.1,
+              ),
+              Form(
+                key: _key,
+                child: Column(
+                  children: [
+                    InvoiceTextField(
+                      title: "login_email_hading".tr,
+                      hintText: "Enter Email",
+                      controller: loginService.email.value,
+                      keyboardType: TextInputType.emailAddress,
+                      prefixIcon: Icon(Icons.alternate_email),
+                      validator: (value){
+                        return value!.isEmpty ? "login_email_validator".tr : null;
+                      },
+                    ),
+                    SizedBox(
+                      height: size.height * 0.02,
+                    ),
+                    Obx(() =>
+                        InvoiceTextField(
+                          title: "login_password_hading".tr,
+                          hintText: "Enter Password",
+                          controller: loginService.password.value,
+                          prefixIcon: Icon(Icons.key),
+                          suffixIcon: GestureDetector(
+                            onTap: (){
+                              loginService.visibility.value =! loginService.visibility.value;
+                            },
+                            child: Icon(
+                              loginService.visibility.value ?
+                              Icons.visibility_off_outlined :
+                              Icons.visibility,
+                            ),
                           ),
+                          obscureText: loginService.visibility.value,
+                          validator: (value){
+                            return value!.isEmpty ? "login_password_validator".tr :
+                            value.length < 8 ? "login_password_second_validator".tr : null;
+                          },
                         ),
-                        obscureText: loginService.visibility.value,
-                        validator: (value){
-                          return value!.isEmpty ? "login_password_validator".tr :
-                          value.length < 8 ? "login_password_second_validator".tr : null;
-                        },
+                    ),
+                    SizedBox(
+                      height: size.height * 0.02,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(
+                            "forget_password".tr,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 17,
+                              color: AppColor.primaryColor,
+                            ),
+                          ),
+                        ],
                       ),
-                  ),
-                  SizedBox(
-                    height: size.height * 0.02,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          "forget_password".tr,
+                    ),
+                    SizedBox(
+                      height: size.height * 0.03,
+                    ),
+                    Obx(() =>
+                        AppButton(
+                          title: "button_login".tr,
+                          height: size.height * 0.06,
+                          width: size.width * 0.95,
+                          loading: loginService.loading.value,
+                          onTap: (){
+                            if(_key.currentState!.validate()){
+                              loginService.isLogin(context);
+                            }
+                          },
+                        ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: size.height * 0.1,
+              ),
+              Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "don't_have_any_account".tr,
+                        style: TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).textTheme.displayLarge!.color,
+                        ),
+                      ),
+                      SizedBox(width: 5,),
+                      GestureDetector(
+                        onTap: (){
+                          Get.toNamed(AppRoutes.signUp);
+                        },
+                        child: Text(
+                          "sign_up_link".tr,
                           style: TextStyle(
-                            fontWeight: FontWeight.bold,
                             fontSize: 17,
+                            fontWeight: FontWeight.bold,
                             color: AppColor.primaryColor,
                           ),
                         ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: size.height * 0.03,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Row(
+                      children: [
+                        Flexible(child: Divider(thickness: 3,)),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: Text("or"),
+                        ),
+                        Flexible(child: Divider(thickness: 3,)),
                       ],
                     ),
                   ),
                   SizedBox(
                     height: size.height * 0.03,
                   ),
-                  Obx(() =>
-                      AppButton(
-                        title: "button_login".tr,
-                        height: size.height * 0.06,
-                        width: size.width * 0.95,
-                        loading: loginService.loading.value,
-                        onTap: (){
-                          if(_key.currentState!.validate()){
-                            loginService.isLogin(context);
-                          }
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      FlutterSocialMediaButton(
+                          title: '',
+                          imageUrl: AssetsUrl.gmailLogo,
+                          height: 50,
+                          width: 50,
+                          onlyImageAvailable: true,
+                        onPress: (){
+                          var date = DateTime.now();
+                          var specificId = date.millisecondsSinceEpoch;
+                          googleSignIn().signInWithGoogle().then((value){
+                            UserModel userModel = UserModel(
+                              uid: value.user!.uid,
+                              userName: value.user!.displayName,
+                              profileImage: value.user!.photoURL,
+                              email: value.user!.email,
+                              phoneNumber: "",
+                            );
+                            FirebaseFirestore.instance
+                                .collection("users")
+                                .doc(value.user!.uid)
+                                .set(userModel.toJson()).then((value){
+                              Get.toNamed(AppRoutes.homeScreen);
+                            });
+                          }).onError((error, stackTrace){
+                            Utils.flutterToast(error.toString());
+                          });
                         },
                       ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: size.height * 0.1,
-            ),
-            Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "don't_have_any_account".tr,
-                      style: TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).textTheme.displayLarge!.color,
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: (){
-                        Get.toNamed(AppRoutes.signUp);
-                      },
-                      child: Text(
-                        "sign_up_link".tr,
-                        style: TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.bold,
-                          color: AppColor.primaryColor,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: size.height * 0.03,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Row(
-                    children: [
-                      Flexible(child: Divider(thickness: 3,)),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Text("or"),
-                      ),
-                      Flexible(child: Divider(thickness: 3,)),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: size.height * 0.03,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    FlutterSocialMediaButton(
+                      SizedBox(width: size.width * 0.04,),
+                      FlutterSocialMediaButton(
                         title: '',
-                        imageUrl: AssetsUrl.gmailLogo,
+                        imageUrl: AssetsUrl.appleLogo,
                         height: 50,
                         width: 50,
                         onlyImageAvailable: true,
-                      onPress: (){
-                        var date = DateTime.now();
-                        var specificId = date.millisecondsSinceEpoch;
-                        googleSignIn().signInWithGoogle().then((value){
-                          UserModel userModel = UserModel(
-                            uid: value.user!.uid,
-                            userName: value.user!.displayName,
-                            profileImage: value.user!.photoURL,
-                            email: value.user!.email,
-                            phoneNumber: "",
-                          );
-                          FirebaseFirestore.instance
-                              .collection("users")
-                              .doc(value.user!.uid)
-                              .set(userModel.toJson()).then((value){
-                            Get.toNamed(AppRoutes.homeScreen);
+                        onPress: (){
+                          var date = DateTime.now();
+                          var specificId = date.millisecondsSinceEpoch;
+                          googleSignIn().signInWithGoogle().then((value){
+                            UserModel userModel = UserModel(
+                              uid: value.user!.uid,
+                              userName: value.user!.displayName,
+                              profileImage: value.user!.photoURL,
+                              email: value.user!.email,
+                              phoneNumber: "",
+                            );
+                            FirebaseFirestore.instance
+                                .collection("users")
+                                .doc(value.user!.uid)
+                                .set(userModel.toJson()).then((value){
+                              Get.toNamed(AppRoutes.homeScreen);
+                            });
+                          }).onError((error, stackTrace){
+                            Utils.flutterToast(error.toString());
                           });
-                        }).onError((error, stackTrace){
-                          Utils.flutterToast(error.toString());
-                        });
-                      },
-                    ),
-                    SizedBox(width: size.width * 0.04,),
-                    FlutterSocialMediaButton(
-                      title: '',
-                      imageUrl: AssetsUrl.appleLogo,
-                      height: 50,
-                      width: 50,
-                      onlyImageAvailable: true,
-                      onPress: (){
-                        var date = DateTime.now();
-                        var specificId = date.millisecondsSinceEpoch;
-                        googleSignIn().signInWithGoogle().then((value){
-                          UserModel userModel = UserModel(
-                            uid: value.user!.uid,
-                            userName: value.user!.displayName,
-                            profileImage: value.user!.photoURL,
-                            email: value.user!.email,
-                            phoneNumber: "",
-                          );
-                          FirebaseFirestore.instance
-                              .collection("users")
-                              .doc(value.user!.uid)
-                              .set(userModel.toJson()).then((value){
-                            Get.toNamed(AppRoutes.homeScreen);
-                          });
-                        }).onError((error, stackTrace){
-                          Utils.flutterToast(error.toString());
-                        });
-                      },
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ],
+                        },
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

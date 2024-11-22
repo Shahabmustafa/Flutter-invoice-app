@@ -24,12 +24,12 @@ class _ItemDetailState extends State<ItemDetail> {
     final size = MediaQuery.sizeOf(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text("Item Detils"),
+        title: Text("Item Details"),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
         child: Container(
-          height: size.height * 0.69,
+          height: size.height * 0.73,
           width: size.width,
           padding: EdgeInsets.symmetric(horizontal: 15,vertical: 10),
           decoration: BoxDecoration(
@@ -46,6 +46,11 @@ class _ItemDetailState extends State<ItemDetail> {
           ),
           child: Column(
             children: [
+              TextWidgets(
+                title: "Barcode",
+                subtitle: itemData[10],
+              ),
+              Divider(),
               TextWidgets(
                 title: "Name",
                 subtitle: itemData[3],

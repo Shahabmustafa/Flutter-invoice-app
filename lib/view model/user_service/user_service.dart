@@ -23,7 +23,8 @@ class UserService extends GetxController{
         userName: userName,
         email: email,
         profileImage: "https://i.pinimg.com/474x/ad/73/1c/ad731cd0da0641bb16090f25778ef0fd.jpg",
-        phoneNumber: "03********",
+        phoneNumber: "xxxx-xxxxxxx",
+        cashInHand: 0,
       );
       AppApiService
           .firestore

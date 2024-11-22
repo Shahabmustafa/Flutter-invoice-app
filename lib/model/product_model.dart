@@ -1,4 +1,5 @@
 class Product {
+  String productId;
   String product;
   double price;
   int stock;
@@ -6,6 +7,7 @@ class Product {
   double tax;
 
   Product({
+    required this.productId,
     required this.product,
     required this.price,
     required this.stock,
@@ -16,6 +18,7 @@ class Product {
   // Convert Product to Map
   Map<String, dynamic> toMap() {
     return {
+      'productId': productId,
       'product': product,
       'price': price,
       'stock': stock,
@@ -27,6 +30,7 @@ class Product {
   // Create Product from Map
   factory Product.fromMap(Map<String, dynamic> map) {
     return Product(
+      productId: map['productId'],
       product: map['product'],
       price: (map['price'] as num).toDouble(),
       stock: map['stock'],
@@ -37,6 +41,6 @@ class Product {
 
   @override
   String toString() {
-    return 'Product(product: $product, price: $price, stock: $stock, discount: $discount, tax: $tax)';
+    return 'Product(productId: $productId,product: $product, price: $price, stock: $stock, discount: $discount, tax: $tax)';
   }
 }

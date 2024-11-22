@@ -52,4 +52,5 @@ class AppApiService{
   firestore.collection("users")
       .doc(userId)
       .collection("saleInvoice");
+
 }

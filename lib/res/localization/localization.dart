@@ -19,7 +19,7 @@ class Languages extends Translations{
       "forget_password" : "Forget Password",
 
       "don't_have_any_account" : "Don't have any account",
-      "sign_up_link" : "Sign Up",
+      "sign_up_link" : " Sign Up",
 
 
       "signup_userName_hading" : "User Name",
@@ -38,8 +38,8 @@ class Languages extends Translations{
 
       "button_signUp" : "Sign Up",
 
-      "already_have_an_account" : "Already have an account",
-      "sign_in_link" : "Sign in",
+      "already_have_an_account" : "Already have an account ",
+      "sign_in_link" : " Sign in",
 
       // add item
       "add_Item" : "Add Item",
