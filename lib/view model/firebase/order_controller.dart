@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_invoice_app/model/customer_model.dart';
 import 'package:flutter_invoice_app/model/product_model.dart';
 import 'package:flutter_invoice_app/model/supplier_model.dart';
-import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
 import 'package:get/get.dart';
+
+import '../../res/calculation/calculation.dart';
 
 class OrderController extends GetxController{
 
@@ -17,7 +19,7 @@ class OrderController extends GetxController{
   RxList<String> dropdownCompanyId = <String>[].obs;
   RxString selectCompany = "".obs;
   RxString selectCompanyId = "".obs;
-  TextEditingController receivedAmount =  TextEditingController();
+  TextEditingController payAmount =  TextEditingController();
 
 
   addOrderInvoice(
@@ -29,8 +31,8 @@ class OrderController extends GetxController{
       )async{
     setLoading(true);
     try{
-      var orderId = await AppApiService.order.doc();
-      var invoiceSnapshot = await AppApiService.order.orderBy("invoiceId", descending: true).limit(1).get();
+      var orderId = await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("orders").doc();
+      var invoiceSnapshot = await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("orders").orderBy("invoiceId", descending: true).limit(1).get();
 
       int lastInvoiceId = 1;
 
@@ -40,7 +42,7 @@ class OrderController extends GetxController{
 
       int newInvoiceId = lastInvoiceId + 1;
 
-      int dueAmount = totalAmount - int.parse(receivedAmount.text);
+      int dueAmount = totalAmount - int.parse(payAmount.text);
 
       var data =  {
         "invoiceId" : newInvoiceId,
@@ -52,12 +54,13 @@ class OrderController extends GetxController{
         "discount" : discount,
         "date" : DateTime.now(),
         "company" : selectCompany.value,
-        "received_amount" : receivedAmount.value.text,
+        "received_amount" : payAmount.value.text,
         "due_amount" : dueAmount,
       };
       dashboardAddSupplierPayment(dueAmount);
+      subtractCashInHand();
       companyAddPayment(dueAmount);
-      AppApiService.order.doc(orderId.id).set(data);
+      FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("orders").doc(orderId.id).set(data);
       for (var product in product) {
         await addStockToProduct(
           itemId: product.productId,
@@ -65,7 +68,7 @@ class OrderController extends GetxController{
         );
       }
       product.clear();
-      receivedAmount.clear();
+      payAmount.clear();
       selectCompanyId.value = "";
       selectCompany.value = "";
       Get.back();
@@ -77,7 +80,9 @@ class OrderController extends GetxController{
   }
 
   Future<void> addStockToProduct({required String itemId, required int stock}) async {
-    var item = await AppApiService.item.doc(itemId).get();
+    var item = await FirebaseFirestore.instance.collection("users")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection("items").doc(itemId).get();
 
     if (item.exists) {
       int previousStock = item.data()?['stock'] ?? 0;
@@ -88,7 +93,9 @@ class OrderController extends GetxController{
       // Ensure stock does not go below 0
       if (newStock < 0) newStock = 0;
 
-      await AppApiService.item.doc(itemId).update({
+      await FirebaseFirestore.instance.collection("users")
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .collection("items").doc(itemId).update({
         "stock": newStock,
       });
 
@@ -99,11 +106,11 @@ class OrderController extends GetxController{
   }
 
   dashboardAddSupplierPayment(int dueAmount)async{
-    var dashboard = await AppApiService.dashboard.get();
+    var dashboard = await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("dashboard").doc(Calculation().date()).get();
     if(dashboard.exists){
       int previousSupplerPayment = dashboard.data()?['supplierPayment'] ?? 0;
 
-      await AppApiService.dashboard.update({
+      await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("dashboard").doc(Calculation().date()).update({
         "supplierPayment" : previousSupplerPayment + dueAmount,
       });
     }else{
@@ -111,8 +118,15 @@ class OrderController extends GetxController{
     }
   }
 
+  subtractCashInHand()async{
+    var cashInHand = await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).get();
+    FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).update({
+      "cashInHand" : cashInHand.data()!["cashInHand"] - int.parse(payAmount.text),
+    });
+  }
+
   Future company() async {
-    var company = await AppApiService.supplier.get();
+    var company = await  FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("supplier").get();
     dropdownCompany.value = company.docs.map((doc) {
       SupplierModel companyModel = SupplierModel.fromJson(doc.data() as Map<String, dynamic>);
       dropdownCompanyId.add(companyModel.supplierId ?? '');
@@ -124,8 +138,8 @@ class OrderController extends GetxController{
 
 
   companyAddPayment(int dueAmount)async{
-    var customer = await AppApiService.supplier.doc(selectCompanyId.value).get();
-    AppApiService.supplier.doc(selectCompanyId.value).update({
+    var customer = await  FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("supplier").doc(selectCompanyId.value).get();
+    FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("supplier").doc(selectCompanyId.value).update({
       "payment" : customer.data()?['payment'] + dueAmount,
     });
   }

@@ -3,6 +3,8 @@ import 'package:flutter_invoice_app/view/auth/sign_up_screen.dart';
 import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/sales/sale_invoice_detail_screen.dart';
 import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/sales/sales_screen.dart';
 import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/setting/category/category_screen.dart';
+import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/setting/dashboard_history/dashboard_history_screen.dart';
+import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/setting/expense/expense_screeen.dart';
 import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/setting/installment/customer_installment_screen.dart';
 import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/setting/installment/supplier_installment_screen.dart';
 import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/setting/items/edit_item.dart';
@@ -61,6 +63,8 @@ class AppRoutes{
   static const String customerInstallmentScreen = "/customer_installment_screen";
   static const String supplierInstallmentScreen = "/supplier_installment_screen";
   static const String saleScreen = "/sale_screen";
+  static const String expenseScreen = "/expense_screen";
+  static const String dashboardHistory = "/dashboard_history_screen";
   static const String saleInvoiceDetailScreen = "/sale_invoice_detail_screen";
 
   static appRoutes() => [
@@ -236,6 +240,20 @@ class AppRoutes{
     GetPage(
       name: saleInvoiceDetailScreen,
       page: () => SaleInvoiceDetailScreen(),
+      transition: Transition.rightToLeftWithFade,
+      transitionDuration: const Duration(microseconds: 250),
+    ),
+
+    GetPage(
+      name: expenseScreen,
+      page: () => ExpenseScreen(),
+      transition: Transition.rightToLeftWithFade,
+      transitionDuration: const Duration(microseconds: 250),
+    ),
+
+    GetPage(
+      name: dashboardHistory,
+      page: () => DashboardHistoryScreen(),
       transition: Transition.rightToLeftWithFade,
       transitionDuration: const Duration(microseconds: 250),
     ),

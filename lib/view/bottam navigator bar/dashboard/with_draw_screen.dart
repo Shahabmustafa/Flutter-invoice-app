@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
 import 'package:flutter_invoice_app/res/component/invoice_text_field.dart';
@@ -22,11 +23,11 @@ class _WithDrawScreenState extends State<WithDrawScreen> {
   TextEditingController recievedAmount = TextEditingController();
 
   withDraw()async{
-    var draw = await AppApiService.firestore.collection("users").doc(AppApiService.userId).get();
-    await AppApiService.firestore.collection("users").doc(AppApiService.userId).update({
+    var draw = await AppApiService.firestore.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).get();
+    await AppApiService.firestore.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).update({
       "cashInHand" : draw.data()?['cashInHand'] - int.parse(recievedAmount.text) ?? 0,
     });
-    AppApiService.firestore.collection("users").doc(AppApiService.userId).
+    AppApiService.firestore.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).
     collection("withdrawHistory").add({
       "withDrawAmount" : recievedAmount.text,
       "date" : DateTime.now(),
@@ -42,7 +43,7 @@ class _WithDrawScreenState extends State<WithDrawScreen> {
         title: Text("With Draw"),
       ),
       body: StreamBuilder(
-        stream: AppApiService.firestore.collection("users").doc(AppApiService.userId).snapshots(),
+        stream: AppApiService.firestore.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).snapshots(),
         builder: (context,snapshot){
           if(snapshot.hasData){
             Map<dynamic,dynamic> data = snapshot.data!.data() as Map<dynamic,dynamic>;
@@ -59,7 +60,7 @@ class _WithDrawScreenState extends State<WithDrawScreen> {
                   SizedBox(height: 20,),
                   Expanded(
                     child: StreamBuilder(
-                      stream: AppApiService.firestore.collection("users").doc(AppApiService.userId).collection("withdrawHistory").orderBy("date",descending: true).snapshots(),
+                      stream: AppApiService.firestore.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("withdrawHistory").orderBy("date",descending: true).snapshots(),
                       builder: (context,snapshot){
                         if(snapshot.hasData){
                           return ListView.builder(

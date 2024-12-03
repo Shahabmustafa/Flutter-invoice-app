@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:d_chart/commons/data_model/data_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
 import 'package:flutter_invoice_app/res/assets/assets_url.dart';
+import 'package:flutter_invoice_app/res/calculation/calculation.dart';
 import 'package:flutter_invoice_app/res/colors/app_colors.dart';
 import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/dashboard/with_draw_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -31,63 +31,79 @@ class _DashboardScreenState extends State<DashboardScreen> {
       body: Column(
         children: [
           StreamBuilder(
-            stream: AppApiService.dashboard.snapshots(),
+            stream: FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("dashboard").doc(Calculation().date()).snapshots(),
             builder: (context,snapshot){
               if(snapshot.hasData){
                 Map<dynamic,dynamic> data = snapshot.data!.data() as Map<dynamic,dynamic>;
-                return Column(
-                  children: [
-                    SizedBox(height: 10,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        DashboardSummary(
-                          imageAssets: AssetsUrl.cashSaleSvgIcon,
-                          title: "Cash Sale",
-                          subtitle: data["cashSale"].toString(),
-                        ),
-                        DashboardSummary(
-                          imageAssets: AssetsUrl.creditCardSvgIcon,
-                          title: "Credit Card",
-                          subtitle: data["creditCard"].toString(),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 10,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        DashboardSummary(
-                          imageAssets: AssetsUrl.creditSaleSvgIcon,
-                          title: "Credit Sale",
-                          subtitle: data["creditSale"].toString(),
-                        ),
-                        DashboardSummary(
-                          imageAssets: AssetsUrl.supplierSaleSvgIcon,
-                          title: "Supplier Payment",
-                          subtitle: data["supplierPayment"].toString(),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 10,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        DashboardSummary(
-                          imageAssets: AssetsUrl.totalInstallmentSvgIcon,
-                          title: "Total Installment",
-                          subtitle: data["totalInstallment"].toString(),
-                        ),
-                        DashboardSummary(
-                          imageAssets: AssetsUrl.totalSaleSvgIcon,
-                          title: "Total Sale",
-                          subtitle: (data["cashSale"] + data["creditSale"]).toString(),
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 15),
-                      child: Card(
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Column(
+                    children: [
+                      SizedBox(height: 10,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Expanded(
+                            child: DashboardSummary(
+                              imageAssets: AssetsUrl.cashSaleSvgIcon,
+                              title: "Cash Sale",
+                              subtitle: data["cashSale"].toString(),
+                            ),
+                          ),
+                          SizedBox(width: 10,),
+                          Expanded(
+                            child: DashboardSummary(
+                              imageAssets: AssetsUrl.creditCardSvgIcon,
+                              title: "Expense",
+                              subtitle: data["expense"].toString(),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 10,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Expanded(
+                            child: DashboardSummary(
+                              imageAssets: AssetsUrl.creditSaleSvgIcon,
+                              title: "Credit Sale",
+                              subtitle: data["creditSale"].toString(),
+                            ),
+                          ),
+                          SizedBox(width: 10,),
+                          Expanded(
+                            child: DashboardSummary(
+                              imageAssets: AssetsUrl.supplierSaleSvgIcon,
+                              title: "Supp Payment",
+                              subtitle: data["supplierPayment"].toString(),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 10,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Expanded(
+                            child: DashboardSummary(
+                              imageAssets: AssetsUrl.totalInstallmentSvgIcon,
+                              title: "Total Installment",
+                              subtitle: data["totalInstallment"].toString(),
+                            ),
+                          ),
+                          SizedBox(width: 10,),
+                          Expanded(
+                            child: DashboardSummary(
+                              imageAssets: AssetsUrl.totalSaleSvgIcon,
+                              title: "Total Sale",
+                              subtitle: (data["cashSale"] + data["creditSale"]).toString(),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 10,),
+                      Card(
                         child: ListTile(
                           title: Text("With Draw"),
                           onTap: (){
@@ -95,8 +111,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           },
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 );
               }else{
                 return Center(child: CircularProgressIndicator());

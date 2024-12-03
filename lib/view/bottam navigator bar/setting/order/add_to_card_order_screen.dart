@@ -303,8 +303,8 @@ class _AddToCardOrderScreenState extends State<AddToCardOrderScreen> {
                             ),
                             SizedBox(height: 10,),
                             InvoiceTextField(
-                              title: "Received Amount",
-                              controller: invoice.receivedAmount,
+                              title: "Pay Amount",
+                              controller: invoice.payAmount,
                             ),
                           ],
                         ),
@@ -317,7 +317,7 @@ class _AddToCardOrderScreenState extends State<AddToCardOrderScreen> {
                           color: AppColor.whiteColor,
                           textColor: AppColor.primaryColor,
                           onTap: (){
-
+                            Get.back();
                           },
                         ),
                         Obx((){
@@ -329,8 +329,10 @@ class _AddToCardOrderScreenState extends State<AddToCardOrderScreen> {
                             textColor: AppColor.whiteColor,
                             loading: invoice.loading.value,
                             onTap: (){
-                              if(totalAmount < int.parse(invoice.receivedAmount.text)){
+                              if(totalAmount < int.parse(invoice.payAmount.text)){
                                 Utils.flutterToast("your amount is received is greater than to total amount");
+                              }else if(invoice.selectCompany.value.isEmpty){
+                                Utils.flutterToast("Please Select Supplier");
                               }else{
                                 invoice.addOrderInvoice(
                                   widget.orderProduct,

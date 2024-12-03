@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/res/routes/routes.dart';
+import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/setting/installment/supplier_installment_screen.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -63,93 +66,98 @@ class _SupplierScreenState extends State<SupplierScreen> {
         ],
       ),
       body: StreamBuilder(
-        stream: AppApiService.supplier.snapshots(),
+        stream: FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("supplier").snapshots(),
         builder: (context,snapshot){
           if(snapshot.hasData){
             return ListView.builder(
               itemCount: snapshot.data!.docs.length,
               itemBuilder: (context,index){
                 var supplier = snapshot.data!.docs[index];
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
-                  child: Container(
-                    height: 160,
-                    width: double.infinity,
-                    padding: EdgeInsets.symmetric(horizontal: 20),
-                    decoration: BoxDecoration(
-                      color: AppColor.whiteColor,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: [
-                        BoxShadow(
-                          blurRadius: 0.8,
-                          color: Colors.grey,
-                          offset: Offset(0.3, 0.2),
-                        ),
+                return GestureDetector(
+                  onTap: (){
+                    Get.toNamed(
+                      AppRoutes.SupplierDetails,
+                      arguments: [
+                        supplier["companyName"],
+                        supplier["companyEmail"],
+                        supplier["phoneNumber"],
+                        supplier["address"],
+                        supplier["supplierName"],
+                        supplier["supplierPhoneNumber"],
+                        supplier["supplierEmail"],
+                        supplier["payment"].toString(),
+                        snapshot.data!.docs[index].id,
                       ],
-                    ),
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(5.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(supplier["companyName"],style: GoogleFonts.lato(fontWeight: FontWeight.w600,fontSize: 16),),
-                              Row(
-                                children: [
-                                  IconButton(
-                                    onPressed: (){
-                                      Get.toNamed(
-                                        AppRoutes.SupplierDetails,
-                                        arguments: [
-                                          supplier["companyName"],
-                                          supplier["companyEmail"],
-                                          supplier["phoneNumber"],
-                                          supplier["address"],
-                                          supplier["supplierName"],
-                                          supplier["supplierPhoneNumber"],
-                                          supplier["supplierEmail"],
-                                          supplier["payment"],
-                                          snapshot.data!.docs[index].id,
-                                        ],
-                                      );
-                                    },
-                                    icon: AssetsUrl.categoryEditSvgIcon,
-                                  ),
-                                  IconButton(
-                                    onPressed: (){
-                                      AppApiService.item.doc(supplier.id).delete();
-                                    },
-                                    icon: Icon(CupertinoIcons.delete,size: 22,color: AppColor.errorColor,),
-                                  ),
-                                ],
-                              ),
-                            ],
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
+                    child: Container(
+                      height: 160,
+                      width: double.infinity,
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      decoration: BoxDecoration(
+                        color: AppColor.whiteColor,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            blurRadius: 0.8,
+                            color: Colors.grey,
+                            offset: Offset(0.3, 0.2),
                           ),
-                        ),
-                        Divider(),
-                        Padding(
-                          padding: const EdgeInsets.all(5.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text("Company Name",style: GoogleFonts.lato(color: Colors.grey),),
-                              Text(supplier["companyName"],style: GoogleFonts.lato(color: AppColor.primaryColor,fontWeight: FontWeight.w600),),
-                            ],
+                        ],
+                      ),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(5.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(supplier["companyName"],style: GoogleFonts.lato(fontWeight: FontWeight.w600,fontSize: 16),),
+                                Row(
+                                  children: [
+                                    IconButton(
+                                      onPressed: (){
+                                        Navigator.push(context, MaterialPageRoute(builder: (context) => SupplierInstallmentScreen()));
+                                      },
+                                      icon: Icon(CupertinoIcons.clock),
+                                    ),
+                                    IconButton(
+                                      onPressed: (){
+                                        FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("items").doc(supplier.id).delete();
+                                      },
+                                      icon: Icon(CupertinoIcons.delete,size: 22,color: AppColor.errorColor,),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        Divider(),
-                        Padding(
-                          padding: const EdgeInsets.all(5.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text("Payment",style: GoogleFonts.lato(color: Colors.grey),),
-                              Text(supplier["payment"].toString(),style: GoogleFonts.lato(color: AppColor.primaryColor,fontWeight: FontWeight.w600),),
-                            ],
+                          Divider(),
+                          Padding(
+                            padding: const EdgeInsets.all(5.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("Company Name",style: GoogleFonts.lato(color: Colors.grey),),
+                                Text(supplier["companyName"],style: GoogleFonts.lato(color: AppColor.primaryColor,fontWeight: FontWeight.w600),),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                          Divider(),
+                          Padding(
+                            padding: const EdgeInsets.all(5.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("Payment",style: GoogleFonts.lato(color: Colors.grey),),
+                                Text(supplier["payment"].toString(),style: GoogleFonts.lato(color: AppColor.primaryColor,fontWeight: FontWeight.w600),),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 );

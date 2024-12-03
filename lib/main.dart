@@ -10,9 +10,6 @@ import 'package:flutter_invoice_app/view/splash/splash_screen.dart';
 import 'package:get/get.dart';
 import 'firebase_options.dart';
 
-// import 'firebase_options.dart';
-
-
 void main()async{
   WidgetsFlutterBinding.ensureInitialized();
   await SharedPrefHelper.init();

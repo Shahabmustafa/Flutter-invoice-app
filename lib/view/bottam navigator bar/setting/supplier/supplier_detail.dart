@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/res/routes/routes.dart';
 import 'package:get/get.dart';
@@ -18,14 +20,14 @@ class _SupplierDetailState extends State<SupplierDetail> {
 
   var supplier = Get.arguments;
 
-  supplierPayment() {
-    List<dynamic> supplierPayment = supplier[7];
-    int sum = 0;
-    for (String amount in supplierPayment) {
-      sum += int.tryParse(amount) ?? 0; // Parse string to int, default to 0 if parsing fails
-    }
-    return sum;
-  }
+  // supplierPayment() {
+  //   List<dynamic> supplierPayment = supplier[7];
+  //   int sum = 0;
+  //   for (String amount in supplierPayment) {
+  //     sum += int.tryParse(amount) ?? 0; // Parse string to int, default to 0 if parsing fails
+  //   }
+  //   return sum;
+  // }
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
@@ -36,7 +38,7 @@ class _SupplierDetailState extends State<SupplierDetail> {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
         child: Container(
-          height: size.height * 0.58,
+          height: size.height * 0.6,
           width: size.width,
           padding: EdgeInsets.symmetric(horizontal: 15,vertical: 10),
           decoration: BoxDecoration(
@@ -90,7 +92,7 @@ class _SupplierDetailState extends State<SupplierDetail> {
               Divider(),
               TextWidgets(
                 title: "Payment",
-                subtitle: supplierPayment().toString(),
+                subtitle: supplier[7],
               ),
               Divider(),
               SizedBox(
@@ -106,7 +108,7 @@ class _SupplierDetailState extends State<SupplierDetail> {
                     color: AppColor.whiteColor,
                     textColor: AppColor.primaryColor,
                     onTap: (){
-                      AppApiService.supplier.doc(supplier[8]).delete().then((value){
+                      FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("supplier").doc(supplier[8]).delete().then((value){
                         Get.back();
                       });
                     },
@@ -120,7 +122,9 @@ class _SupplierDetailState extends State<SupplierDetail> {
                     onTap: (){
                       Get.toNamed(
                         AppRoutes.editSupplier,
-                        arguments: [supplier[8]],
+                        arguments: [
+                          supplier[8],
+                        ],
                       );
                     },
                   ),

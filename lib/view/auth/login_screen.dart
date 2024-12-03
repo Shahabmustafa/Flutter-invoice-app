@@ -191,7 +191,6 @@ class _LoginPageState extends State<LoginPage> {
                           onlyImageAvailable: true,
                         onPress: (){
                           var date = DateTime.now();
-                          var specificId = date.millisecondsSinceEpoch;
                           googleSignIn().signInWithGoogle().then((value){
                             UserModel userModel = UserModel(
                               uid: value.user!.uid,
@@ -200,10 +199,7 @@ class _LoginPageState extends State<LoginPage> {
                               email: value.user!.email,
                               phoneNumber: "",
                             );
-                            FirebaseFirestore.instance
-                                .collection("users")
-                                .doc(value.user!.uid)
-                                .set(userModel.toJson()).then((value){
+                            FirebaseFirestore.instance.collection("users").doc(value.user!.uid).set(userModel.toJson()).then((value){
                               Get.toNamed(AppRoutes.homeScreen);
                             });
                           }).onError((error, stackTrace){

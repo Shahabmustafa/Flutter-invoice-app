@@ -1,12 +1,18 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
+import 'package:flutter_invoice_app/res/calculation/calculation.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../res/colors/app_colors.dart';
 import '../../../../res/component/app_button.dart';
 import '../../../../res/component/invoice_text_field.dart';
+import '../../../../view model/firebase/customer_controller.dart';
+import '../../../../view model/firebase/customer_installment_viewmodel.dart';
 
 class CustomerInstallmentScreen extends StatefulWidget {
   const CustomerInstallmentScreen({super.key});
@@ -17,91 +23,140 @@ class CustomerInstallmentScreen extends StatefulWidget {
 
 class _CustomerInstallmentScreenState extends State<CustomerInstallmentScreen> {
 
+
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(CustomerController());
+    final controller = Get.put(CustomerInstallmentViewModel());
     return Scaffold(
       appBar: AppBar(
         title: Text("Customer Installment"),
       ),
-      body: Column(
-        children: [
-
-        ],
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance.collection("users").
+        doc(FirebaseAuth.instance.currentUser!.uid).
+        collection("customerInstallment").orderBy("date",descending: true).snapshots(),
+        builder: (context,snapshot){
+          if(snapshot.hasData){
+            return ListView.builder(
+              itemCount: snapshot.data!.docs.length,
+              itemBuilder: (context,index){
+                DateTime dateTime = snapshot.data!.docs[index]["date"].toDate();
+                String formattedDate = DateFormat('dd-MM-yyyy').format(dateTime);
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+                  child: Card(
+                    child: ListTile(
+                      leading: Text("${index + 1}"),
+                      title: Text(snapshot.data!.docs[index]["customerName"]),
+                      subtitle: Text(formattedDate),
+                      trailing: Text(snapshot.data!.docs[index]["payBalance"]),
+                    ),
+                  ),
+                );
+              },
+            );
+          }else{
+            return Center(child: CircularProgressIndicator());
+          }
+        },
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: (){
           showDialog(
             context: context,
             builder: (context){
-              return AlertDialog(
-                title: Text("Add Customer Installment",style: GoogleFonts.lato(fontSize: 16,fontWeight: FontWeight.bold),),
-                content: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Obx(() {
-                        // Wait until the customers list is populated
-                        if (controller.customers.isEmpty) {
-                          return CircularProgressIndicator(); // Show loading while fetching
-                        }
-
-                        return DropdownSearch<String>(
-                          items: (f, cs) => controller.customers, // Provide the function returning the list
-                          dropdownBuilder: (context, selectedItem) {
-                            if (selectedItem == null) {
-                              return SizedBox.shrink();
-                            }
-                            return ListTile(
-                              contentPadding: EdgeInsets.only(left: 0),
-                              title: Text(selectedItem), // Display the selected customer name
-                            );
-                          },
-                          popupProps: PopupProps.menu(
-                            showSearchBox: true,  // Enable the search box
-                            showSelectedItems: true,
-                            itemBuilder: (ctx, item, isDisabled, isSelected) {
-                              return ListTile(
-                                selected: isSelected,
-                                title: Text(item),  // Display customer name in the popup
-                              );
-                            },
-                          ),
-                        );
-                      }),
-                      SizedBox(height: 10,),
-                      InvoiceTextField(
-                        title: "Total Cash",
-                      ),
-                      SizedBox(height: 10,),
-                      InvoiceTextField(
-                        title: "Receive Cash",
-                      ),
-                      SizedBox(height: 20,),
-                      InvoiceTextField(
-                        title: "Due Cash",
-                      ),
-                      SizedBox(height: 20,),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              return StatefulBuilder(
+                builder: (context,setState){
+                  return AlertDialog(
+                    title: Text("Add Customer Installment",style: GoogleFonts.lato(fontSize: 16,fontWeight: FontWeight.bold),),
+                    content: SingleChildScrollView(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          AppButton(
-                            height: 45,
-                            width: 100,
-                            color: AppColor.whiteColor,
-                            title: "Cancel",
-                            textColor: AppColor.blackColor,
+                          Obx(() {
+                            if (controller.dropdownCustomer.isEmpty) {
+                              return CircularProgressIndicator();
+                            }
+                            return DropdownSearch<String>(
+                              items: (f, cs) => controller.dropdownCustomer,
+                              dropdownBuilder: (context, selectedItem) {
+                                if (selectedItem == null) {
+                                  return Text("Please Select Customer");
+                                }
+                                return Text(selectedItem);
+                              },
+                              popupProps: PopupProps.menu(
+                                showSearchBox: true,
+                                showSelectedItems: true,
+                                itemBuilder: (ctx, item, isDisabled, isSelected) {
+                                  return ListTile(
+                                    title: Text(item),
+                                  );
+                                },
+                              ),
+                              onChanged: (value) {
+                                if (controller.dropdownCustomer.isNotEmpty && controller.dropdownCustomerIds.isNotEmpty) {
+                                  int index = controller.dropdownCustomer.indexOf(value!);
+                                  setState((){});
+                                  // Check if index is valid before accessing dropdownCustomerIds
+                                  if (index >= 0 && index < controller.dropdownCustomerIds.length) {
+                                    String selectedCustomerId = controller.dropdownCustomerIds[index];
+                                    String selectedCustomerName = controller.dropdownCustomer[index];
+                                    String selectedCustomerPayment = controller.dropdownCustomerPayment[index];
+                                    print("Selected Customer ID: $selectedCustomerId");
+                                    print("Selected Customer Name: $selectedCustomerName");
+                                    print("Selected Customer Payment: $selectedCustomerPayment");
+                                    controller.selectCustomerId.value = selectedCustomerId;
+                                    controller.selectCustomer.value = selectedCustomerName;
+                                    controller.selectCustomerPayment.value = selectedCustomerPayment;
+                                  } else {
+                                    print("Invalid index or empty lists");
+                                  }
+                                } else {
+                                  print("Customer data is not loaded or empty");
+                                }
+                              },
+                            );
+                          }),
+                          SizedBox(height: 10,),
+                          InvoiceTextField(
+                            title: "Customer Amount",
+                            controller: TextEditingController(text: controller.selectCustomerPayment.value),
                           ),
-                          AppButton(
-                            height: 45,
-                            width: 100,
-                            title: "Add",
+                          SizedBox(height: 10,),
+                          InvoiceTextField(
+                            title: "Receive Cash",
+                            controller: controller.recivedAmount,
+                          ),
+                          SizedBox(height: 20,),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              AppButton(
+                                height: 45,
+                                width: 100,
+                                color: AppColor.whiteColor,
+                                title: "Cancel",
+                                textColor: AppColor.blackColor,
+                                onTap: (){
+                                  Get.back();
+                                },
+                              ),
+                              AppButton(
+                                height: 45,
+                                width: 100,
+                                title: "Add",
+                                onTap: (){
+                                  controller.customerInstallment();
+                                },
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                    ],
-                  ),
-                ),
+                    ),
+                  );
+                },
               );
             },
           );
@@ -113,28 +168,3 @@ class _CustomerInstallmentScreenState extends State<CustomerInstallmentScreen> {
   }
 }
 
-
-class CustomerController extends GetxController {
-  var customers = <String>[].obs;
-
-  @override
-  void onInit() {
-    super.onInit();
-    fetchCustomers();
-  }
-
-  // Fetch customer names from Firestore
-  void fetchCustomers() async {
-    try {
-      var snapshot = await AppApiService.customer.get();
-
-      var customerList = snapshot.docs.map((doc) {
-        return doc['customerName'] as String; // Assuming each customer document has a 'name' field
-      }).toList();
-      print(customerList);
-      customers.value = customerList; // Update the customers list
-    } catch (e) {
-      print("Error fetching customers: $e");
-    }
-  }
-}

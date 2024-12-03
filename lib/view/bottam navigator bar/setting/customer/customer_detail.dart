@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -93,7 +95,9 @@ class _CustomerDetailState extends State<CustomerDetail> {
                         title: "Delete",
                         content: Text("You Delete This Item"),
                         onConfirm: (){
-                          AppApiService.item.doc(customerData[7]).delete().then((value){
+                          FirebaseFirestore.instance.collection("users")
+                              .doc(FirebaseAuth.instance.currentUser!.uid)
+                              .collection("items").doc(customerData[7]).delete().then((value){
                             Get.back();
                             Get.back();
                           });

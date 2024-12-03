@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_invoice_app/model/customer_model.dart';
 import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
@@ -18,7 +19,7 @@ class CustomerController extends GetxController{
   final loading = Get.put(LoadingController());
 
   addCustomerData()async{
-    var customerId = await AppApiService.customer.doc();
+    var customerId = await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("customer").doc();
     CustomerModel customerModel = CustomerModel(
       customerId: customerId.id,
       customerName: customerName.value.text,
@@ -31,7 +32,7 @@ class CustomerController extends GetxController{
     );
     loading.setLoading(true);
     try{
-      await AppApiService.customer.doc(customerId.id).set(customerModel.toJson()).then((value){
+      await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("customer").doc(customerId.id).set(customerModel.toJson()).then((value){
         loading.setLoading(false);
         Get.back();
       }).onError((error, stackTrace){

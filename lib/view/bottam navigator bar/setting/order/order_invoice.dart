@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/res/routes/routes.dart';
@@ -30,7 +31,7 @@ class _OrderInvoiceScreenState extends State<OrderInvoiceScreen> {
         title: Text("Order Invoice"),
       ),
       body: StreamBuilder(
-        stream: AppApiService.order.orderBy("date",descending: false).snapshots(),
+        stream: FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("orders").orderBy("date",descending: false).snapshots(),
         builder: (context,snapshot){
           if(snapshot.hasData){
             return ListView.builder(

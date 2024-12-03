@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
 import 'package:flutter_invoice_app/res/routes/routes.dart';
@@ -23,12 +25,12 @@ class LoginService extends GetxController{
   isLogin(BuildContext context){
     setLoading(true);
     try{
-      AppApiService.auth.signInWithEmailAndPassword(
+      FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email.value.text,
         password: password.value.text,
       ).then((value)async{
         setLoading(false);
-        addDashboardIfNotExists();
+        addDashboardIfNotExists(value.user!.uid);
         Utils.flutterToast("You have Successfully Login");
         email.value.clear();
         password.value.clear();
@@ -46,16 +48,16 @@ class LoginService extends GetxController{
   static Calculation calculation = Calculation();
 
 
-  Future<void> addDashboardIfNotExists() async {
+  Future<void> addDashboardIfNotExists(String userID) async {
     try {
-      var dashboardDoc = await AppApiService.dashboard.get();
+      var dashboardDoc = await FirebaseFirestore.instance.collection("users").doc(userID).collection("dashboard").doc(Calculation().date()).get();
 
       if (!dashboardDoc.exists) {
         // If the document doesn't exist, create it with default values
-        await AppApiService.dashboard.set({
+        await FirebaseFirestore.instance.collection("users").doc(userID).collection("dashboard").doc(Calculation().date()).set({
           "date": calculation.date(),
           "cashSale": 0,
-          "creditCard": 0,
+          "expense": 0,
           "creditSale": 0,
           "supplierPayment": 0,
           "totalInstallment": 0,

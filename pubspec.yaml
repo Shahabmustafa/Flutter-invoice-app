@@ -37,32 +37,30 @@ dependencies:
   cupertino_icons: ^1.0.2
   get: ^4.6.6
   google_fonts: ^6.1.0
-  firebase_core: ^2.24.0
-  firebase_auth: ^4.15.0
-  cloud_firestore: ^4.13.3
-  fluttertoast: ^8.2.4
-  cached_network_image: ^3.3.0
-  shared_preferences: ^2.2.2
-  image_picker: ^1.0.4
+  firebase_core: 3.8.0
+  firebase_auth: 5.3.3
+  cloud_firestore: 5.5.0
+  fluttertoast: 8.2.8
+  cached_network_image: 3.4.1
+  shared_preferences: ^2.3.3
+  image_picker: ^1.1.2
   shimmer: ^3.0.0
-  firebase_storage: ^11.5.3
-  google_sign_in: ^6.1.6
+  firebase_storage: ^12.3.6
+  google_sign_in: ^6.2.2
   http: ^1.1.2
-  flutter_flip_card: ^0.0.4
-  avatar_glow: ^3.0.1
-  flutter_launcher_icons: ^0.13.1
+  flutter_launcher_icons: ^0.14.1
   flutter_social_media_button: ^0.0.1
-  d_chart: ^2.6.3
-  flutter_svg: ^2.0.13
+  flutter_svg: ^2.0.16
   badges: ^3.1.2
   dropdown_search: ^6.0.1
   flutter_barcode_scanner: ^2.0.0
   intl: ^0.19.0
   path: ^1.9.0
-  printing: ^5.12.0
-  pdf: ^3.11.0
-  fl_chart: ^0.69.2
-  syncfusion_flutter_charts: ^27.2.3
+  printing: 5.13.4
+  pdf: 3.11.1
+  syncfusion_flutter_charts: 27.2.4
+  device_preview: ^1.2.0
+  path_provider: ^2.1.5
 
 
 dev_dependencies:

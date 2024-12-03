@@ -304,7 +304,7 @@ class _AddToCardScreenState extends State<AddToCardScreen> {
                             SizedBox(height: 10,),
                             InvoiceTextField(
                               title: "Received Amount",
-                              controller: invoice.receivedAmount,
+                              controller: invoice.payAmount,
                             ),
                           ],
                         ),
@@ -329,7 +329,7 @@ class _AddToCardScreenState extends State<AddToCardScreen> {
                             textColor: AppColor.whiteColor,
                             loading: invoice.loading.value,
                             onTap: (){
-                              if(totalAmount < int.parse(invoice.receivedAmount.text)){
+                              if(totalAmount < int.parse(invoice.payAmount.text)){
                                 Utils.flutterToast("your amount is received is greater than to total amount");
                               }else{
                                 invoice.addSaleInvoice(

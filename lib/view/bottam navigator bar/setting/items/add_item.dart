@@ -44,10 +44,6 @@ class _AddItemsState extends State<AddItems> {
                       child: InvoiceTextField(
                         title: "Barcode",
                         controller: item.barcode.value,
-                        enabled: false,
-                        validator: (value){
-                          return value!.isEmpty ? "Enter Your Item Name" : null;
-                        },
                       ),
                     );
                   }),
@@ -210,7 +206,7 @@ class _AddItemsState extends State<AddItems> {
                     return AppButton(
                       title: "Add Item",
                       height: size.height * 0.05,
-                      width: size.width * 0.94,
+                      width: double.infinity,
                       loading: item.loading.loading.value,
                       onTap: (){
                         if(_key.currentState!.validate()){

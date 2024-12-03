@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_invoice_app/model/supplier_model.dart';
 import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
@@ -17,7 +19,9 @@ class SupplierController extends GetxController{
 
   addSupplier()async{
 
-    var supplierId = await AppApiService.item.doc();
+    var supplierId = await FirebaseFirestore.instance.collection("users")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection("items").doc();
 
     SupplierModel supplierModel = SupplierModel(
       supplierId: supplierId.id,
@@ -32,7 +36,7 @@ class SupplierController extends GetxController{
     );
     loading.setLoading(true);
     try{
-      await AppApiService.supplier.doc(supplierId.id).set(supplierModel.toJson()).then((value){
+      await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("supplier").doc(supplierId.id).set(supplierModel.toJson()).then((value){
         loading.setLoading(false);
         Get.back();
         companyName.value.clear();
@@ -50,29 +54,22 @@ class SupplierController extends GetxController{
     }
   }
 
-  editSupplier({required String supplierId})async{
+  editSupplier({required String supplierId,companyName,companyEmail,companyPhone,companyAddress,supplierName,supplierPhone,supplierEmail})async{
     SupplierModel supplierModel = SupplierModel(
-      companyName: companyName.value.text,
-      companyEmail: companyEmail.value.text,
-      address: companyAddress.value.text,
+      companyName: companyName,
+      companyEmail: companyEmail,
+      address: companyAddress,
       payment: 0,
-      phoneNumber: companyPhoneNumber.value.text,
-      supplierEmail: supplierEmail.value.text,
-      supplierName: supplierName.value.text,
-      supplierPhoneNumber: supplierPhoneNumber.value.text,
+      phoneNumber: companyPhone,
+      supplierEmail: supplierEmail,
+      supplierName: supplierName,
+      supplierPhoneNumber: supplierPhone,
     );
     loading.setLoading(true);
     try{
-      await AppApiService.supplier.doc(supplierId).update(supplierModel.toJson()).then((value){
+      await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("supplier").doc(supplierId).update(supplierModel.toJson()).then((value){
         Get.back();
         loading.setLoading(false);
-        companyName.value.clear();
-        companyEmail.value.clear();
-        companyAddress.value.clear();
-        companyPhoneNumber.value.clear();
-        supplierEmail.value.clear();
-        supplierName.value.clear();
-        supplierPhoneNumber.value.clear();
       }).onError((error, stackTrace){
         print("Error : ${error}");
         loading.setLoading(false);

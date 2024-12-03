@@ -12,7 +12,20 @@
           "package_name": "com.example.flutter_invoice_app"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "144087426142-f09t1hk15ok84tpq8q687vc7spdmtnt5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.flutter_invoice_app",
+            "certificate_hash": "092c46cdeb76a5956e256a56541e8d9b99908371"
+          }
+        },
+        {
+          "client_id": "144087426142-05bgqcklhe4v7dk0in7bfbhddflcls9l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCI1lufW5D4fgTu-gIAfqu6fcL_oYml0H8"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "144087426142-05bgqcklhe4v7dk0in7bfbhddflcls9l.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "144087426142-atns3lipcg0eve5fudu06dqp5vjj6rbc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.flutterInvoiceApp"
+              }
+            }
+          ]
         }
       }
     }

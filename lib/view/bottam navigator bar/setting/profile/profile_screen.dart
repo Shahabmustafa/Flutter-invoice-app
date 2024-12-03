@@ -1,5 +1,5 @@
-import 'package:avatar_glow/avatar_glow.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/res/assets/assets_url.dart';
 import 'package:flutter_invoice_app/res/routes/routes.dart';
@@ -32,7 +32,7 @@ class _UserProfileState extends State<UserProfile> {
           title: Text("Profile"),
         ),
         body: StreamBuilder(
-          stream: AppApiService.firestore.collection("users").doc(AppApiService.userId).snapshots(),
+          stream: AppApiService.firestore.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).snapshots(),
           builder: (context,snapshot){
             if(snapshot.hasData){
               Map<String,dynamic> data = snapshot.data!.data() as Map<String,dynamic>;
@@ -94,11 +94,11 @@ class _UserProfileState extends State<UserProfile> {
                     ],
                   ),
                   Container(
-                    height: size.height * 0.7,
+                    height: size.height * 0.6,
                     width: double.infinity,
                     decoration: BoxDecoration(
                       color: AppColor.whiteColor,
-                      borderRadius: BorderRadius.only(topLeft: Radius.circular(30),topRight: Radius.circular(30))
+                      borderRadius: BorderRadius.only(topLeft: Radius.circular(30),topRight: Radius.circular(30),),
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -107,7 +107,7 @@ class _UserProfileState extends State<UserProfile> {
                           height: kToolbarHeight,
                         ),
                         Container(
-                          height: size.height * 0.22,
+                          height: size.height * 0.3,
                           width: size.width * 0.85,
                           padding: EdgeInsets.all(10),
                           decoration: BoxDecoration(
@@ -158,7 +158,7 @@ class _UserProfileState extends State<UserProfile> {
                             ],
                           ),
                         ),
-                        SizedBox(height: 40,),
+                        SizedBox(height: size.height * 0.04,),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20),
                           child: Card(

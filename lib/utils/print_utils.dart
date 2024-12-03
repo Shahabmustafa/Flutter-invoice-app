@@ -1,7 +1,7 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/model/product_model.dart';
-import 'package:intl/intl.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
@@ -21,9 +21,9 @@ class SaleInvoicePDFPrint {
   }) async {
     final pdf = pw.Document();
 
-    // Load fonts
-    final regularFont = await PdfGoogleFonts.openSansRegular();
-    final boldFont = await PdfGoogleFonts.openSansBold();
+    // // Load fonts
+    // final regularFont = await PdfGoogleFonts.openSansRegular();
+    // final boldFont = await PdfGoogleFonts.openSansBold();
 
     // Create invoice content
     pdf.addPage(
@@ -108,12 +108,15 @@ class SaleInvoicePDFPrint {
       ),
     );
 
-    // Save the PDF file to a directory
-    final output = await getTemporaryDirectory();
-    final file = File("${output.path}/invoice_$invoiceId.pdf");
-    await file.writeAsBytes(await pdf.save());
+    try {
+      final output = await getTemporaryDirectory();
+      final file = File("${output.path}/invoice_$invoiceId.pdf");
+      await file.writeAsBytes(await pdf.save());
 
-    // Print or Share the PDF
-    await Printing.sharePdf(bytes: await pdf.save(), filename: 'invoice_$invoiceId.pdf');
+      // Print or Share the PDF
+      await Printing.sharePdf(bytes: await pdf.save(), filename: 'invoice_$invoiceId.pdf');
+    } catch (e) {
+      debugPrint("Error generating PDF: $e");
+    }
   }
 }

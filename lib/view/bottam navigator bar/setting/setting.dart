@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
 import 'package:flutter_invoice_app/res/colors/app_colors.dart';
@@ -28,9 +29,9 @@ class _SettingPageState extends State<SettingPage> {
   Future<void> emailChange()async{
     reLoad.setLoading(true);
    try{
-     AppApiService.auth.currentUser!.updateEmail(emailController.text).then((value){
+     FirebaseAuth.instance.currentUser!.updateEmail(emailController.text).then((value){
        reLoad.setLoading(false);
-       FirebaseFirestore.instance.collection("users").doc(AppApiService.userId).update({
+       FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).update({
          "email" : emailController.text,
        },).then((value){
          reLoad.setLoading(false);
@@ -161,6 +162,30 @@ class _SettingPageState extends State<SettingPage> {
               padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
               child: Card(
                 child: ListTile(
+                  leading: AssetsUrl.categorySvgIcon,
+                  title: Text("Expense"),
+                  onTap: (){
+                    Get.toNamed(AppRoutes.expenseScreen);
+                  },
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+              child: Card(
+                child: ListTile(
+                  leading: AssetsUrl.customerInstallmentSvgIcon,
+                  title: Text("Dashboard History"),
+                  onTap: (){
+                    Get.toNamed(AppRoutes.dashboardHistory);
+                  },
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+              child: Card(
+                child: ListTile(
                   leading: AssetsUrl.accountSvgIcon,
                   title: Text("Account"),
                   onTap: (){
@@ -208,7 +233,7 @@ class _SettingPageState extends State<SettingPage> {
                   leading: AssetsUrl.logoutSvgIcon,
                   title: Text("Logout"),
                   onTap: (){
-                    AppApiService.auth.signOut().then((value){
+                    FirebaseAuth.instance.signOut().then((value){
                       Get.toNamed("/login_routes");
                       Utils.flutterToast("Log Out");
                     });

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
@@ -38,7 +39,7 @@ class ItemController extends GetxController{
   addItemData()async{
     loading.setLoading(true);
     try{
-      var itemId = await AppApiService.item.doc();
+      var itemId = await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("items").doc();
       ItemModel itemModel = ItemModel(
         barcode: barcode.value.text,
         itemId: itemId.id,
@@ -53,7 +54,7 @@ class ItemController extends GetxController{
         saleDate: saleDate.value.text,
         expiryDate: expiryDate.value.text,
       );
-      await AppApiService.item.doc(itemId.id).set(itemModel.toJson()).then((value){
+      await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("items").doc(itemId.id).set(itemModel.toJson()).then((value){
         loading.setLoading(false);
         Get.back();
       }).onError((error, stackTrace){
@@ -64,22 +65,24 @@ class ItemController extends GetxController{
     }
   }
 
-  editItem(String itemId)async{
+  editItem(String itemId,barcode,itemName,salePrice,purchasePrice,discount,tax,saleDate,expiryDate)async{
     loading.setLoading(true);
     try{
       ItemModel itemModel = ItemModel(
-        itemName: itemName.value.text,
-        salePrice: int.parse(sale.value.text),
-        purchasePrice: int.parse(cost.value.text),
-        discount: int.parse(discount.value.text),
+        barcode: barcode,
+        itemId: itemId,
+        itemName: itemName,
+        salePrice: int.parse(salePrice),
+        purchasePrice: int.parse(purchasePrice),
+        discount: int.parse(discount),
         stock: 0,
         category: selectCategory.value,
-        tax: int.parse(tax.value.text),
+        tax: int.parse(tax),
         companyName: selectCompany.value,
         saleDate: saleDate.value.text,
         expiryDate: expiryDate.value.text,
       );
-      await AppApiService.item.doc(itemId).update(itemModel.toJson()).then((value){
+      await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("items").doc(itemId).update(itemModel.toJson()).then((value){
         loading.setLoading(false);
         Get.back();
       }).onError((error, stackTrace){
@@ -92,12 +95,12 @@ class ItemController extends GetxController{
 
 
   categoryDropdown()async{
-    var category = await AppApiService.categori.get();
+    var category = await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("categori").get();
     dropdownCategory.value = category.docs.map((doc) => doc['category'] as String).toList();
   }
 
   companyDropdown() async {
-    var supplier = await AppApiService.supplier.get();
+    var supplier = await  FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("supplier").get();
     dropdownCompany.value = supplier.docs.map((doc) => doc['companyName'] as String).toList();
     print(dropdownCompany); // Debug: Check if data is populated
   }

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
 import 'package:flutter_invoice_app/res/component/app_button.dart';
@@ -25,7 +26,7 @@ class _ChangeProfileDetailState extends State<ChangeProfileDetail> {
     try{
       await FirebaseFirestore.instance
           .collection("users")
-          .doc(AppApiService.userId)
+          .doc(FirebaseAuth.instance.currentUser!.uid)
           .update({
         "userName" : userName.text,
         "phoneNumber" : phoneNumber.text,

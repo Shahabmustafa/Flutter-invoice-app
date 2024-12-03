@@ -1,4 +1,6 @@
 import 'package:badges/badges.dart' as badges;
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
@@ -53,7 +55,7 @@ class _SalesPageState extends State<SalesPage> {
         ],
       ),
       body: StreamBuilder(
-        stream: AppApiService.item.snapshots(),
+        stream: FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("items").snapshots(),
         builder: (context,snapshot){
           if(snapshot.hasData){
             return ListView.builder(

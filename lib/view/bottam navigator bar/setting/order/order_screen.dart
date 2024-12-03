@@ -1,4 +1,6 @@
 import 'package:badges/badges.dart' as badges;
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
@@ -53,7 +55,7 @@ class _OrderScreenState extends State<OrderScreen> {
           ],
         ),
         body: StreamBuilder(
-          stream: AppApiService.item.snapshots(),
+          stream: FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("items").snapshots(),
           builder: (context,snapshot){
             if(snapshot.hasData){
               return ListView.builder(
@@ -105,7 +107,7 @@ class _OrderScreenState extends State<OrderScreen> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text("Sale Price ${snapshot.data!.docs[index]["salePrice"]}",style: GoogleFonts.lato(color: Colors.black),),
+                                Text("Purchase Price ${snapshot.data!.docs[index]["purchasePrice"]}",style: GoogleFonts.lato(color: Colors.black),),
                                 AppButton(
                                   title: "Add",
                                   height: 30,
@@ -114,7 +116,7 @@ class _OrderScreenState extends State<OrderScreen> {
                                     Product product = Product(
                                       productId: snapshot.data!.docs[index]["itemId"],
                                       product: snapshot.data!.docs[index]["itemName"],
-                                      price: (snapshot.data!.docs[index]["salePrice"] as num).toDouble(),
+                                      price: (snapshot.data!.docs[index]["purchasePrice"] as num).toDouble(),
                                       stock: 1,
                                       tax: (snapshot.data!.docs[index]["tax"] as num).toDouble(),
                                       discount: (snapshot.data!.docs[index]["discount"] as num).toDouble(),
