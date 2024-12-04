@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/res/assets/assets_url.dart';
 import 'package:flutter_invoice_app/res/colors/app_colors.dart';
+import 'package:flutter_invoice_app/res/component/app_button.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -18,6 +19,10 @@ class _CategoryScreenState extends State<CategoryScreen> {
 
   TextEditingController category = TextEditingController();
   final _key = GlobalKey<FormState>();
+  RxBool loading = false.obs;
+  setLoading(bool value){
+    loading.value = value;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -203,45 +208,38 @@ class _CategoryScreenState extends State<CategoryScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColor.whiteColor,
-                                foregroundColor: AppColor.primaryColor,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  side: BorderSide(
-                                    color: AppColor.primaryColor,
-                                  ),
-                                ),
-                              ),
-                              onPressed: (){
+                            AppButton(
+                              title: "Cancel",
+                              height: 40,
+                              width: 100,
+                              color: AppColor.whiteColor,
+                              textColor: AppColor.primaryColor,
+                              onTap: (){
                                 Get.back();
                               },
-                              child: Text("Cancel"),
                             ),
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColor.primaryColor,
-                                foregroundColor: AppColor.whiteColor,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  side: BorderSide(
-                                    color: AppColor.primaryColor,
-                                  ),
-                                ),
-                              ),
-                              onPressed: (){
-                                if(_key.currentState!.validate()){
-                                  FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("categori").add({
-                                    "category" : category.text.trim(),
-                                  }).then((value){
-                                    category.clear();
-                                    Get.back();
-                                  });
-                                }
-                              },
-                              child: Text("Add"),
-                            ),
+                            Obx((){
+                              return AppButton(
+                                title: "Add",
+                                height: 40,
+                                width: 100,
+                                loading: loading.value,
+                                onTap: (){
+                                  if(_key.currentState!.validate()){
+                                    setLoading(true);
+                                    FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("categori").add({
+                                      "category" : category.text.trim(),
+                                    }).then((value){
+                                      setLoading(false);
+                                      category.clear();
+                                      Get.back();
+                                    }).onError((e,s){
+                                      setLoading(false);
+                                    });
+                                  }
+                                },
+                              );
+                            }),
                           ],
                         ),
                       ],

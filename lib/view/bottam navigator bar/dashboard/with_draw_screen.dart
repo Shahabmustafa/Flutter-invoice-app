@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
+import 'package:flutter_invoice_app/res/component/app_button.dart';
 import 'package:flutter_invoice_app/res/component/invoice_text_field.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -21,19 +22,30 @@ class WithDrawScreen extends StatefulWidget {
 class _WithDrawScreenState extends State<WithDrawScreen> {
 
   TextEditingController recievedAmount = TextEditingController();
+  RxBool loading = false.obs;
+
+  setLoading(bool value){
+    loading.value = value;
+  }
 
   withDraw()async{
-    var draw = await AppApiService.firestore.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).get();
-    await AppApiService.firestore.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).update({
-      "cashInHand" : draw.data()?['cashInHand'] - int.parse(recievedAmount.text) ?? 0,
-    });
-    AppApiService.firestore.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).
-    collection("withdrawHistory").add({
-      "withDrawAmount" : recievedAmount.text,
-      "date" : DateTime.now(),
-    });
-    Get.back();
-    recievedAmount.clear();
+   try{
+     setLoading(true);
+     var draw = await AppApiService.firestore.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).get();
+     await AppApiService.firestore.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).update({
+       "cashInHand" : draw.data()?['cashInHand'] - int.parse(recievedAmount.text) ?? 0,
+     });
+     AppApiService.firestore.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).
+     collection("withdrawHistory").add({
+       "withDrawAmount" : recievedAmount.text,
+       "date" : DateTime.now(),
+     });
+     setLoading(false);
+     Get.back();
+     recievedAmount.clear();
+   }catch(e){
+     setLoading(false);
+   }
   }
 
   @override
@@ -132,36 +144,25 @@ class _WithDrawScreenState extends State<WithDrawScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColor.whiteColor,
-                            foregroundColor: AppColor.primaryColor,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              side: BorderSide(
-                                color: AppColor.primaryColor,
-                              ),
-                            ),
-                          ),
-                          onPressed: (){
+                        AppButton(
+                          title: "Cancel",
+                          height: 40,
+                          width: 100,
+                          color: AppColor.whiteColor,
+                          textColor: AppColor.primaryColor,
+                          onTap: (){
                             Get.back();
                           },
-                          child: Text("Cancel"),
                         ),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColor.primaryColor,
-                            foregroundColor: AppColor.whiteColor,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              side: BorderSide(
-                                color: AppColor.primaryColor,
-                              ),
-                            ),
-                          ),
-                          onPressed: () => withDraw(),
-                          child: Text("Received"),
-                        ),
+                        Obx((){
+                          return AppButton(
+                            title: "WithDraw",
+                            height: 40,
+                            width: 100,
+                            loading: loading.value,
+                            onTap: () => withDraw(),
+                          );
+                        }),
                       ],
                     ),
                   ],

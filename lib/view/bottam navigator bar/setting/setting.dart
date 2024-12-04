@@ -48,6 +48,7 @@ class _SettingPageState extends State<SettingPage> {
   }
 
   RxBool visibility = true.obs;
+  final deleteAccount = Get.put(DeleteAccountController());
 
   @override
   Widget build(BuildContext context) {
@@ -207,14 +208,17 @@ class _SettingPageState extends State<SettingPage> {
                                   Get.back();
                                 },
                               ),
-                              AppButton(
-                                title: "Yes",
-                                height: 40,
-                                width: 100,
-                                onTap: (){
-                                  DeleteAccountController().deleteAccount();
-                                },
-                              )
+                              Obx((){
+                                return AppButton(
+                                  title: "Yes",
+                                  height: 40,
+                                  width: 100,
+                                  loading: deleteAccount.loading.value,
+                                  onTap: (){
+                                    deleteAccount.deleteAccount();
+                                  },
+                                );
+                              }),
                             ],
                           ),
                         );
