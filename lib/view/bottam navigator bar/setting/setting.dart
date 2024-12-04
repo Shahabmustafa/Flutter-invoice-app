@@ -1,16 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
 import 'package:flutter_invoice_app/res/colors/app_colors.dart';
 import 'package:flutter_invoice_app/res/component/app_button.dart';
-import 'package:flutter_invoice_app/res/component/invoice_text_field.dart';
 import 'package:flutter_invoice_app/res/routes/routes.dart';
 import 'package:flutter_invoice_app/utils/utils.dart';
+import 'package:flutter_invoice_app/view%20model/auth%20service/delete_account_controller.dart';
 import 'package:flutter_invoice_app/view%20model/auth%20service/login_service.dart';
 import 'package:get/get.dart';
 
-import '../../../../../view model/swith_service/swith_service.dart';
 import '../../../res/assets/assets_url.dart';
 
 class SettingPage extends StatefulWidget {
@@ -162,7 +161,7 @@ class _SettingPageState extends State<SettingPage> {
               padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
               child: Card(
                 child: ListTile(
-                  leading: AssetsUrl.categorySvgIcon,
+                  leading: Icon(CupertinoIcons.money_dollar_circle,size: 30,),
                   title: Text("Expense"),
                   onTap: (){
                     Get.toNamed(AppRoutes.expenseScreen);
@@ -174,7 +173,7 @@ class _SettingPageState extends State<SettingPage> {
               padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
               child: Card(
                 child: ListTile(
-                  leading: AssetsUrl.customerInstallmentSvgIcon,
+                  leading: Icon(CupertinoIcons.time,size: 30,),
                   title: Text("Dashboard History"),
                   onTap: (){
                     Get.toNamed(AppRoutes.dashboardHistory);
@@ -186,46 +185,65 @@ class _SettingPageState extends State<SettingPage> {
               padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
               child: Card(
                 child: ListTile(
-                  leading: AssetsUrl.accountSvgIcon,
-                  title: Text("Account"),
+                  leading: Icon(CupertinoIcons.person_badge_minus,size: 30,),
+                  title: Text("Delete Account"),
                   onTap: (){
-                    // Get.toNamed(AppRoutes.changeProfileDetail);
+                    showDialog(
+                      context: context,
+                      builder: (context){
+                        return AlertDialog(
+                          title: Text("Do You Want to Delete Account?",style: TextStyle(fontSize: 16,fontWeight: FontWeight.w600),),
+                          content: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              AppButton(
+                                title: "No",
+                                color: AppColor.whiteColor,
+                                textColor: AppColor.primaryColor,
+                                height: 40,
+                                width: 100,
+                                onTap: (){
+                                  Get.back();
+                                },
+                              ),
+                              AppButton(
+                                title: "Yes",
+                                height: 40,
+                                width: 100,
+                                onTap: (){
+                                  DeleteAccountController().deleteAccount();
+                                },
+                              )
+                            ],
+                          ),
+                        );
+                      },
+                    );
                   },
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
-              child: Card(
-                child: ListTile(
-                  leading:  AssetsUrl.changeLanguageSvgIcon,
-                  title: Text("Change Language"),
-                  onTap: (){
-                    Get.toNamed("/change_languages_routes");
-                  },
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
-              child: Card(
-                child: ListTile(
-                  leading: AssetsUrl.darkModeSvgIcon,
-                  title: Text("Dark Mode"),
-                  trailing: GetBuilder<ThemeController>(
-                    builder: (controller) {
-                      return Switch(
-                        activeColor: AppColor.primaryColor,
-                        value: controller.isDark,
-                        onChanged: (value) {
-                          controller.changeTheme(value);
-                        },
-                      );
-                    },
-                  ),
-                ),
-              ),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+            //   child: Card(
+            //     child: ListTile(
+            //       leading: AssetsUrl.darkModeSvgIcon,
+            //       title: Text("Dark Mode"),
+            //       trailing: GetBuilder<ThemeController>(
+            //         builder: (controller) {
+            //           return Switch(
+            //             activeColor: AppColor.primaryColor,
+            //             value: controller.isDark,
+            //             onChanged: (value) {
+            //               controller.changeTheme(value);
+            //             },
+            //           );
+            //         },
+            //       ),
+            //     ),
+            //   ),
+            // ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
               child: Card(

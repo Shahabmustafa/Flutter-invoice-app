@@ -36,6 +36,7 @@ class _AddToCardScreenState extends State<AddToCardScreen> {
     return totalAmount - receivedAmount;
   }
 
+
   @override
   Widget build(BuildContext context) {
     double subtotal = widget.product.fold(0, (sum, item) {
@@ -157,43 +158,16 @@ class _AddToCardScreenState extends State<AddToCardScreen> {
                                     widget.product[index].tax,
                                     widget.product[index].stock,
                                   )}",
-                                  style: GoogleFonts.lato(color: Colors.grey),),
-                                Row(
-                                  children: [
-                                    IconButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          widget.product[index].stock++;
-                                        });
-                                      },
-                                      icon: Icon(
-                                        CupertinoIcons.plus_circle,
-                                        color: Colors.green,
-                                      ),
-                                    ),
-                                    Text(
-                                      "${widget.product[index].stock}",
-                                      style: GoogleFonts.lato(
-                                          color: AppColor.primaryColor,
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                    IconButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          if (widget.product[index].stock > 1) {
-                                            widget.product[index].stock--;
-                                          } else {
-                                            widget.product.removeAt(index);
-                                          }
-                                        });
-                                      },
-                                      icon: Icon(
-                                        Icons.remove_circle_outline,
-                                        color: Colors.red,
-                                      ),
-                                    ),
-                                  ],
+                                  style: GoogleFonts.lato(color: Colors.grey),
                                 ),
+                                CountTextField(
+                                  orderProduct: widget.product,
+                                  index: index,
+                                  onStockChanged: () {
+                                    setState(() {
+                                    });
+                                  },
+                                )
                               ],
                             ),
                           ),
@@ -252,98 +226,102 @@ class _AddToCardScreenState extends State<AddToCardScreen> {
                 showDialog(
                   context: context,
                   builder: (context){
-                    return AlertDialog(
-                      title: Text("Summary"),
-                      content: SingleChildScrollView(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            DropdownSearch<String>(
-                              items: (f, cs) => invoice.dropdownCustomer,
-                              dropdownBuilder: (context, selectedItem) {
-                                if (selectedItem == null) {
-                                  return Text("Please Select Customer");
-                                }
-                                return Text(selectedItem);
-                              },
-                              popupProps: PopupProps.menu(
-                                showSearchBox: true,
-                                showSelectedItems: true,
-                                itemBuilder: (ctx, item, isDisabled, isSelected) {
-                                  return ListTile(
-                                    title: Text(item),
-                                  );
-                                },
-                              ),
-                              onChanged: (value) {
-                                if (invoice.dropdownCustomer.isNotEmpty && invoice.dropdownCustomerIds.isNotEmpty) {
-                                  int index = invoice.dropdownCustomer.indexOf(value!);
+                    return StatefulBuilder(
+                      builder: (context,setState){
+                        return AlertDialog(
+                          title: Text("Summary"),
+                          content: SingleChildScrollView(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                DropdownSearch<String>(
+                                  items: (f, cs) => invoice.dropdownCustomer,
+                                  dropdownBuilder: (context, selectedItem) {
+                                    if (selectedItem == null) {
+                                      return Text("Please Select Customer");
+                                    }
+                                    return Text(selectedItem);
+                                  },
+                                  popupProps: PopupProps.menu(
+                                    showSearchBox: true,
+                                    showSelectedItems: true,
+                                    itemBuilder: (ctx, item, isDisabled, isSelected) {
+                                      return ListTile(
+                                        title: Text(item),
+                                      );
+                                    },
+                                  ),
+                                  onChanged: (value) {
+                                    if (invoice.dropdownCustomer.isNotEmpty && invoice.dropdownCustomerIds.isNotEmpty) {
+                                      int index = invoice.dropdownCustomer.indexOf(value!);
 
-                                  // Check if index is valid before accessing dropdownCustomerIds
-                                  if (index >= 0 && index < invoice.dropdownCustomerIds.length) {
-                                    String selectedCustomerId = invoice.dropdownCustomerIds[index];
-                                    String selectedCustomerName = invoice.dropdownCustomer[index];
-                                    print("Selected Customer ID: $selectedCustomerId");
-                                    print("Selected Customer Name: $selectedCustomerName");
-                                    invoice.selectCustomerId.value = selectedCustomerId;
-                                    invoice.selectCustomer.value = selectedCustomerName;
-                                  } else {
-                                    print("Invalid index or empty lists");
+                                      // Check if index is valid before accessing dropdownCustomerIds
+                                      if (index >= 0 && index < invoice.dropdownCustomerIds.length) {
+                                        String selectedCustomerId = invoice.dropdownCustomerIds[index];
+                                        String selectedCustomerName = invoice.dropdownCustomer[index];
+                                        print("Selected Customer ID: $selectedCustomerId");
+                                        print("Selected Customer Name: $selectedCustomerName");
+                                        invoice.selectCustomerId.value = selectedCustomerId;
+                                        invoice.selectCustomer.value = selectedCustomerName;
+                                      } else {
+                                        print("Invalid index or empty lists");
+                                      }
+                                    } else {
+                                      print("Customer data is not loaded or empty");
+                                    }
+                                  },
+                                ),
+                                SizedBox(height: 10,),
+                                InvoiceTextField(
+                                  title: "Total Amount",
+                                  enabled: false,
+                                  controller: TextEditingController(text: totalAmount.toString()),
+                                ),
+                                SizedBox(height: 10,),
+                                InvoiceTextField(
+                                  title: "Received Amount",
+                                  controller: invoice.payAmount,
+                                ),
+                              ],
+                            ),
+                          ),
+                          actions: [
+                            AppButton(
+                              title: "Cancel",
+                              height: 40,
+                              width: 120,
+                              color: AppColor.whiteColor,
+                              textColor: AppColor.primaryColor,
+                              onTap: (){
+                                Get.back();
+                              },
+                            ),
+                            Obx((){
+                              return AppButton(
+                                title: "Save",
+                                height: 40,
+                                width: 120,
+                                color: AppColor.primaryColor,
+                                textColor: AppColor.whiteColor,
+                                loading: invoice.loading.value,
+                                onTap: (){
+                                  if(totalAmount < int.parse(invoice.payAmount.text)){
+                                    Utils.flutterToast("your amount is received is greater than to total amount");
+                                  }else{
+                                    invoice.addSaleInvoice(
+                                      widget.product,
+                                      subtotal.toInt(),
+                                      totalAmount.toInt(),
+                                      totalTax.toInt(),
+                                      totalDiscount.toInt(),
+                                    );
                                   }
-                                } else {
-                                  print("Customer data is not loaded or empty");
-                                }
-                              },
-                            ),
-                            SizedBox(height: 10,),
-                            InvoiceTextField(
-                              title: "Total Amount",
-                              enabled: false,
-                              controller: TextEditingController(text: totalAmount.toString()),
-                            ),
-                            SizedBox(height: 10,),
-                            InvoiceTextField(
-                              title: "Received Amount",
-                              controller: invoice.payAmount,
-                            ),
+                                },
+                              );
+                            }),
                           ],
-                        ),
-                      ),
-                      actions: [
-                        AppButton(
-                          title: "Cancel",
-                          height: 40,
-                          width: 120,
-                          color: AppColor.whiteColor,
-                          textColor: AppColor.primaryColor,
-                          onTap: (){
-
-                          },
-                        ),
-                        Obx((){
-                          return AppButton(
-                            title: "Save",
-                            height: 40,
-                            width: 120,
-                            color: AppColor.primaryColor,
-                            textColor: AppColor.whiteColor,
-                            loading: invoice.loading.value,
-                            onTap: (){
-                              if(totalAmount < int.parse(invoice.payAmount.text)){
-                                Utils.flutterToast("your amount is received is greater than to total amount");
-                              }else{
-                                invoice.addSaleInvoice(
-                                  widget.product,
-                                  subtotal.toInt(),
-                                  totalAmount.toInt(),
-                                  totalTax.toInt(),
-                                  totalDiscount.toInt(),
-                                );
-                              }
-                            },
-                          );
-                        }),
-                      ],
+                        );
+                      },
                     );
                   },
                 );
@@ -351,6 +329,70 @@ class _AddToCardScreenState extends State<AddToCardScreen> {
               },
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+
+class CountTextField extends StatefulWidget {
+  CountTextField({
+    required this.orderProduct,
+    required this.index,
+    required this.onStockChanged,
+    super.key,
+  });
+
+  final List orderProduct;
+  final int index;
+  final VoidCallback onStockChanged;
+
+  @override
+  State<CountTextField> createState() => _CountTextFieldState();
+}
+
+class _CountTextFieldState extends State<CountTextField> {
+  late TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController(
+      text: widget.orderProduct[widget.index].stock.toString(),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 80,
+      child: TextField(
+        controller: _controller,
+        keyboardType: TextInputType.number,
+        onChanged: (value) {
+          if (int.tryParse(value) != null) {
+            setState(() {
+              widget.orderProduct[widget.index].stock = int.parse(value);
+            });
+            // Notify the parent widget of the stock change
+            widget.onStockChanged();
+          }
+        },
+        decoration: InputDecoration(
+          border: OutlineInputBorder(),
+          contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+          labelText: "Stock",
+        ),
+        style: GoogleFonts.lato(
+          color: AppColor.primaryColor,
+          fontWeight: FontWeight.w600,
         ),
       ),
     );

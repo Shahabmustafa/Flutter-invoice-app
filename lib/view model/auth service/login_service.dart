@@ -1,13 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
 import 'package:flutter_invoice_app/res/routes/routes.dart';
 import 'package:flutter_invoice_app/utils/utils.dart';
 import 'package:get/get.dart';
 
 import '../../res/calculation/calculation.dart';
-import '../notification_service/notification_service.dart';
 
 class LoginService extends GetxController{
   RxBool loading = false.obs;
@@ -30,7 +28,7 @@ class LoginService extends GetxController{
         password: password.value.text,
       ).then((value)async{
         setLoading(false);
-        addDashboardIfNotExists(value.user!.uid);
+        await addDashboardIfNotExists(value.user!.uid);
         Utils.flutterToast("You have Successfully Login");
         email.value.clear();
         password.value.clear();

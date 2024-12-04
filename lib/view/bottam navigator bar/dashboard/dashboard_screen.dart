@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
 import 'package:flutter_invoice_app/res/assets/assets_url.dart';
 import 'package:flutter_invoice_app/res/calculation/calculation.dart';
 import 'package:flutter_invoice_app/res/colors/app_colors.dart';
@@ -9,6 +8,8 @@ import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/dashboard/with
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+
+import '../../../res/component/dashboard_summary.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -114,6 +115,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ],
                   ),
                 );
+              }else if(snapshot.connectionState == ConnectionState.waiting){
+                return Center(child: CircularProgressIndicator());
+              }else if (!snapshot.hasData || snapshot.data!.data() == null) {
+                return Center(child: Text("No data available"));
               }else{
                 return Center(child: CircularProgressIndicator());
               }
@@ -219,53 +224,4 @@ class ChartData {
   final int value;
 
   ChartData(this.category, this.value);
-}
-
-class DashboardSummary extends StatelessWidget {
-  DashboardSummary({
-    required this.imageAssets,
-    required this.title,
-    required this.subtitle,
-    this.width = 190,
-    super.key,
-  });
-  String title;
-  String subtitle;
-  Widget imageAssets;
-  double? width;
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(10),
-      height: 90,
-      width: width,
-      decoration: BoxDecoration(
-        color: AppColor.whiteColor,
-        boxShadow: [
-          BoxShadow(
-            color: AppColor.grayColor.withOpacity(0.2),
-            blurRadius: 10,
-            offset: Offset(0.2, 0.1),
-          ),
-        ],
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          imageAssets,
-          // AssetsUrl.cashSaleSvgIcon,
-          SizedBox(width: 10,),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(title,style: GoogleFonts.lora(fontSize: 12,fontWeight: FontWeight.bold),),
-              Text(subtitle,style: GoogleFonts.lora(fontSize: 12,fontWeight: FontWeight.w400),),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
 }

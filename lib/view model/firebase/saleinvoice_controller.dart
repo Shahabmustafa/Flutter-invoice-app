@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_invoice_app/model/customer_model.dart';
 import 'package:flutter_invoice_app/model/product_model.dart';
-import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
 import 'package:get/get.dart';
 
 import '../../res/calculation/calculation.dart';

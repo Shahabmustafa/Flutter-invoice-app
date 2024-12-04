@@ -156,43 +156,15 @@ class _AddToCardOrderScreenState extends State<AddToCardOrderScreen> {
                                     widget.orderProduct[index].discount,
                                     widget.orderProduct[index].tax,
                                     widget.orderProduct[index].stock,
-                                  )}",
-                                  style: GoogleFonts.lato(color: Colors.grey),),
-                                Row(
-                                  children: [
-                                    IconButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          widget.orderProduct[index].stock++;
-                                        });
-                                      },
-                                      icon: Icon(
-                                        CupertinoIcons.plus_circle,
-                                        color: Colors.green,
-                                      ),
-                                    ),
-                                    Text(
-                                      "${widget.orderProduct[index].stock}",
-                                      style: GoogleFonts.lato(
-                                          color: AppColor.primaryColor,
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                    IconButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          if (widget.orderProduct[index].stock > 1) {
-                                            widget.orderProduct[index].stock--;
-                                          } else {
-                                            widget.orderProduct.removeAt(index);
-                                          }
-                                        });
-                                      },
-                                      icon: Icon(
-                                        Icons.remove_circle_outline,
-                                        color: Colors.red,
-                                      ),
-                                    ),
-                                  ],
+                                  )}",style: GoogleFonts.lato(color: Colors.grey),
+                                ),
+                                CountTextField(
+                                  orderProduct: widget.orderProduct,
+                                  index: index,
+                                  onStockChanged: () {
+                                    setState(() {
+                                    });
+                                  },
                                 ),
                               ],
                             ),
@@ -358,3 +330,68 @@ class _AddToCardOrderScreenState extends State<AddToCardOrderScreen> {
     );
   }
 }
+
+
+class CountTextField extends StatefulWidget {
+  CountTextField({
+    required this.orderProduct,
+    required this.index,
+    required this.onStockChanged,
+    super.key,
+  });
+
+  final List orderProduct;
+  final int index;
+  final VoidCallback onStockChanged;
+
+  @override
+  State<CountTextField> createState() => _CountTextFieldState();
+}
+
+class _CountTextFieldState extends State<CountTextField> {
+  late TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController(
+      text: widget.orderProduct[widget.index].stock.toString(),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 80,
+      child: TextField(
+        controller: _controller,
+        keyboardType: TextInputType.number,
+        onChanged: (value) {
+          if (int.tryParse(value) != null) {
+            setState(() {
+              widget.orderProduct[widget.index].stock = int.parse(value);
+            });
+            // Notify the parent widget of the stock change
+            widget.onStockChanged();
+          }
+        },
+        decoration: InputDecoration(
+          border: OutlineInputBorder(),
+          contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+          labelText: "Stock",
+        ),
+        style: GoogleFonts.lato(
+          color: AppColor.primaryColor,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
+  }
+}
+

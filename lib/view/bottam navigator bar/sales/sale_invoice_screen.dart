@@ -2,8 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_invoice_app/model/invoice_model.dart';
-import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
 import 'package:flutter_invoice_app/res/routes/routes.dart';
 import 'package:flutter_invoice_app/utils/print_utils.dart';
 import 'package:get/get.dart';
@@ -37,7 +35,7 @@ class _SaleInvoiceScreenState extends State<SaleInvoiceScreen> {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(CupertinoIcons.cart,color: AppColor.primaryColor,size: 100,),
+                  Icon(CupertinoIcons.doc_text,color: AppColor.primaryColor,size: 100,),
                   SizedBox(
                     height: 20,
                   ),

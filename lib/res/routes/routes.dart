@@ -1,3 +1,4 @@
+import 'package:flutter_invoice_app/view/auth/forget_password_screen.dart';
 import 'package:flutter_invoice_app/view/auth/login_screen.dart';
 import 'package:flutter_invoice_app/view/auth/sign_up_screen.dart';
 import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/sales/sale_invoice_detail_screen.dart';
@@ -14,6 +15,7 @@ import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/setting/suppli
 import 'package:flutter_invoice_app/view/home/home_screen.dart';
 import 'package:flutter_invoice_app/view/splash/splash_screen.dart';
 import 'package:get/get.dart';
+
 import '../../view/bottam navigator bar/setting/change_profile_detail.dart';
 import '../../view/bottam navigator bar/setting/customer/add_customer.dart';
 import '../../view/bottam navigator bar/setting/customer/customer_detail.dart';
@@ -66,6 +68,7 @@ class AppRoutes{
   static const String expenseScreen = "/expense_screen";
   static const String dashboardHistory = "/dashboard_history_screen";
   static const String saleInvoiceDetailScreen = "/sale_invoice_detail_screen";
+  static const String forgetPasswordScreen = "/forget_password_screen";
 
   static appRoutes() => [
     GetPage(
@@ -254,6 +257,13 @@ class AppRoutes{
     GetPage(
       name: dashboardHistory,
       page: () => DashboardHistoryScreen(),
+      transition: Transition.rightToLeftWithFade,
+      transitionDuration: const Duration(microseconds: 250),
+    ),
+
+    GetPage(
+      name: forgetPasswordScreen,
+      page: () => ForgetPasswordScreen(),
       transition: Transition.rightToLeftWithFade,
       transitionDuration: const Duration(microseconds: 250),
     ),

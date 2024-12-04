@@ -39,12 +39,9 @@ class _AddItemsState extends State<AddItems> {
                     height: size.height * 0.02,
                   ),
                   Obx((){
-                    return GestureDetector(
-                      onTap: item.scanQRCode,
-                      child: InvoiceTextField(
-                        title: "Barcode",
-                        controller: item.barcode.value,
-                      ),
+                    return InvoiceTextField(
+                      title: "Barcode",
+                      controller: item.barcode.value,
                     );
                   }),
                   SizedBox(

@@ -2,7 +2,6 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/view%20model/firebase/item_controller.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../../../res/component/app_button.dart';
 import '../../../../../../res/component/invoice_text_field.dart';
@@ -17,21 +16,13 @@ class EditItem extends StatefulWidget {
 class _EditItemState extends State<EditItem> {
   final _key = GlobalKey<FormState>();
   DateTime selectedDate = DateTime.now();
-  final item = Get.put(ItemController());
+  final controller = Get.put(ItemController());
   final itemId = Get.arguments;
 
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    TextEditingController updateBarcode = TextEditingController(text: itemId[1]);
-    TextEditingController updateItemName = TextEditingController(text: itemId[2]);
-    TextEditingController updateSale = TextEditingController(text: itemId[3]);
-    TextEditingController updateCost = TextEditingController(text: itemId[4]);
-    TextEditingController updateDiscount = TextEditingController(text: itemId[5]);
-    TextEditingController updateTax = TextEditingController(text: itemId[6]);
-    TextEditingController updateStartDate = TextEditingController(text: itemId[7]);
-    TextEditingController updateEndDate = TextEditingController(text: itemId[8]);
     return Scaffold(
       appBar: AppBar(
         title: Text("Edit Item"),
@@ -47,23 +38,18 @@ class _EditItemState extends State<EditItem> {
                   SizedBox(
                     height: size.height * 0.02,
                   ),
-                  GestureDetector(
-                    onTap: item.scanQRCode,
-                    child: InvoiceTextField(
+                  Obx((){
+                    return InvoiceTextField(
                       title: "Barcode",
-                      controller: updateBarcode,
-                      enabled: false,
-                      validator: (value){
-                        return value!.isEmpty ? "Enter Your Item Name" : null;
-                      },
-                    ),
-                  ),
+                      controller: controller.barcode.value,
+                    );
+                  }),
                   SizedBox(
                     height: size.height * 0.02,
                   ),
                   InvoiceTextField(
                     title: "Item Name",
-                    controller: updateItemName,
+                    controller: controller.itemName.value,
                     validator: (value){
                       return value!.isEmpty ? "Enter Your Item Name" : null;
                     },
@@ -77,7 +63,7 @@ class _EditItemState extends State<EditItem> {
                       Flexible(
                         child: InvoiceTextField(
                           title: "Sale",
-                          controller: updateSale,
+                          controller: controller.sale.value,
                           keyboardType: TextInputType.number,
                           validator: (value){
                             return value!.isEmpty ? "Enter Your Item Price" : null;
@@ -88,7 +74,7 @@ class _EditItemState extends State<EditItem> {
                       Flexible(
                         child: InvoiceTextField(
                           title: "Cost",
-                          controller: updateCost,
+                          controller: controller.cost.value,
                           keyboardType: TextInputType.number,
                           validator: (value){
                             return value!.isEmpty ? "Enter Your Item Whole Price" : null;
@@ -106,7 +92,7 @@ class _EditItemState extends State<EditItem> {
                       Flexible(
                         child: InvoiceTextField(
                           title: "Discount",
-                          controller: updateDiscount,
+                          controller: controller.discount.value,
                           keyboardType: TextInputType.number,
                           validator: (value){
                             return value!.isEmpty ? "Enter Your Item discount" : null;
@@ -117,7 +103,7 @@ class _EditItemState extends State<EditItem> {
                       Flexible(
                         child: InvoiceTextField(
                           title: "Tax",
-                          controller: updateTax,
+                          controller: controller.tax.value,
                           keyboardType: TextInputType.number,
                           suffix: Text("%"),
                           validator: (value){
@@ -130,20 +116,8 @@ class _EditItemState extends State<EditItem> {
                   SizedBox(
                     height: size.height * 0.02,
                   ),
-                  InvoiceTextField(
-                    title: "Stocks",
-                    controller: TextEditingController(text: 0.toString()),
-                    keyboardType: TextInputType.number,
-                    enabled: false,
-                    validator: (value){
-                      return value!.isEmpty ? "Enter Your Item Name" : null;
-                    },
-                  ),
-                  SizedBox(
-                    height: size.height * 0.02,
-                  ),
                   DropdownSearch<String>(
-                    items: (f, cs) => item.dropdownCategory,
+                    items: (f, cs) => controller.dropdownCategory,
                     dropdownBuilder: (context, selectedItem) {
                       if (selectedItem == null) {
                         return Text("Please Select Category");
@@ -160,14 +134,14 @@ class _EditItemState extends State<EditItem> {
                       },
                     ),
                     onChanged: (value){
-                      item.selectCategory.value = value!;
+                      controller.selectCategory.value = value!;
                     },
                   ),
                   SizedBox(
                     height: size.height * 0.02,
                   ),
                   DropdownSearch<String>(
-                    items: (es,i) => item.dropdownCompany.value,
+                    items: (es,i) => controller.dropdownCompany.value,
                     dropdownBuilder: (context, selectedItem) {
                       return Text(selectedItem ?? "Please Select Company");
                     },
@@ -181,7 +155,7 @@ class _EditItemState extends State<EditItem> {
                       },
                     ),
                     onChanged: (value) {
-                      item.selectCompany.value = value!;
+                      controller.selectCompany.value = value!;
                     },
                   ),
                   SizedBox(
@@ -194,7 +168,7 @@ class _EditItemState extends State<EditItem> {
                           title: "Start Date",
                           keyboardType: TextInputType.datetime,
                           readOnly: true,
-                          controller: updateStartDate,
+                          controller: controller.saleDate.value,
                           onTap: () => _dateNow(context),
                         ),
                       ),
@@ -204,7 +178,7 @@ class _EditItemState extends State<EditItem> {
                           title: "Expiry Date",
                           keyboardType: TextInputType.datetime,
                           readOnly: true,
-                          controller: updateEndDate,
+                          controller: controller.expiryDate.value,
                           onTap: () => _dateExpiry(context),
                         ),
                       ),
@@ -213,27 +187,19 @@ class _EditItemState extends State<EditItem> {
                   SizedBox(
                     height: size.height * 0.02,
                   ),
-                  AppButton(
-                    title: "Edit Item",
-                    height: size.height * 0.05,
-                    width: double.infinity,
-                    loading: item.loading.loading.value,
-                    onTap: (){
-                      if(_key.currentState!.validate()){
-                        item.editItem(
-                          itemId[0],
-                          itemId[1],
-                          itemId[2],
-                          itemId[3],
-                          itemId[4],
-                          itemId[5],
-                          itemId[6],
-                          itemId[7],
-                          itemId[8],
-                        );
-                      }
-                    },
-                  ),
+                  Obx((){
+                    return AppButton(
+                      title: "Edit Item",
+                      height: size.height * 0.05,
+                      width: double.infinity,
+                      loading: controller.loading.loading.value,
+                      onTap: (){
+                        if(_key.currentState!.validate()){
+                          controller.editItem(itemId[0]);
+                        }
+                      },
+                    );
+                  }),
                 ],
               ),
             ),

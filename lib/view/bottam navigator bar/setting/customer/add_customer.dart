@@ -115,17 +115,19 @@ class _AddCustomerState extends State<AddCustomer> {
                 SizedBox(
                   height: size.height * 0.02,
                 ),
-                AppButton(
-                  title: "Add Customer",
-                  height: size.height * 0.05,
-                  width: size.width * 0.94,
-                  loading: addCustomer.loading.loading.value,
-                  onTap: (){
-                    if(_key.currentState!.validate()){
-                      addCustomer.addCustomerData();
-                    }
-                  },
-                ),
+                Obx((){
+                  return AppButton(
+                    title: "Add Customer",
+                    height: size.height * 0.05,
+                    width: size.width * 0.94,
+                    loading: addCustomer.loading.value,
+                    onTap: (){
+                      if(_key.currentState!.validate()){
+                        addCustomer.addCustomerData();
+                      }
+                    },
+                  );
+                }),
                 SizedBox(
                   height: size.height * 0.05,
                 ),

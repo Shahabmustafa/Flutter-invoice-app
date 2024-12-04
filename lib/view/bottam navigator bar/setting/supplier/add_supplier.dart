@@ -115,17 +115,19 @@ class _AddSupplierState extends State<AddSupplier> {
                 SizedBox(
                   height: size.height * 0.02,
                 ),
-                AppButton(
-                  title: "Add Supplier",
-                  height: size.height * 0.05,
-                  width: size.width * 0.94,
-                  loading: addSupplier.loading.loading.value,
-                  onTap: (){
-                    if(_key.currentState!.validate()){
-                      addSupplier.addSupplier();
-                    }
-                  },
-                ),
+                Obx((){
+                  return AppButton(
+                    title: "Add Supplier",
+                    height: size.height * 0.05,
+                    width: size.width * 0.94,
+                    loading: addSupplier.loading.loading.value,
+                    onTap: (){
+                      if(_key.currentState!.validate()){
+                        addSupplier.addSupplier();
+                      }
+                    },
+                  );
+                }),
               ],
             ),
           ),

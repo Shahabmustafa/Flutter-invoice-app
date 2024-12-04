@@ -8,8 +8,6 @@ import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/setting/instal
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../../../res/app_api/app_api_service.dart';
-import '../../../../res/assets/assets_url.dart';
 import '../../../../res/colors/app_colors.dart';
 
 class CustomerScreen extends StatefulWidget {
@@ -147,7 +145,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                         onPressed: (){
                                           FirebaseFirestore.instance.collection("users")
                                               .doc(FirebaseAuth.instance.currentUser!.uid)
-                                              .collection("items").doc(snapshot.data!.docs[index].id).delete();
+                                              .collection("customer").doc(snapshot.data!.docs[index].id).delete();
                                         },
                                         icon: Icon(CupertinoIcons.delete,size: 22,color: AppColor.errorColor,),
                                       ),

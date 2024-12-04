@@ -1,13 +1,10 @@
-
-
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/res/calculation/calculation.dart';
+import 'package:flutter_invoice_app/res/component/app_button.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
@@ -26,24 +23,36 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
 
   TextEditingController recievedAmount = TextEditingController();
   TextEditingController description = TextEditingController();
+  RxBool loading = false.obs;
+  setLoading(bool value){
+    loading.value = value;
+  }
 
   expense()async{
-    var draw = await AppApiService.firestore.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).get();
-    var expense = await AppApiService.firestore.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("dashboard").doc(Calculation().date()).get();
-    await AppApiService.firestore.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).update({
-      "cashInHand" : draw.data()?['cashInHand'] - int.parse(recievedAmount.text) ?? 0,
-    });
-    AppApiService.firestore.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("dashboard").doc(Calculation().date()).update({
-      "expense" : expense.data()?["expense"] + int.parse(recievedAmount.text),
-    });
-    AppApiService.firestore.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("expense").add({
-      "expense" : recievedAmount.text,
-      "date" : DateTime.now(),
-      "description" : description.text,
-    });
-    Get.back();
-    recievedAmount.clear();
-    description.clear();
+    try{
+      setLoading(true);
+      var draw = await AppApiService.firestore.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).get();
+      var expense = await AppApiService.firestore.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("dashboard").doc(Calculation().date()).get();
+      await AppApiService.firestore.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).update({
+        "cashInHand" : draw.data()?['cashInHand'] - int.parse(recievedAmount.text) ?? 0,
+      });
+      setLoading(false);
+      AppApiService.firestore.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("dashboard").doc(Calculation().date()).update({
+        "expense" : expense.data()?["expense"] + int.parse(recievedAmount.text),
+      });
+      setLoading(false);
+      AppApiService.firestore.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("expense").add({
+        "expense" : recievedAmount.text,
+        "date" : DateTime.now(),
+        "description" : description.text,
+      });
+      setLoading(false);
+      Get.back();
+      recievedAmount.clear();
+      description.clear();
+    }catch(e){
+      setLoading(false);
+    }
   }
 
   @override
@@ -53,25 +62,46 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
         title: Text("Expense"),
       ),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("expense").snapshots(),
+        stream: FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("expense").orderBy("date",descending: true).snapshots(),
         builder: (context,snapshot){
           if(snapshot.hasData){
-            return ListView.builder(
-                itemCount: snapshot.data!.docs.length,
-                itemBuilder: (context,index){
-                  Timestamp timestamp = snapshot.data!.docs[index]['date'];
-                  DateTime dateTime = timestamp.toDate();
-                  String formattedDate = DateFormat('dd-MMMM-yyyy').format(dateTime);
-                  return Card(
-                    child: ListTile(
-                      leading: Text("${index + 1}"),
-                      trailing: Text(formattedDate.toString(),style: GoogleFonts.lato(fontSize: 14,fontWeight: FontWeight.normal,color: AppColor.grayColor)),
-                      title: Text("Rs. " + snapshot.data!.docs[index]["expense"].toString(),style: GoogleFonts.lato(fontSize: 16,fontWeight: FontWeight.bold,color: AppColor.blackColor),),
-                      subtitle: Text(snapshot.data!.docs[index]["description"].toString(),style: GoogleFonts.lato(fontSize: 12,fontWeight: FontWeight.normal,color: AppColor.grayColor),),
+            if(snapshot.data!.docs.isEmpty){
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(CupertinoIcons.arrow_down_circle,color: AppColor.primaryColor,size: 100,),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Center(
+                    child: Text(
+                      "Expense is Empty",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 18,
+                      ),
                     ),
-                  );
-                }
-            );
+                  ),
+                ],
+              );
+            }else{
+              return ListView.builder(
+                  itemCount: snapshot.data!.docs.length,
+                  itemBuilder: (context,index){
+                    Timestamp timestamp = snapshot.data!.docs[index]['date'];
+                    DateTime dateTime = timestamp.toDate();
+                    String formattedDate = DateFormat('dd-MMMM-yyyy').format(dateTime);
+                    return Card(
+                      child: ListTile(
+                        leading: Text("${index + 1}"),
+                        trailing: Text(formattedDate.toString(),style: GoogleFonts.lato(fontSize: 14,fontWeight: FontWeight.normal,color: AppColor.grayColor)),
+                        title: Text("Rs. " + snapshot.data!.docs[index]["expense"].toString(),style: GoogleFonts.lato(fontSize: 16,fontWeight: FontWeight.bold,color: AppColor.blackColor),),
+                        subtitle: Text(snapshot.data!.docs[index]["description"].toString(),style: GoogleFonts.lato(fontSize: 12,fontWeight: FontWeight.normal,color: AppColor.grayColor),),
+                      ),
+                    );
+                  }
+              );
+            }
           }else{
             return Center(child: CircularProgressIndicator());
           }
@@ -82,60 +112,51 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
             showDialog(
               context: context,
               builder: (context){
-                return AlertDialog(
-                  title: Text("Add Expense"),
-                  content: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      InvoiceTextField(
-                        title: "Expense Payment",
-                        hintText: "Enter Amount",
-                        controller: recievedAmount,
-                      ),
-                      SizedBox(height: 10,),
-                      InvoiceTextField(
-                        title: "Description",
-                        hintText: "Enter Description",
-                        controller: description,
-                      ),
-                      SizedBox(height: 20,),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                return StatefulBuilder(
+                  builder: (context,setState){
+                    return AlertDialog(
+                      title: Text("Add Expense"),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColor.whiteColor,
-                              foregroundColor: AppColor.primaryColor,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                side: BorderSide(
-                                  color: AppColor.primaryColor,
-                                ),
-                              ),
-                            ),
-                            onPressed: (){
-                              Get.back();
-                            },
-                            child: Text("Cancel"),
+                          InvoiceTextField(
+                            title: "Expense Payment",
+                            hintText: "Enter Amount",
+                            controller: recievedAmount,
                           ),
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColor.primaryColor,
-                              foregroundColor: AppColor.whiteColor,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                side: BorderSide(
-                                  color: AppColor.primaryColor,
-                                ),
+                          SizedBox(height: 10,),
+                          InvoiceTextField(
+                            title: "Description",
+                            hintText: "Enter Description",
+                            controller: description,
+                          ),
+                          SizedBox(height: 20,),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              AppButton(
+                                title: "Cancel",
+                                height: 40,
+                                width: 100,
+                                onTap: (){
+                                  Get.back();
+                                },
                               ),
-                            ),
-                            onPressed: () => expense(),
-                            child: Text("Received"),
+                              Obx((){
+                                return AppButton(
+                                  title: "Pay",
+                                  height: 40,
+                                  width: 100,
+                                  loading: loading.value,
+                                  onTap: () => expense(),
+                                );
+                              }),
+                            ],
                           ),
                         ],
                       ),
-                    ],
-                  ),
+                    );
+                  },
                 );
               },
             );

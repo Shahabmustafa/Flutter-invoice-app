@@ -2,9 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_invoice_app/model/item_model.dart';
-import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
+import 'package:flutter_invoice_app/utils/utils.dart';
 import 'package:flutter_invoice_app/view%20model/loading_controller.dart';
 import 'package:get/get.dart';
 
@@ -65,24 +64,24 @@ class ItemController extends GetxController{
     }
   }
 
-  editItem(String itemId,barcode,itemName,salePrice,purchasePrice,discount,tax,saleDate,expiryDate)async{
+  editItem(String ItemId)async{
     loading.setLoading(true);
     try{
-      ItemModel itemModel = ItemModel(
-        barcode: barcode,
-        itemId: itemId,
-        itemName: itemName,
-        salePrice: int.parse(salePrice),
-        purchasePrice: int.parse(purchasePrice),
-        discount: int.parse(discount),
-        stock: 0,
-        category: selectCategory.value,
-        tax: int.parse(tax),
-        companyName: selectCompany.value,
-        saleDate: saleDate.value.text,
-        expiryDate: expiryDate.value.text,
-      );
-      await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("items").doc(itemId).update(itemModel.toJson()).then((value){
+
+      var itemModel = {
+        "barcode": barcode.value.text,
+        "itemName": itemName.value.text,
+        "salePrice": int.parse(sale.value.text),
+        "purchasePrice": int.parse(cost.value.text),
+        "discount": int.parse(discount.value.text),
+        "category": selectCategory.value,
+        "tax": int.parse(tax.value.text),
+        "companyName": selectCompany.value,
+        "saleDate": saleDate.value.text,
+        "expiryDate": expiryDate.value.text,
+      };
+      await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("items").doc(ItemId).update(itemModel).then((value){
+        Utils.flutterToast("Update Product");
         loading.setLoading(false);
         Get.back();
       }).onError((error, stackTrace){
@@ -106,21 +105,21 @@ class ItemController extends GetxController{
   }
 
 
-  Future<void> scanQRCode() async {
-    try {
-      String qrCode = await FlutterBarcodeScanner.scanBarcode(
-        "#ff6666", // Color of the scan line
-        "Cancel", // Text for the cancel button
-        true, // Whether to show the flashlight button
-        ScanMode.QR, // Scan mode: QR code
-      );
-      if (qrCode != "-1") {
-          barcode.value.text = qrCode;
-      }
-    } catch (e) {
-      print("Error scanning QR code: $e");
-    }
-  }
+  // Future<void> scanQRCode() async {
+  //   try {
+  //     String qrCode = await FlutterBarcodeScanner.scanBarcode(
+  //       "#ff6666", // Color of the scan line
+  //       "Cancel", // Text for the cancel button
+  //       true, // Whether to show the flashlight button
+  //       ScanMode.QR, // Scan mode: QR code
+  //     );
+  //     if (qrCode != "-1") {
+  //         barcode.value.text = qrCode;
+  //     }
+  //   } catch (e) {
+  //     print("Error scanning QR code: $e");
+  //   }
+  // }
 
   @override
   void onInit() {

@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
 import 'package:flutter_invoice_app/res/calculation/calculation.dart';
 import 'package:flutter_invoice_app/utils/utils.dart';
 import 'package:flutter_invoice_app/view%20model/user_service/user_service.dart';
@@ -35,6 +34,7 @@ class SignUpService extends GetxController{
         UserService.userAddDataFirestore(
           userName.value.text,
           email.value.text,
+          password.value.text,
         );
         await FirebaseFirestore.instance.collection("users").doc(value.user!.uid).collection("dashboard").doc(Calculation().date()).set({
           "date": Calculation().date(),

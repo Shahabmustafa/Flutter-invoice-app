@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/res/assets/assets_url.dart';
 import 'package:flutter_invoice_app/res/colors/app_colors.dart';
@@ -21,7 +20,6 @@ class _SplashPageState extends State<SplashPage> {
     // TODO: implement initState
     super.initState();
     splashService.splashService();
-    print(FirebaseAuth.instance.currentUser!.uid);
   }
   Widget build(BuildContext context) {
     return Scaffold(

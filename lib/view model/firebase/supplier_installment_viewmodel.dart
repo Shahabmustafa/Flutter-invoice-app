@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_invoice_app/model/supplier_model.dart';
 import 'package:get/get.dart';
-import '../../res/app_api/app_api_service.dart';
+
 import '../../res/calculation/calculation.dart';
 
 class SupplierInstallmentViewModel extends GetxController {
@@ -13,6 +13,12 @@ class SupplierInstallmentViewModel extends GetxController {
   RxString selectSupplier = "".obs;
   RxString selectSupplierId = "".obs;
   RxString selectSupplierPayment = "".obs;
+  RxBool _loading = false.obs;
+  RxBool get loading => _loading;
+
+  setLoading(bool value){
+    _loading.value = value;
+  }
 
   TextEditingController recivedAmount = TextEditingController();
 
@@ -36,34 +42,39 @@ class SupplierInstallmentViewModel extends GetxController {
   }
 
   SupplierInstallment()async{
-    var snapshot = await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("supplier").doc(selectSupplierId.value).get();
-    var dashboard = await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("dashboard").doc(Calculation().date()).get();
-    var user = await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).get();
-    FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("supplier").doc(selectSupplierId.value).update({
-      "payment" : snapshot.data()!["payment"] - int.parse(recivedAmount.text),
-    });
+    setLoading(true);
+    try{
+      var snapshot = await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("supplier").doc(selectSupplierId.value).get();
+      var dashboard = await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("dashboard").doc(Calculation().date()).get();
+      var user = await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).get();
+      FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("supplier").doc(selectSupplierId.value).update({
+        "payment" : snapshot.data()!["payment"] - int.parse(recivedAmount.text),
+      });
 
-    FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("supplierInstallment").add({
-      "supplierName" : selectSupplier.value,
-      "payBalance" : recivedAmount.text.trim(),
-      "date" : DateTime.now(),
-      "supplierId" : selectSupplierId.value,
-    });
+      FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("supplierInstallment").add({
+        "supplierName" : selectSupplier.value,
+        "payBalance" : recivedAmount.text.trim(),
+        "date" : DateTime.now(),
+        "supplierId" : selectSupplierId.value,
+      });
 
-    FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("dashboard").doc(Calculation().date()).update({
-      "supplierPayment" : dashboard.data()!["supplierPayment"] - int.parse(recivedAmount.text),
-    });
+      FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("dashboard").doc(Calculation().date()).update({
+        "supplierPayment" : dashboard.data()!["supplierPayment"] - int.parse(recivedAmount.text),
+      });
 
-    FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).update({
-      "cashInHand" : user.data()!["cashInHand"] - int.parse(recivedAmount.text),
-    });
-    await SupplierDropdown();
-    recivedAmount.clear();
-    selectSupplierId.value = "";
-    selectSupplier.value = "";
-    selectSupplierPayment.value = "";
-    Get.back();
-
+      FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).update({
+        "cashInHand" : user.data()!["cashInHand"] - int.parse(recivedAmount.text),
+      });
+      await SupplierDropdown();
+      setLoading(false);
+      recivedAmount.clear();
+      selectSupplierId.value = "";
+      selectSupplier.value = "";
+      selectSupplierPayment.value = "";
+      Get.back();
+    }catch(e){
+      setLoading(false);
+    }
   }
 
 

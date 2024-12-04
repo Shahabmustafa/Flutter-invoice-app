@@ -2,9 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
-import 'package:flutter_invoice_app/res/component/app_button.dart';
-import 'package:flutter_invoice_app/res/component/invoice_text_field.dart';
 import 'package:flutter_invoice_app/res/routes/routes.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -162,9 +159,7 @@ class _ItemScreenState extends State<ItemScreen> {
                                         ),
                                         IconButton(
                                           onPressed: (){
-                                            FirebaseFirestore.instance.collection("users")
-                                                .doc(FirebaseAuth.instance.currentUser!.uid)
-                                                .collection("items").doc(snapshot.data!.docs[index].id).delete();
+                                            FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("items").doc(snapshot.data!.docs[index].id).delete();
                                           },
                                           icon: Icon(CupertinoIcons.delete,size: 22,color: AppColor.errorColor,),
                                         ),

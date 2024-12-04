@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_invoice_app/model/customer_model.dart';
-import 'package:flutter_invoice_app/res/app_api/app_api_service.dart';
 import 'package:flutter_invoice_app/view%20model/loading_controller.dart';
 import 'package:get/get.dart';
 
@@ -15,9 +14,12 @@ class CustomerController extends GetxController{
   final customerPayment = TextEditingController().obs;
   final customerCNIC = TextEditingController().obs;
   final customerCategory = TextEditingController().obs;
+  RxBool _loading = false.obs;
+  RxBool get loading => _loading;
 
-  final loading = Get.put(LoadingController());
-
+  setLoading(bool value){
+    _loading.value = value;
+  }
   addCustomerData()async{
     var customerId = await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("customer").doc();
     CustomerModel customerModel = CustomerModel(
@@ -30,16 +32,16 @@ class CustomerController extends GetxController{
       cnic: customerCNIC.value.text,
       category: customerCategory.value.text,
     );
-    loading.setLoading(true);
+    setLoading(true);
     try{
       await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("customer").doc(customerId.id).set(customerModel.toJson()).then((value){
-        loading.setLoading(false);
+        setLoading(false);
         Get.back();
       }).onError((error, stackTrace){
-        loading.setLoading(false);
+        setLoading(false);
       });
     }catch(e){
-      loading.setLoading(false);
+      setLoading(false);
     }
   }
 }
