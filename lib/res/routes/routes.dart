@@ -20,6 +20,7 @@ import '../../view/bottam navigator bar/setting/change_profile_detail.dart';
 import '../../view/bottam navigator bar/setting/customer/add_customer.dart';
 import '../../view/bottam navigator bar/setting/customer/customer_detail.dart';
 import '../../view/bottam navigator bar/setting/customer/customer_screen.dart';
+import '../../view/bottam navigator bar/setting/customer/edit_customer_screen.dart';
 import '../../view/bottam navigator bar/setting/items/add_item.dart';
 import '../../view/bottam navigator bar/setting/items/item_detail.dart';
 import '../../view/bottam navigator bar/setting/items/item_screen.dart';
@@ -69,6 +70,7 @@ class AppRoutes{
   static const String dashboardHistory = "/dashboard_history_screen";
   static const String saleInvoiceDetailScreen = "/sale_invoice_detail_screen";
   static const String forgetPasswordScreen = "/forget_password_screen";
+  static const String editCustomerScreen = "/edit_customer_screen";
 
   static appRoutes() => [
     GetPage(
@@ -264,6 +266,13 @@ class AppRoutes{
     GetPage(
       name: forgetPasswordScreen,
       page: () => ForgetPasswordScreen(),
+      transition: Transition.rightToLeftWithFade,
+      transitionDuration: const Duration(microseconds: 250),
+    ),
+
+    GetPage(
+      name: editCustomerScreen,
+      page: () => EditCustomerScreen(),
       transition: Transition.rightToLeftWithFade,
       transitionDuration: const Duration(microseconds: 250),
     ),

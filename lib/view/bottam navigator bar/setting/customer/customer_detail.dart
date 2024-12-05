@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_invoice_app/res/routes/routes.dart';
 import 'package:get/get.dart';
 
 import '../../../../res/colors/app_colors.dart';
@@ -92,11 +93,9 @@ class _CustomerDetailState extends State<CustomerDetail> {
                     onTap: (){
                       Get.defaultDialog(
                         title: "Delete",
-                        content: Text("You Delete This Item"),
+                        content: Text("Delete This Customer"),
                         onConfirm: (){
-                          FirebaseFirestore.instance.collection("users")
-                              .doc(FirebaseAuth.instance.currentUser!.uid)
-                              .collection("items").doc(customerData[7]).delete().then((value){
+                          FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("items").doc(customerData[7]).delete().then((value){
                             Get.back();
                             Get.back();
                           });
@@ -114,7 +113,21 @@ class _CustomerDetailState extends State<CustomerDetail> {
                     width: size.width * 0.3,
                     color: AppColor.primaryColor,
                     textColor: AppColor.whiteColor,
-                    onTap: (){},
+                    onTap: (){
+                      Get.toNamed(
+                        AppRoutes.editCustomerScreen,
+                        arguments: [
+                          customerData[0],
+                          customerData[1],
+                          customerData[2],
+                          customerData[3],
+                          customerData[4],
+                          customerData[5],
+                          customerData[6],
+                          customerData[7],
+                        ],
+                      );
+                    },
                   ),
                 ],
               ),

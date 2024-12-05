@@ -116,11 +116,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                 );
               }else if(snapshot.connectionState == ConnectionState.waiting){
-                return Center(child: CircularProgressIndicator());
+                return Center(child: SizedBox());
               }else if (!snapshot.hasData || snapshot.data!.data() == null) {
                 return Center(child: Text("No data available"));
               }else{
-                return Center(child: CircularProgressIndicator());
+                return Center(child: SizedBox());
               }
             },
           ),

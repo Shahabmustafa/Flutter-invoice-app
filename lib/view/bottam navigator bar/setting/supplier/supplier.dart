@@ -19,13 +19,15 @@ class SupplierScreen extends StatefulWidget {
 class _SupplierScreenState extends State<SupplierScreen> {
 
   bool search = false;
+  String searchQuery = "";
+
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
     return Scaffold(
       appBar: AppBar(
-        title: search ?
-        TextField(
+        title: search ? TextField(
           cursorHeight: 18,
           cursorColor: AppColor.whiteColor,
           style: GoogleFonts.lato(
@@ -42,22 +44,19 @@ class _SupplierScreenState extends State<SupplierScreen> {
               ),
               border: InputBorder.none
           ),
-        ) :
-        Text("Supplier"),
+          onChanged: (value) {
+            setState(() {
+              searchQuery = value.trim();
+            });
+          },
+        ) : Text("Supplier"),
         actions: [
           IconButton(
-            onPressed: (){
-              if(search == false){
-                search = true;
-                setState(() {
-
-                });
-              }else{
-                search = false;
-                setState(() {
-
-                });
-              }
+            onPressed: () {
+              setState(() {
+                search = !search;
+                if (!search) searchQuery = "";
+              });
             },
             icon: Icon(CupertinoIcons.search),
           )
@@ -67,7 +66,14 @@ class _SupplierScreenState extends State<SupplierScreen> {
         stream: FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("supplier").snapshots(),
         builder: (context,snapshot){
           if(snapshot.hasData){
-            if(snapshot.data!.docs.isEmpty){
+            var supplier = snapshot.data!.docs;
+            if (searchQuery.isNotEmpty) {
+              supplier = supplier.where((customer) {
+                String name = customer["supplierName"] ?? "";
+                return name.toLowerCase().contains(searchQuery.toLowerCase());
+              }).toList();
+            }
+            if(supplier.isEmpty){
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -77,7 +83,7 @@ class _SupplierScreenState extends State<SupplierScreen> {
                   ),
                   Center(
                     child: Text(
-                      "Supplier is Empty",
+                      "Supplier Not Found",
                       style: TextStyle(
                         fontWeight: FontWeight.w700,
                         fontSize: 18,

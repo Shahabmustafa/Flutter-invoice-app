@@ -23,6 +23,14 @@ class _EditItemState extends State<EditItem> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    controller.barcode.value = TextEditingController(text: itemId[1]);
+    controller.itemName.value = TextEditingController(text: itemId[2]);
+    controller.sale.value = TextEditingController(text: itemId[3]);
+    controller.cost.value = TextEditingController(text: itemId[4]);
+    controller.discount.value = TextEditingController(text: itemId[5]);
+    controller.tax.value = TextEditingController(text: itemId[6]);
+    controller.saleDate.value = TextEditingController(text: itemId[7]);
+    controller.expiryDate.value = TextEditingController(text: itemId[8]);
     return Scaffold(
       appBar: AppBar(
         title: Text("Edit Item"),

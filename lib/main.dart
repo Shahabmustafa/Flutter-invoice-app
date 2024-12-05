@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_invoice_app/res/localization/localization.dart';
 import 'package:flutter_invoice_app/res/routes/routes.dart';
 import 'package:flutter_invoice_app/res/theme_data/theme_data.dart';
@@ -17,7 +18,14 @@ void main()async{
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+    DeviceOrientation.landscapeLeft,
+    DeviceOrientation.landscapeRight,
+  ]).then((_) {
+    runApp(MyApp());
+  });
 }
 
 class MyApp extends StatelessWidget {
@@ -30,7 +38,7 @@ class MyApp extends StatelessWidget {
       init: ThemeController(),
       builder: (controller) => GetMaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Invoice App',
+        title: 'POS Invoice',
         initialBinding: Binding(),
         theme: AppThemeData.lightTheme,
         darkTheme: AppThemeData.darkTheme,

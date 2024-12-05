@@ -33,8 +33,8 @@ class _SplashPageState extends State<SplashPage> {
             Center(
                 child: Image.asset(
                   AssetsUrl.appLogo,
-                  height: 150,
-                  width: 150,
+                  height: 200,
+                  width: 200,
                 ),
             ),
             Column(

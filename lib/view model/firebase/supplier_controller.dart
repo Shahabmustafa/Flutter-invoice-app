@@ -53,20 +53,20 @@ class SupplierController extends GetxController{
     }
   }
 
-  editSupplier({required String supplierId,companyName,companyEmail,companyPhone,companyAddress,supplierName,supplierPhone,supplierEmail})async{
-    SupplierModel supplierModel = SupplierModel(
-      companyName: companyName,
-      companyEmail: companyEmail,
-      address: companyAddress,
-      payment: 0,
-      phoneNumber: companyPhone,
-      supplierEmail: supplierEmail,
-      supplierName: supplierName,
-      supplierPhoneNumber: supplierPhone,
-    );
+  editSupplier({required String supplierId})async{
+    var supplierModel = {
+      "companyName": companyName.value.text,
+      "companyEmail": companyEmail.value.text,
+      "address": companyAddress.value.text,
+      "phoneNumber": companyPhoneNumber.value.text,
+      "supplierEmail": supplierEmail.value.text,
+      "supplierName": supplierName.value.text,
+      "supplierPhoneNumber": supplierPhoneNumber.value.text,
+    };
     loading.setLoading(true);
     try{
-      await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("supplier").doc(supplierId).update(supplierModel.toJson()).then((value){
+      await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("supplier").doc(supplierId).update(supplierModel).then((value){
+        Get.back();
         Get.back();
         loading.setLoading(false);
       }).onError((error, stackTrace){

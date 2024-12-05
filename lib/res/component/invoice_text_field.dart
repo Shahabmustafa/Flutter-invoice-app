@@ -84,6 +84,8 @@ class InvoiceTextField extends StatelessWidget {
                 fontWeight: FontWeight.normal,
                 fontSize: 14
               ),
+              focusColor: AppColor.primaryColor,
+              hoverColor: AppColor.primaryColor,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
                 borderSide: BorderSide(

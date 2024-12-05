@@ -19,6 +19,8 @@ class CustomerScreen extends StatefulWidget {
 
 class _CustomerScreenState extends State<CustomerScreen> {
   bool search = false;
+  String searchQuery = "";
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
@@ -34,7 +36,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
             color: AppColor.whiteColor,
           ),
           decoration: InputDecoration(
-            hintText: "Customer Name",
+            hintText: "Search Customer",
             hintStyle: GoogleFonts.lato(
               fontSize: 16,
               fontWeight: FontWeight.w400,
@@ -42,22 +44,20 @@ class _CustomerScreenState extends State<CustomerScreen> {
             ),
             border: InputBorder.none,
           ),
+          onChanged: (value) {
+            setState(() {
+              searchQuery = value.trim();
+            });
+          },
         ) :
         Text("Customer"),
         actions: [
           IconButton(
-            onPressed: (){
-              if(search == false){
-                search = true;
-                setState(() {
-
-                });
-              }else{
-                search = false;
-                setState(() {
-
-                });
-              }
+            onPressed: () {
+              setState(() {
+                search = !search;
+                if (!search) searchQuery = ""; // Reset search query
+              });
             },
             icon: Icon(CupertinoIcons.search),
           )
@@ -65,34 +65,38 @@ class _CustomerScreenState extends State<CustomerScreen> {
       ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("customer").snapshots(),
-        builder: (context,snapshot){
-          if(snapshot.hasData){
-            if(snapshot.data!.docs.isEmpty){
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(CupertinoIcons.group,color: AppColor.primaryColor,size: 100,),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Center(
-                    child: Text(
-                      "Customer is Empty",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 18,
-                      ),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            var customers = snapshot.data!.docs;
+            // Apply search filter
+            if (searchQuery.isNotEmpty) {
+              customers = customers.where((customer) {
+                String name = customer["customerName"] ?? "";
+                return name.toLowerCase().contains(searchQuery.toLowerCase());
+              }).toList();
+            }
+
+            if (customers.isEmpty) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(CupertinoIcons.group, color: AppColor.primaryColor, size: 100),
+                    SizedBox(height: 20),
+                    Text(
+                      "No customers found",
+                      style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               );
-            }else{
+            } else {
               return ListView.builder(
-                itemCount: snapshot.data!.docs.length,
-                itemBuilder: (context,index){
-                  var customer = snapshot.data!.docs[index];
+                itemCount: customers.length,
+                itemBuilder: (context, index) {
+                  var customer = customers[index];
                   return GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       Get.toNamed(
                         AppRoutes.CustomersDetail,
                         arguments: [
@@ -103,71 +107,72 @@ class _CustomerScreenState extends State<CustomerScreen> {
                           customer["payment"],
                           customer["cnic"],
                           customer["category"],
-                          snapshot.data!.docs[index].id,
+                          customer.id,
                         ],
                       );
                     },
                     child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 7.5),
-                        child: GetBuilder<ThemeController>(
-                          builder: (controller){
-                            return Container(
-                              height: 60,
-                              width: double.infinity,
-                              padding: EdgeInsets.symmetric(horizontal: 20),
-                              decoration: BoxDecoration(
-                                color: controller.isDark ? AppColor.blackColor : AppColor.whiteColor,
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(
-                                  color: controller.isDark ? AppColor.primaryColor : AppColor.whiteColor,
+                      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 7.5),
+                      child: Container(
+                        height: 60,
+                        width: double.infinity,
+                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        decoration: BoxDecoration(
+                          color: AppColor.whiteColor,
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: [
+                            BoxShadow(
+                              blurRadius: 0.8,
+                              color: Colors.grey,
+                              offset: Offset(0.3, 0.2),
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              customer["customerName"],
+                              style: GoogleFonts.lato(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16,
+                              ),
+                            ),
+                            Row(
+                              children: [
+                                IconButton(
+                                  onPressed: () {
+                                    Navigator.push(context, MaterialPageRoute(builder: (context) => SpecificCustomerInstallmentScreen(customerID: snapshot.data!.docs[index]["customerId"],customerName: snapshot.data!.docs[index]["customerName"],)));
+                                  },
+                                  icon: Icon(CupertinoIcons.clock),
                                 ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    blurRadius: 0.8,
-                                    color: Colors.grey,
-                                    offset: Offset(0.3, 0.2),
+                                IconButton(
+                                  onPressed: () {
+                                    FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("customer").doc(customer.id).delete();
+                                  },
+                                  icon: Icon(
+                                    CupertinoIcons.delete,
+                                    size: 22,
+                                    color: AppColor.errorColor,
                                   ),
-                                ],
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(customer["customerName"],style: GoogleFonts.lato(color: controller.isDark ? AppColor.whiteColor : AppColor.blackColor,fontWeight: FontWeight.w600,fontSize: 16),),
-                                  Row(
-                                    children: [
-                                      IconButton(
-                                        onPressed: (){
-                                          Navigator.push(context, MaterialPageRoute(builder: (context) => SpecificCustomerInstallmentScreen(customerID: snapshot.data!.docs[index]["customerId"],customerName: snapshot.data!.docs[index]["customerName"],)));
-                                        },
-                                        icon: Icon(CupertinoIcons.clock),
-                                      ),
-                                      IconButton(
-                                        onPressed: (){
-                                          FirebaseFirestore.instance.collection("users")
-                                              .doc(FirebaseAuth.instance.currentUser!.uid)
-                                              .collection("customer").doc(snapshot.data!.docs[index].id).delete();
-                                        },
-                                        icon: Icon(CupertinoIcons.delete,size: 22,color: AppColor.errorColor,),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                        )
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   );
                 },
               );
             }
-          }else{
+          } else {
             return Center(child: CircularProgressIndicator());
           }
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: (){
+        onPressed: () {
           Get.toNamed(AppRoutes.addCustomer);
         },
         child: Icon(Icons.add),

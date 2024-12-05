@@ -5,23 +5,30 @@ import 'package:get/get.dart';
 import '../../../../../res/component/app_button.dart';
 import '../../../../../res/component/invoice_text_field.dart';
 
-class AddCustomer extends StatefulWidget {
-  const AddCustomer({Key? key}) : super(key: key);
+class EditCustomerScreen extends StatefulWidget {
+  const EditCustomerScreen({Key? key}) : super(key: key);
 
   @override
-  State<AddCustomer> createState() => _AddCustomerState();
+  State<EditCustomerScreen> createState() => _EditCustomerScreenState();
 }
 
-class _AddCustomerState extends State<AddCustomer> {
+class _EditCustomerScreenState extends State<EditCustomerScreen> {
   final _key = GlobalKey<FormState>();
-  final addCustomer = Get.put(CustomerController());
-
+  final editCustomer = Get.put(CustomerController());
+  var customer = Get.arguments;
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    editCustomer.customerName.value = TextEditingController(text: customer[0]);
+    editCustomer.customerEmail.value= TextEditingController(text: customer[1]);
+    editCustomer.customerPhone.value = TextEditingController(text: customer[2]);
+    editCustomer.customerAddress.value = TextEditingController(text: customer[3]);
+    editCustomer.customerPayment.value = TextEditingController(text: customer[4].toString());
+    editCustomer.customerCNIC.value = TextEditingController(text: customer[5]);
+    editCustomer.customerCategory.value = TextEditingController(text: customer[6]);
     return Scaffold(
       appBar: AppBar(
-        title: Text("Add Customer"),
+        title: Text("Edit Customer"),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -36,7 +43,7 @@ class _AddCustomerState extends State<AddCustomer> {
                 InvoiceTextField(
                   title: "Customer Name",
                   hintText: "Full Name",
-                  controller: addCustomer.customerName.value,
+                  controller: editCustomer.customerName.value,
                   validator: (value){
                     return value!.isEmpty ? "Enter Your Company Name" : null;
                   },
@@ -47,7 +54,7 @@ class _AddCustomerState extends State<AddCustomer> {
                 InvoiceTextField(
                   title: "Customer Email",
                   hintText: "Email Address",
-                  controller: addCustomer.customerEmail.value,
+                  controller: editCustomer.customerEmail.value,
                   keyboardType: TextInputType.emailAddress,
                   validator: (value){
                     return value!.isEmpty ? "Enter Your Email Address" : null;
@@ -59,7 +66,7 @@ class _AddCustomerState extends State<AddCustomer> {
                 InvoiceTextField(
                   title: "Customer CNIC",
                   hintText: "CNIC",
-                  controller: addCustomer.customerCNIC.value,
+                  controller: editCustomer.customerCNIC.value,
                   keyboardType: TextInputType.number,
                   validator: (value){
                     return value!.isEmpty ? "Enter Your Item Price" : null;
@@ -71,7 +78,7 @@ class _AddCustomerState extends State<AddCustomer> {
                 InvoiceTextField(
                   title: "Customer Phone",
                   hintText: "Phone No",
-                  controller: addCustomer.customerPhone.value,
+                  controller: editCustomer.customerPhone.value,
                   keyboardType: TextInputType.phone,
                   validator: (value){
                     return value!.isEmpty ? "Enter Your Phone" : null;
@@ -83,7 +90,7 @@ class _AddCustomerState extends State<AddCustomer> {
                 InvoiceTextField(
                   title: "Customer Address",
                   hintText: "Address",
-                  controller: addCustomer.customerAddress.value,
+                  controller: editCustomer.customerAddress.value,
                   keyboardType: TextInputType.multiline,
                   maxLines: 5,
                   validator: (value){
@@ -103,7 +110,7 @@ class _AddCustomerState extends State<AddCustomer> {
                 ),
                 InvoiceTextField(
                   title: "Customer Category",
-                  controller: addCustomer.customerCategory.value,
+                  controller: editCustomer.customerCategory.value,
                   validator: (value){
                     return value!.isEmpty ? "Enter Your Item Whole Price" : null;
                   },
@@ -116,10 +123,10 @@ class _AddCustomerState extends State<AddCustomer> {
                     title: "Add Customer",
                     height: size.height * 0.05,
                     width: size.width * 0.94,
-                    loading: addCustomer.loading.value,
+                    loading: editCustomer.loading.value,
                     onTap: (){
                       if(_key.currentState!.validate()){
-                        addCustomer.addCustomerData();
+                        editCustomer.editCustomerData(customer[7]);
                       }
                     },
                   );

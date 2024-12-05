@@ -19,14 +19,6 @@ class _SupplierDetailState extends State<SupplierDetail> {
 
   var supplier = Get.arguments;
 
-  // supplierPayment() {
-  //   List<dynamic> supplierPayment = supplier[7];
-  //   int sum = 0;
-  //   for (String amount in supplierPayment) {
-  //     sum += int.tryParse(amount) ?? 0; // Parse string to int, default to 0 if parsing fails
-  //   }
-  //   return sum;
-  // }
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
@@ -60,7 +52,7 @@ class _SupplierDetailState extends State<SupplierDetail> {
               ),
               Divider(),
               TextWidgets(
-                title: "Email",
+                title: "Company Email",
                 subtitle: supplier[1],
               ),
               Divider(),
@@ -122,6 +114,14 @@ class _SupplierDetailState extends State<SupplierDetail> {
                       Get.toNamed(
                         AppRoutes.editSupplier,
                         arguments: [
+                          supplier[0],
+                          supplier[1],
+                          supplier[2],
+                          supplier[3],
+                          supplier[4],
+                          supplier[5],
+                          supplier[6],
+                          supplier[7],
                           supplier[8],
                         ],
                       );

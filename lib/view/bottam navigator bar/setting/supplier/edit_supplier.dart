@@ -20,14 +20,14 @@ class _EditSupplierState extends State<EditSupplier> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
-    var supplierId = supplier[0];
-    TextEditingController updateCompany = TextEditingController(text: supplier[1]);
-    TextEditingController updateCompanyEmail= TextEditingController(text: supplier[2]);
-    TextEditingController updatePhoneNumber = TextEditingController(text: supplier[3]);
-    TextEditingController updateAddress = TextEditingController(text: supplier[4]);
-    TextEditingController updateSupplierName = TextEditingController(text: supplier[5]);
-    TextEditingController updateSupplierPhone = TextEditingController(text: supplier[6]);
-    TextEditingController updateSupplierEmail = TextEditingController(text: supplier[7]);
+     var supplierId = supplier[8];
+     editSupplier.companyName.value = TextEditingController(text: supplier[0]);
+     editSupplier.companyEmail.value= TextEditingController(text: supplier[1]);
+     editSupplier.companyPhoneNumber.value = TextEditingController(text: supplier[2]);
+     editSupplier.companyAddress.value = TextEditingController(text: supplier[3]);
+     editSupplier.supplierName.value = TextEditingController(text: supplier[4]);
+     editSupplier.supplierPhoneNumber.value = TextEditingController(text: supplier[5]);
+     editSupplier.supplierEmail.value = TextEditingController(text: supplier[6]);
     return Scaffold(
       appBar: AppBar(
         title: Text("Edit Supplier"),
@@ -44,7 +44,7 @@ class _EditSupplierState extends State<EditSupplier> {
                 ),
                 InvoiceTextField(
                   title: "Company Name",
-                  controller: updateCompany,
+                  controller: editSupplier.companyName.value,
                   validator: (value){
                     return value!.isEmpty ? "Enter Your Company Name" : null;
                   },
@@ -54,7 +54,7 @@ class _EditSupplierState extends State<EditSupplier> {
                 ),
                 InvoiceTextField(
                   title: "Company Email Address",
-                  controller: updateCompanyEmail,
+                  controller: editSupplier.companyEmail.value,
                   keyboardType: TextInputType.emailAddress,
                   validator: (value){
                     return value!.isEmpty ? "Enter Your Email Address" : null;
@@ -65,7 +65,7 @@ class _EditSupplierState extends State<EditSupplier> {
                 ),
                 InvoiceTextField(
                   title: "Company Phone Number",
-                  controller: updatePhoneNumber,
+                  controller: editSupplier.companyPhoneNumber.value,
                   keyboardType: TextInputType.phone,
                   validator: (value){
                     return value!.isEmpty ? "Enter Your Phone Number" : null;
@@ -76,7 +76,7 @@ class _EditSupplierState extends State<EditSupplier> {
                 ),
                 InvoiceTextField(
                   title: "Company Address",
-                  controller: updateAddress,
+                  controller: editSupplier.companyAddress.value,
                   keyboardType: TextInputType.multiline,
                   maxLines: 5,
                   validator: (value){
@@ -88,7 +88,7 @@ class _EditSupplierState extends State<EditSupplier> {
                 ),
                 InvoiceTextField(
                   title: "Supplier Name",
-                  controller: updateSupplierName,
+                  controller: editSupplier.supplierName.value,
                   validator: (value){
                     return value!.isEmpty ? "Enter Your Item Name" : null;
                   },
@@ -98,7 +98,7 @@ class _EditSupplierState extends State<EditSupplier> {
                 ),
                 InvoiceTextField(
                   title: "Supplier Phone Number",
-                  controller: updateSupplierPhone,
+                  controller: editSupplier.supplierPhoneNumber.value,
                   keyboardType: TextInputType.number,
                   validator: (value){
                     return value!.isEmpty ? "Enter Your Item Price" : null;
@@ -109,7 +109,7 @@ class _EditSupplierState extends State<EditSupplier> {
                 ),
                 InvoiceTextField(
                   title: "Supplier Email",
-                  controller: updateSupplierEmail,
+                  controller: editSupplier.supplierEmail.value,
                   validator: (value){
                     return value!.isEmpty ? "Enter Your Item Whole Price" : null;
                   },
@@ -125,16 +125,7 @@ class _EditSupplierState extends State<EditSupplier> {
                     loading: editSupplier.loading.loading.value,
                     onTap: (){
                       if(_key.currentState!.validate()){
-                        editSupplier.editSupplier(
-                          supplierId: supplierId,
-                          companyName: updateCompany.text,
-                          companyEmail: updateCompanyEmail.text,
-                          companyPhone: updatePhoneNumber.text,
-                          companyAddress: updateAddress.text,
-                          supplierName: updateSupplierName.text,
-                          supplierEmail: updateSupplierEmail.text,
-                          supplierPhone: updateSupplierPhone.text,
-                        );
+                        editSupplier.editSupplier(supplierId: supplierId);
 
                       }
                     },

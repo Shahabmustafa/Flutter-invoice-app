@@ -96,7 +96,7 @@ class _SupplierInstallmentScreenState extends State<SupplierInstallmentScreen> {
                               items: (f, cs) => controller.dropdownSupplier,
                               dropdownBuilder: (context, selectedItem) {
                                 if (selectedItem == null) {
-                                  return Text("Please Select Customer");
+                                  return Text("Please Select Supplier");
                                 }
                                 return Text(selectedItem);
                               },

@@ -1,6 +1,6 @@
 {
-    "name": "flutter_invoice_app",
-    "short_name": "flutter_invoice_app",
+    "name": "POS Invoice",
+    "short_name": "POS Invoice",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
