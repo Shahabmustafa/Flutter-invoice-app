@@ -10,7 +10,9 @@ import 'package:intl/intl.dart';
 
 import '../../../../res/app_api/app_api_service.dart';
 import '../../../../res/colors/app_colors.dart';
+import '../../../../res/component/dashboard_summary.dart';
 import '../../../../res/component/invoice_text_field.dart';
+import '../../../../utils/utils.dart';
 
 class ExpenseScreen extends StatefulWidget {
   const ExpenseScreen({super.key});
@@ -55,6 +57,14 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
     }
   }
 
+  List<int> days = [1,7,14,30,60];
+  int selectValue = 1;
+
+
+  DateTime get startDate {
+    return DateTime.now().subtract(Duration(days: selectValue));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,17 +72,19 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
         title: Text("Expense"),
       ),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("expense").orderBy("date",descending: true).snapshots(),
-        builder: (context,snapshot){
-          if(snapshot.hasData){
-            if(snapshot.data!.docs.isEmpty){
+        stream: FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("expense").where("date", isGreaterThanOrEqualTo: Timestamp.fromDate(startDate)).orderBy("date", descending: true).snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            double expense = 0.0;
+            for (var doc in snapshot.data!.docs) {
+              expense += double.parse(doc["expense"].toString());
+            }
+            if (snapshot.data!.docs.isEmpty) {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(CupertinoIcons.arrow_down_circle,color: AppColor.primaryColor,size: 100,),
-                  SizedBox(
-                    height: 20,
-                  ),
+                  Icon(CupertinoIcons.arrow_down_circle, color: AppColor.primaryColor, size: 100),
+                  SizedBox(height: 20),
                   Center(
                     child: Text(
                       "Expense is Empty",
@@ -84,30 +96,94 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                   ),
                 ],
               );
-            }else{
-              return ListView.builder(
-                  itemCount: snapshot.data!.docs.length,
-                  itemBuilder: (context,index){
-                    Timestamp timestamp = snapshot.data!.docs[index]['date'];
-                    DateTime dateTime = timestamp.toDate();
-                    String formattedDate = DateFormat('dd-MMMM-yyyy').format(dateTime);
-                    return Card(
-                      child: ListTile(
-                        leading: Text("${index + 1}"),
-                        trailing: Text(formattedDate.toString(),style: GoogleFonts.lato(fontSize: 14,fontWeight: FontWeight.normal,color: AppColor.grayColor)),
-                        title: Text("Rs. " + snapshot.data!.docs[index]["expense"].toString(),style: GoogleFonts.lato(fontSize: 16,fontWeight: FontWeight.bold,color: AppColor.blackColor),),
-                        subtitle: Text(snapshot.data!.docs[index]["description"].toString(),style: GoogleFonts.lato(fontSize: 12,fontWeight: FontWeight.normal,color: AppColor.grayColor),),
-                      ),
-                    );
-                  }
-              );
             }
-          }else{
-            return Center(child: CircularProgressIndicator());
+            return Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: DashboardSummary(
+                          imageAssets: Icon(CupertinoIcons.arrow_down_circle),
+                          title: "Expense",
+                          subtitle: expense.toStringAsFixed(0),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 60,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: days.length,
+                    itemBuilder: (context, index) {
+                      return Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: selectValue == days[index] ? Colors.blue : Colors.grey[300],
+                              foregroundColor: selectValue == days[index] ? Colors.white : Colors.black,
+                              minimumSize: Size(80, 40),
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                selectValue = days[index];
+                              });
+                            },
+                            child: Text("${days[index]} Days"),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (context, index) {
+                      Timestamp timestamp = snapshot.data!.docs[index]['date'];
+                      DateTime dateTime = timestamp.toDate();
+                      String formattedDate =
+                      DateFormat('dd-MM-yyyy hh:mm a').format(dateTime);
+
+                      return Card(
+                        child: ListTile(
+                          leading: Text("${index + 1}"),
+                          trailing: Text(formattedDate.toString(),
+                              style: GoogleFonts.lato(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.normal,
+                                  color: AppColor.grayColor)),
+                          title: Text(
+                            "Rs. " + snapshot.data!.docs[index]["expense"].toString(),
+                            style: GoogleFonts.lato(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: AppColor.blackColor),
+                          ),
+                          subtitle: Text(
+                            snapshot.data!.docs[index]["description"].toString(),
+                            style: GoogleFonts.lato(
+                                fontSize: 12,
+                                fontWeight: FontWeight.normal,
+                                color: AppColor.grayColor),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            );
+          } else {
+            return Center(child: Utils.circular);
           }
         },
       ),
-        floatingActionButton: FloatingActionButton.extended(
+      floatingActionButton: FloatingActionButton.extended(
           onPressed: (){
             showDialog(
               context: context,
@@ -123,6 +199,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                             title: "Expense Payment",
                             hintText: "Enter Amount",
                             controller: recievedAmount,
+                            onlyNumber: true,
                           ),
                           SizedBox(height: 10,),
                           InvoiceTextField(

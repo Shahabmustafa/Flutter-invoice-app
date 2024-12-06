@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../utils/utils.dart';
+
 class SpecificCustomerInstallmentScreen extends StatefulWidget {
   SpecificCustomerInstallmentScreen({super.key, this.customerID, this.customerName});
   final String? customerID;
@@ -31,7 +33,7 @@ class _SpecificCustomerInstallmentScreenState extends State<SpecificCustomerInst
               itemCount: snapshot.data!.docs.length,
               itemBuilder: (context,index){
                 DateTime dateTime = snapshot.data!.docs[index]["date"].toDate();
-                String formattedDate = DateFormat('dd-MM-yyyy').format(dateTime);
+                String formattedDate = DateFormat('dd-MM-yyyy hh:mm a').format(dateTime);
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
                   child: Card(
@@ -45,7 +47,7 @@ class _SpecificCustomerInstallmentScreenState extends State<SpecificCustomerInst
               },
             );
           }else{
-            return Center(child: CircularProgressIndicator());
+            return Center(child: Utils.circular);
           }
         },
       ),

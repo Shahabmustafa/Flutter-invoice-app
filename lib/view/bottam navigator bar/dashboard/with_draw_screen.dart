@@ -8,9 +8,11 @@ import 'package:flutter_invoice_app/res/component/invoice_text_field.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+
 import '../../../res/assets/assets_url.dart';
 import '../../../res/colors/app_colors.dart';
 import '../../../res/component/dashboard_summary.dart';
+import '../../../utils/utils.dart';
 
 class WithDrawScreen extends StatefulWidget {
   const WithDrawScreen({super.key});
@@ -48,6 +50,14 @@ class _WithDrawScreenState extends State<WithDrawScreen> {
    }
   }
 
+  List<int> days = [1,7,14,30,60];
+  int selectValue = 1;
+
+
+  DateTime get startDate {
+    return DateTime.now().subtract(Duration(days: selectValue));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,9 +82,15 @@ class _WithDrawScreenState extends State<WithDrawScreen> {
                   SizedBox(height: 20,),
                   Expanded(
                     child: StreamBuilder(
-                      stream: AppApiService.firestore.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("withdrawHistory").orderBy("date",descending: true).snapshots(),
+                      stream: AppApiService.firestore.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).
+                      collection("withdrawHistory").where("date", isGreaterThanOrEqualTo: Timestamp.fromDate(startDate)).
+                      orderBy("date", descending: true).snapshots(),
                       builder: (context,snapshot){
                         if(snapshot.hasData){
+                          double cashInHand = 0.0;
+                          for (var doc in snapshot.data!.docs) {
+                            cashInHand += double.parse(doc["withDrawAmount"].toString());
+                          }
                           if(snapshot.data!.docs.isEmpty){
                             return Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -95,24 +111,75 @@ class _WithDrawScreenState extends State<WithDrawScreen> {
                               ],
                             );
                           }else{
-                            return ListView.builder(
-                                itemCount: snapshot.data!.docs.length,
-                                itemBuilder: (context,index){
-                                  Timestamp timestamp = snapshot.data!.docs[index]['date'];
-                                  DateTime dateTime = timestamp.toDate();
-                                  String formattedDate = DateFormat('dd-MMMM-yyyy').format(dateTime);
-                                  return Card(
-                                    child: ListTile(
-                                      leading: Text("${index + 1}"),
-                                      title: Text(formattedDate.toString(),style: GoogleFonts.lato(fontSize: 14,fontWeight: FontWeight.normal,color: AppColor.grayColor)),
-                                      subtitle: Text("Rs. " + snapshot.data!.docs[index]["withDrawAmount"].toString(),style: GoogleFonts.lato(fontSize: 16,fontWeight: FontWeight.bold,color: AppColor.blackColor),),
-                                    ),
-                                  );
-                                }
+                            return Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: DashboardSummary(
+                                          imageAssets: Icon(CupertinoIcons.calendar),
+                                          title: "Total Cash In Hand",
+                                          subtitle: "${cashInHand.toStringAsFixed(0)}",
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 60,
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: days.length,
+                                    itemBuilder: (context, index) {
+                                      return Center(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(10),
+                                          child: ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: selectValue == days[index]
+                                                  ? Colors.blue
+                                                  : Colors.grey[300],
+                                              foregroundColor: selectValue == days[index]
+                                                  ? Colors.white
+                                                  : Colors.black,
+                                              minimumSize: Size(80, 40),
+                                            ),
+                                            onPressed: () {
+                                              setState(() {
+                                                selectValue = days[index];
+                                              });
+                                            },
+                                            child: Text("${days[index]} Days"),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                                Expanded(
+                                  child: ListView.builder(
+                                      itemCount: snapshot.data!.docs.length,
+                                      itemBuilder: (context,index){
+                                        Timestamp timestamp = snapshot.data!.docs[index]['date'];
+                                        DateTime dateTime = timestamp.toDate();
+                                        String formattedDate = DateFormat('dd-MM-yyyy hh:mm a').format(dateTime);
+                                        return Card(
+                                          child: ListTile(
+                                            leading: Text("${index + 1}"),
+                                            title: Text(formattedDate.toString(),style: GoogleFonts.lato(fontSize: 14,fontWeight: FontWeight.normal,color: AppColor.grayColor)),
+                                            subtitle: Text("Rs. " + snapshot.data!.docs[index]["withDrawAmount"].toString(),style: GoogleFonts.lato(fontSize: 16,fontWeight: FontWeight.bold,color: AppColor.blackColor),),
+                                          ),
+                                        );
+                                      }
+                                  ),
+                                ),
+                              ],
                             );
                           }
                         }else{
-                          return Center(child: CircularProgressIndicator());
+                          return Center(child: Utils.circular);
                         }
                       },
                     ),
@@ -139,6 +206,7 @@ class _WithDrawScreenState extends State<WithDrawScreen> {
                       title: "With Draw Payment",
                       hintText: "Enter Amount",
                       controller: recievedAmount,
+                      onlyNumber: true,
                     ),
                     SizedBox(height: 20,),
                     Row(

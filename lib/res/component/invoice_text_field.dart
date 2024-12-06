@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_invoice_app/res/colors/app_colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -19,6 +20,7 @@ class InvoiceTextField extends StatelessWidget {
     this.maxLength,
     this.onTap,
     this.readOnly = false,
+    this.onlyNumber = false,
     this.onChanged,
   }) : super(key: key);
   String title;
@@ -36,6 +38,7 @@ class InvoiceTextField extends StatelessWidget {
   void Function()? onTap;
   bool readOnly;
   void Function(String)? onChanged;
+  bool onlyNumber;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -73,6 +76,9 @@ class InvoiceTextField extends StatelessWidget {
             maxLength: maxLength,
             readOnly: readOnly,
             cursorHeight: 18,
+            inputFormatters: onlyNumber ? <TextInputFormatter>[
+              FilteringTextInputFormatter.digitsOnly,
+            ] : null,
             decoration: InputDecoration(
               hintText: hintText,
               suffix: suffix,

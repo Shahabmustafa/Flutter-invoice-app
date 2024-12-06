@@ -10,6 +10,8 @@ import 'package:flutter_invoice_app/view%20model/auth%20service/google_sign_in.d
 import 'package:flutter_invoice_app/view%20model/auth%20service/login_service.dart';
 import 'package:flutter_social_media_button/flutter_social_media_button.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../res/assets/assets_url.dart';
 
@@ -23,6 +25,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _key = GlobalKey<FormState>();
   final loginService = Get.put(LoginService());
+  final googleSignIn = Get.put(googleSignInController());
   @override
   void dispose() {
     // TODO: implement dispose
@@ -185,64 +188,52 @@ class _LoginPageState extends State<LoginPage> {
                   SizedBox(
                     height: size.height * 0.03,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      FlutterSocialMediaButton(
-                          title: '',
-                          imageUrl: AssetsUrl.gmailLogo,
-                          height: 50,
-                          width: 50,
-                          onlyImageAvailable: true,
-                        onPress: (){
-                          var date = DateTime.now();
-                          googleSignIn().signInWithGoogle().then((value){
-                            UserModel userModel = UserModel(
-                              uid: value.user!.uid,
-                              userName: value.user!.displayName,
-                              profileImage: value.user!.photoURL,
-                              email: value.user!.email,
-                              phoneNumber: "",
-                            );
-                            FirebaseFirestore.instance.collection("users").doc(value.user!.uid).set(userModel.toJson()).then((value){
-                              Get.toNamed(AppRoutes.homeScreen);
-                            });
-                          }).onError((error, stackTrace){
-                            Utils.flutterToast(error.toString());
+                  Obx((){
+                    return GestureDetector(
+                      onTap: googleSignIn.loading.value ? null : (){
+                        googleSignIn.signInWithGoogle().then((value){
+                          UserModel userModel = UserModel(
+                            uid: value.user!.uid,
+                            userName: value.user!.displayName,
+                            profileImage: value.user!.photoURL,
+                            email: value.user!.email,
+                            phoneNumber: "",
+                            cashInHand: 0,
+                          );
+                          FirebaseFirestore.instance.collection("users").doc(value.user!.uid).set(userModel.toJson()).then((value){
+                            Get.toNamed(AppRoutes.homeScreen);
                           });
-                        },
-                      ),
-                      SizedBox(width: size.width * 0.04,),
-                      FlutterSocialMediaButton(
-                        title: '',
-                        imageUrl: AssetsUrl.appleLogo,
+                        }).onError((error, stackTrace){
+                          Utils.flutterToast(error.toString());
+                          print(error);
+                        });
+                      },
+                      child: googleSignIn.loading.value ?
+                      Center(child: Utils.circularForButton):
+                      Container(
                         height: 50,
-                        width: 50,
-                        onlyImageAvailable: true,
-                        onPress: (){
-                          var date = DateTime.now();
-                          var specificId = date.millisecondsSinceEpoch;
-                          googleSignIn().signInWithGoogle().then((value){
-                            UserModel userModel = UserModel(
-                              uid: value.user!.uid,
-                              userName: value.user!.displayName,
-                              profileImage: value.user!.photoURL,
-                              email: value.user!.email,
-                              phoneNumber: "",
-                            );
-                            FirebaseFirestore.instance
-                                .collection("users")
-                                .doc(value.user!.uid)
-                                .set(userModel.toJson()).then((value){
-                              Get.toNamed(AppRoutes.homeScreen);
-                            });
-                          }).onError((error, stackTrace){
-                            Utils.flutterToast(error.toString());
-                          });
-                        },
+                        padding: EdgeInsets.only(left: 50),
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: AppColor.whiteColor,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey,
+                              blurRadius: 0.2,
+                              offset: Offset(0.2, 0.3),
+                            ),
+                          ],
+                        ),
+                        child:  Row(
+                          children: [
+                            Image.asset("assets/images/google.png",height: 30,width: 30,),
+                            SizedBox(width: 10,),
+                            Text("SignIn with Google",style: GoogleFonts.lato(fontSize: 18,fontWeight: FontWeight.w800,),),
+                          ],
+                        ),
                       ),
-                    ],
-                  ),
+                    );
+                  }),
                 ],
               ),
             ],

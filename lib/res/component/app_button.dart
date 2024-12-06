@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/res/colors/app_colors.dart';
+import 'package:flutter_invoice_app/utils/utils.dart';
 
 class AppButton extends StatelessWidget {
   AppButton({Key? key,required this.title,this.height,this.onTap,this.width,this.loading = false,this.color,this.textColor}) : super(key: key);
@@ -26,12 +27,12 @@ class AppButton extends StatelessWidget {
             color: AppColor.primaryColor,
           ),
         ),
-        child: loading ? Center(child: Container(height: 20,width: 20,child: CircularProgressIndicator(color: Theme.of(context).canvasColor,))) : Center(
+        child: loading ? Center(child: Utils.circularForButton) : Center(
             child: Text(
               title,
               style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w400,
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
                 color: textColor ?? AppColor.whiteColor,
               ),
             ),

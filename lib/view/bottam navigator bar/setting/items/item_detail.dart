@@ -91,18 +91,8 @@ class _ItemDetailState extends State<ItemDetail> {
                 title: "Category",
                 subtitle: itemData[0],
               ),
-              Divider(),
-              TextWidgets(
-                title: "Date",
-                subtitle: itemData[5],
-              ),
-              Divider(),
-              TextWidgets(
-                title: "Expiry Date",
-                subtitle: itemData[2],
-              ),
               SizedBox(
-                height: size.height * 0.03,
+                height: size.height * 0.02,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/res/assets/assets_url.dart';
 import 'package:flutter_invoice_app/res/calculation/calculation.dart';
-import 'package:flutter_invoice_app/res/colors/app_colors.dart';
+import 'package:flutter_invoice_app/utils/utils.dart';
 import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/dashboard/with_draw_screen.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -106,6 +106,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       SizedBox(height: 10,),
                       Card(
                         child: ListTile(
+                          leading: Icon(CupertinoIcons.arrow_right_circle_fill),
                           title: Text("With Draw"),
                           onTap: (){
                             Navigator.push(context, MaterialPageRoute(builder: (context) => WithDrawScreen()));
@@ -208,7 +209,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ],
                   );
                 } else {
-                  return Center(child: CircularProgressIndicator());
+                  return Center(child: Utils.circular);
                 }
               },
             ),

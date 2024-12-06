@@ -1,6 +1,7 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_invoice_app/res/component/app_button.dart';
 import 'package:flutter_invoice_app/res/component/invoice_text_field.dart';
 import 'package:flutter_invoice_app/utils/utils.dart';
@@ -40,15 +41,15 @@ class _AddToCardScreenState extends State<AddToCardScreen> {
   @override
   Widget build(BuildContext context) {
     double subtotal = widget.product.fold(0, (sum, item) {
-      return sum + (item.price * item.stock);
+      return sum + (item.salePrice * item.stock);
     });
 
     double totalDiscount = widget.product.fold(0, (sum, item) {
-      return sum + ((item.price * item.discount / 100) * item.stock);
+      return sum + ((item.salePrice * item.discount / 100) * item.stock);
     });
 
     double totalTax = widget.product.fold(0, (sum, item) {
-      double discountedPrice = item.price - (item.price * item.discount / 100);
+      double discountedPrice = item.salePrice - (item.salePrice * item.discount / 100);
       return sum + ((discountedPrice * item.tax / 100) * item.stock);
     });
 
@@ -122,7 +123,7 @@ class _AddToCardScreenState extends State<AddToCardScreen> {
                                       fontWeight: FontWeight.w600, fontSize: 16),
                                 ),
                                 Text(
-                                  "Price: ${widget.product[index].price.toStringAsFixed(2)}",
+                                  "Price: ${widget.product[index].purchasePrice.toStringAsFixed(2)}",
                                   style: GoogleFonts.lato(color: Colors.grey),
                                 ),
                               ],
@@ -153,7 +154,7 @@ class _AddToCardScreenState extends State<AddToCardScreen> {
                               children: [
                                 Text(
                                   "Total Amount: ${calculateProductTotal(
-                                    widget.product[index].price,
+                                    widget.product[index].salePrice,
                                     widget.product[index].discount,
                                     widget.product[index].tax,
                                     widget.product[index].stock,
@@ -250,6 +251,9 @@ class _AddToCardScreenState extends State<AddToCardScreen> {
                                         title: Text(item),
                                       );
                                     },
+                                    constraints: BoxConstraints(
+                                      maxHeight: (invoice.dropdownCustomer.value.length > 5) ? 300.0 : 150.0,
+                                    ),
                                   ),
                                   onChanged: (value) {
                                     if (invoice.dropdownCustomer.isNotEmpty && invoice.dropdownCustomerIds.isNotEmpty) {
@@ -281,6 +285,7 @@ class _AddToCardScreenState extends State<AddToCardScreen> {
                                 InvoiceTextField(
                                   title: "Received Amount",
                                   controller: invoice.payAmount,
+                                  onlyNumber: true,
                                 ),
                               ],
                             ),
@@ -376,12 +381,16 @@ class _CountTextFieldState extends State<CountTextField> {
       child: TextField(
         controller: _controller,
         keyboardType: TextInputType.number,
+        inputFormatters:  <TextInputFormatter>[
+          FilteringTextInputFormatter.digitsOnly,
+        ],
+        cursorColor: AppColor.primaryColor,
+        cursorHeight: 18,
         onChanged: (value) {
           if (int.tryParse(value) != null) {
             setState(() {
               widget.orderProduct[widget.index].stock = int.parse(value);
             });
-            // Notify the parent widget of the stock change
             widget.onStockChanged();
           }
         },

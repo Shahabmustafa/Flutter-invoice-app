@@ -61,6 +61,7 @@ dependencies:
   syncfusion_flutter_charts: 27.2.4
   device_preview: ^1.2.0
   path_provider: ^2.1.5
+  flutter_spinkit: ^5.2.1
 
 
 dev_dependencies:

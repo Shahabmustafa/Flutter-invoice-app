@@ -10,6 +10,8 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../res/component/dashboard_summary.dart';
+import '../../../../utils/utils.dart';
 import '../../../../view model/firebase/supplier_installment_viewmodel.dart';
 
 class SupplierInstallmentScreen extends StatefulWidget {
@@ -21,6 +23,15 @@ class SupplierInstallmentScreen extends StatefulWidget {
 
 class _SupplierInstallmentScreenState extends State<SupplierInstallmentScreen> {
   final controller = Get.put(SupplierInstallmentViewModel());
+
+  List<int> days = [1,7,14,30,60];
+  int selectValue = 1;
+
+
+  DateTime get startDate {
+    return DateTime.now().subtract(Duration(days: selectValue));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,9 +39,15 @@ class _SupplierInstallmentScreenState extends State<SupplierInstallmentScreen> {
         title: Text("Supplier Installment"),
       ),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("supplierInstallment").orderBy("date",descending: true).snapshots(),
+        stream: FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).
+        collection("supplierInstallment").where("date", isGreaterThanOrEqualTo: Timestamp.fromDate(startDate)).
+        orderBy("date", descending: true).snapshots(),
         builder: (context,snapshot){
           if(snapshot.hasData){
+            double totalInstallment = 0.0;
+            for (var doc in snapshot.data!.docs) {
+              totalInstallment += double.parse(doc["payBalance"].toString());
+            }
             if(snapshot.data!.docs.isEmpty){
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -51,27 +68,78 @@ class _SupplierInstallmentScreenState extends State<SupplierInstallmentScreen> {
                 ],
               );
             }else{
-              return ListView.builder(
-                itemCount: snapshot.data!.docs.length,
-                itemBuilder: (context,index){
-                  DateTime dateTime = snapshot.data!.docs[index]["date"].toDate();
-                  String formattedDate = DateFormat('dd-MM-yyyy').format(dateTime);
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
-                    child: Card(
-                      child: ListTile(
-                        leading: Text("${index + 1}"),
-                        title: Text(snapshot.data!.docs[index]["supplierName"]),
-                        subtitle: Text(formattedDate),
-                        trailing: Text(snapshot.data!.docs[index]["payBalance"]),
-                      ),
+              return Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: DashboardSummary(
+                            imageAssets: Icon(CupertinoIcons.calendar),
+                            title: "Installment",
+                            subtitle: "${totalInstallment.toStringAsFixed(0)}",
+                          ),
+                        ),
+                      ],
                     ),
-                  );
-                },
+                  ),
+                  SizedBox(
+                    height: 60,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: days.length,
+                      itemBuilder: (context, index) {
+                        return Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: selectValue == days[index]
+                                    ? Colors.blue
+                                    : Colors.grey[300],
+                                foregroundColor: selectValue == days[index]
+                                    ? Colors.white
+                                    : Colors.black,
+                                minimumSize: Size(80, 40),
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  selectValue = days[index];
+                                });
+                              },
+                              child: Text("${days[index]} Days"),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: snapshot.data!.docs.length,
+                      itemBuilder: (context,index){
+                        DateTime dateTime = snapshot.data!.docs[index]["date"].toDate();
+                        String formattedDate = DateFormat('dd-MM-yyyy hh:mm a').format(dateTime);
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+                          child: Card(
+                            child: ListTile(
+                              leading: Text("${index + 1}"),
+                              title: Text(snapshot.data!.docs[index]["supplierName"]),
+                              subtitle: Text(formattedDate),
+                              trailing: Text(snapshot.data!.docs[index]["payBalance"]),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
               );
             }
           }else{
-            return Center(child: CircularProgressIndicator());
+            return Center(child: Utils.circular);
           }
         },
       ),
@@ -108,6 +176,9 @@ class _SupplierInstallmentScreenState extends State<SupplierInstallmentScreen> {
                                     title: Text(item),
                                   );
                                 },
+                                constraints: BoxConstraints(
+                                  maxHeight: (controller.dropdownSupplier.value.length > 5) ? 300.0 : 150.0,
+                                ),
                               ),
                               onChanged: (value) {
                                 if (controller.dropdownSupplier.isNotEmpty && controller.dropdownSupplierIds.isNotEmpty) {
@@ -137,11 +208,13 @@ class _SupplierInstallmentScreenState extends State<SupplierInstallmentScreen> {
                           InvoiceTextField(
                             title: "Supplier Amount",
                             controller: TextEditingController(text: controller.selectSupplierPayment.value),
+                            enabled: false,
                           ),
                           SizedBox(height: 10,),
                           InvoiceTextField(
                             title: "Receive Cash",
                             controller: controller.recivedAmount,
+                            onlyNumber: true,
                           ),
                           SizedBox(height: 20,),
                           Row(

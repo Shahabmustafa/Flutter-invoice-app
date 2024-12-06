@@ -56,6 +56,7 @@ class OrderController extends GetxController{
         "company" : selectCompany.value,
         "received_amount" : payAmount.value.text,
         "due_amount" : dueAmount,
+        "supplierId" : selectCompanyId.value,
       };
       dashboardAddSupplierPayment(dueAmount);
       subtractCashInHand();

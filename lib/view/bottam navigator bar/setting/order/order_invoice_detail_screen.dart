@@ -112,7 +112,7 @@ class _OrderInvoiceDetailScreenState extends State<OrderInvoiceDetailScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                "Price: ${product["price"].toStringAsFixed(2)}",
+                                "Purchase Price: ${product["purchasePrice"].toStringAsFixed(2)}",
                                 style: GoogleFonts.lato(color: Colors.black),
                               ),
                               Text(
@@ -147,7 +147,7 @@ class _OrderInvoiceDetailScreenState extends State<OrderInvoiceDetailScreen> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
+            padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 10),
             child: Column(
               children: [
                 Divider(),

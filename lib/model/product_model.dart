@@ -1,7 +1,8 @@
 class Product {
   String productId;
   String product;
-  double price;
+  double purchasePrice;
+  double salePrice;
   int stock;
   double discount;
   double tax;
@@ -9,7 +10,8 @@ class Product {
   Product({
     required this.productId,
     required this.product,
-    required this.price,
+    required this.purchasePrice,
+    required this.salePrice,
     required this.stock,
     required this.tax,
     required this.discount,
@@ -20,7 +22,8 @@ class Product {
     return {
       'productId': productId,
       'product': product,
-      'price': price,
+      'purchasePrice': purchasePrice,
+      'salePrice': salePrice,
       'stock': stock,
       'discount': discount,
       'tax': tax,
@@ -32,7 +35,8 @@ class Product {
     return Product(
       productId: map['productId'],
       product: map['product'],
-      price: (map['price'] as num).toDouble(),
+      purchasePrice: (map['purchasePrice'] as num).toDouble(),
+      salePrice: (map['salePrice'] as num).toDouble(),
       stock: map['stock'],
       discount: (map['discount'] as num).toDouble(),
       tax: (map['tax'] as num).toDouble(),
@@ -41,6 +45,6 @@ class Product {
 
   @override
   String toString() {
-    return 'Product(productId: $productId,product: $product, price: $price, stock: $stock, discount: $discount, tax: $tax)';
+    return 'Product(productId: $productId,product: $product, purchasePrice: $purchasePrice,salePrice: $salePrice,stock: $stock, discount: $discount, tax: $tax)';
   }
 }

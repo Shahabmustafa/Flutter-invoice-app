@@ -29,7 +29,7 @@ class _CustomerDetailState extends State<CustomerDetail> {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
         child: Container(
-          height: size.height * 0.5,
+          height: size.height * 0.58,
           width: size.width,
           padding: EdgeInsets.symmetric(horizontal: 15,vertical: 10),
           decoration: BoxDecoration(

@@ -1,6 +1,7 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_invoice_app/res/component/app_button.dart';
 import 'package:flutter_invoice_app/view%20model/firebase/order_controller.dart';
 import 'package:get/get.dart';
@@ -39,15 +40,15 @@ class _AddToCardOrderScreenState extends State<AddToCardOrderScreen> {
   @override
   Widget build(BuildContext context) {
     double subtotal = widget.orderProduct.fold(0, (sum, item) {
-      return sum + (item.price * item.stock);
+      return sum + (item.purchasePrice * item.stock);
     });
 
     double totalDiscount = widget.orderProduct.fold(0, (sum, item) {
-      return sum + ((item.price * item.discount / 100) * item.stock);
+      return sum + ((item.purchasePrice * item.discount / 100) * item.stock);
     });
 
     double totalTax = widget.orderProduct.fold(0, (sum, item) {
-      double discountedPrice = item.price - (item.price * item.discount / 100);
+      double discountedPrice = item.purchasePrice - (item.purchasePrice * item.discount / 100);
       return sum + ((discountedPrice * item.tax / 100) * item.stock);
     });
 
@@ -121,7 +122,7 @@ class _AddToCardOrderScreenState extends State<AddToCardOrderScreen> {
                                       fontWeight: FontWeight.w600, fontSize: 16),
                                 ),
                                 Text(
-                                  "Price: ${widget.orderProduct[index].price.toStringAsFixed(2)}",
+                                  "Price: ${widget.orderProduct[index].purchasePrice.toStringAsFixed(2)}",
                                   style: GoogleFonts.lato(color: Colors.grey),
                                 ),
                               ],
@@ -152,7 +153,7 @@ class _AddToCardOrderScreenState extends State<AddToCardOrderScreen> {
                               children: [
                                 Text(
                                   "Total Amount: ${calculateProductTotal(
-                                    widget.orderProduct[index].price,
+                                    widget.orderProduct[index].purchasePrice,
                                     widget.orderProduct[index].discount,
                                     widget.orderProduct[index].tax,
                                     widget.orderProduct[index].stock,
@@ -246,6 +247,9 @@ class _AddToCardOrderScreenState extends State<AddToCardOrderScreen> {
                                     title: Text(item),
                                   );
                                 },
+                                constraints: BoxConstraints(
+                                  maxHeight: (invoice.dropdownCompany.value.length > 5) ? 300.0 : 150.0,
+                                ),
                               ),
                               onChanged: (value) {
                                 if (invoice.dropdownCompany.isNotEmpty && invoice.dropdownCompanyId.isNotEmpty) {
@@ -277,6 +281,7 @@ class _AddToCardOrderScreenState extends State<AddToCardOrderScreen> {
                             InvoiceTextField(
                               title: "Pay Amount",
                               controller: invoice.payAmount,
+                              onlyNumber: true,
                             ),
                           ],
                         ),
@@ -300,13 +305,13 @@ class _AddToCardOrderScreenState extends State<AddToCardOrderScreen> {
                             color: AppColor.primaryColor,
                             textColor: AppColor.whiteColor,
                             loading: invoice.loading.value,
-                            onTap: (){
+                            onTap: ()async{
                               if(totalAmount < int.parse(invoice.payAmount.text)){
                                 Utils.flutterToast("your amount is received is greater than to total amount");
                               }else if(invoice.selectCompany.value.isEmpty){
                                 Utils.flutterToast("Please Select Supplier");
                               }else{
-                                invoice.addOrderInvoice(
+                                await invoice.addOrderInvoice(
                                   widget.orderProduct,
                                   subtotal.toInt(),
                                   totalAmount.toInt(),
@@ -372,6 +377,11 @@ class _CountTextFieldState extends State<CountTextField> {
       child: TextField(
         controller: _controller,
         keyboardType: TextInputType.number,
+        inputFormatters:  <TextInputFormatter>[
+          FilteringTextInputFormatter.digitsOnly,
+        ],
+        cursorColor: AppColor.primaryColor,
+        cursorHeight: 18,
         onChanged: (value) {
           if (int.tryParse(value) != null) {
             setState(() {

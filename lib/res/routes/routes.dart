@@ -11,6 +11,7 @@ import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/setting/instal
 import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/setting/items/edit_item.dart';
 import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/setting/order/order_invoice_detail_screen.dart';
 import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/setting/profile/change_password_screen.dart';
+import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/setting/profit_and_loss/profit_and_loss_screen.dart';
 import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/setting/supplier/edit_supplier.dart';
 import 'package:flutter_invoice_app/view/home/home_screen.dart';
 import 'package:flutter_invoice_app/view/splash/splash_screen.dart';
@@ -71,6 +72,7 @@ class AppRoutes{
   static const String saleInvoiceDetailScreen = "/sale_invoice_detail_screen";
   static const String forgetPasswordScreen = "/forget_password_screen";
   static const String editCustomerScreen = "/edit_customer_screen";
+  static const String profitAndLossScreen = "/profit_and_loss_screen";
 
   static appRoutes() => [
     GetPage(
@@ -273,6 +275,13 @@ class AppRoutes{
     GetPage(
       name: editCustomerScreen,
       page: () => EditCustomerScreen(),
+      transition: Transition.rightToLeftWithFade,
+      transitionDuration: const Duration(microseconds: 250),
+    ),
+
+    GetPage(
+      name: profitAndLossScreen,
+      page: () => ProfitAndLossScreen(),
       transition: Transition.rightToLeftWithFade,
       transitionDuration: const Duration(microseconds: 250),
     ),

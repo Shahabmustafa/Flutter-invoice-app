@@ -11,6 +11,7 @@ import '../../../../model/product_model.dart';
 import '../../../../res/assets/assets_url.dart';
 import '../../../../res/colors/app_colors.dart';
 import '../../../../utils/print_utils.dart';
+import '../../../../utils/utils.dart';
 
 class OrderInvoiceScreen extends StatefulWidget {
   const OrderInvoiceScreen({Key? key}) : super(key: key);
@@ -58,7 +59,7 @@ class _OrderInvoiceScreenState extends State<OrderInvoiceScreen> {
                 itemBuilder: (context,index){
                   Timestamp timestamp = snapshot.data!.docs[index]['date'];
                   DateTime dateTime = timestamp.toDate();
-                  String formattedDate = DateFormat('dd-MMMM-yyyy').format(dateTime);
+                  String formattedDate = DateFormat('dd-MM-yyyy hh:mm a').format(dateTime);
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
                     child: Container(
@@ -104,7 +105,7 @@ class _OrderInvoiceScreenState extends State<OrderInvoiceScreen> {
                                             ]
                                         );
                                       },
-                                      icon: AssetsUrl.categoryEditSvgIcon,
+                                      icon: Icon(Icons.visibility_outlined),
                                     ),
                                     IconButton(
                                       onPressed: (){
@@ -174,7 +175,7 @@ class _OrderInvoiceScreenState extends State<OrderInvoiceScreen> {
               );
             }
           }else{
-            return Center(child: CircularProgressIndicator());
+            return Center(child: Utils.circular);
           }
         },
       ),

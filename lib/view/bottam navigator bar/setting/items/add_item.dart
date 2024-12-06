@@ -19,7 +19,6 @@ class _AddItemsState extends State<AddItems> {
   DateTime selectedDate = DateTime.now();
   final item = Get.put(ItemController());
 
-
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -144,6 +143,9 @@ class _AddItemsState extends State<AddItems> {
                           title: Text(item),
                         );
                       },
+                      constraints: BoxConstraints(
+                        maxHeight: (item.dropdownCategory.length > 5) ? 300.0 : 150.0,
+                      ),
                     ),
                     onChanged: (value){
                       item.selectCategory.value = value!;
@@ -165,36 +167,13 @@ class _AddItemsState extends State<AddItems> {
                           title: Text(item),
                         );
                       },
+                      constraints: BoxConstraints(
+                        maxHeight: (item.dropdownCategory.length > 5) ? 300.0 : 150.0,
+                      ),
                     ),
                     onChanged: (value) {
                       item.selectCompany.value = value!;
                     },
-                  ),
-                  SizedBox(
-                    height: size.height * 0.02,
-                  ),
-                  Row(
-                    children: [
-                      Flexible(
-                        child: InvoiceTextField(
-                          title: "Start Date",
-                          keyboardType: TextInputType.datetime,
-                          readOnly: true,
-                          controller: item.saleDate.value,
-                          onTap: () => _dateNow(context),
-                        ),
-                      ),
-                      SizedBox(width: size.width * 0.04,),
-                      Flexible(
-                        child: InvoiceTextField(
-                          title: "Expiry Date",
-                          keyboardType: TextInputType.datetime,
-                          readOnly: true,
-                          controller: item.expiryDate.value,
-                          onTap: () => _dateExpiry(context),
-                        ),
-                      ),
-                    ],
                   ),
                   SizedBox(
                     height: size.height * 0.02,
@@ -219,57 +198,5 @@ class _AddItemsState extends State<AddItems> {
         }),
       ),
     );
-  }
-  Future<void> _dateNow(BuildContext context) async {
-    DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: selectedDate,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
-    );
-    if (pickedDate != null) {
-      TimeOfDay? pickedTime = await showTimePicker(
-        context: context,
-        initialTime: TimeOfDay.fromDateTime(selectedDate),
-      );
-      if (pickedTime != null) {
-        setState(() {
-          selectedDate = DateTime(
-            pickedDate.year,
-            pickedDate.month,
-            pickedDate.day,
-            pickedTime.hour,
-            pickedTime.minute,
-          );
-          item.saleDate.value.text = DateFormat.yMd().add_jm().format(selectedDate);
-        });
-      }
-    }
-  }
-  Future<void> _dateExpiry(BuildContext context) async {
-    DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: selectedDate,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
-    );
-    if (pickedDate != null) {
-      TimeOfDay? pickedTime = await showTimePicker(
-        context: context,
-        initialTime: TimeOfDay.fromDateTime(selectedDate),
-      );
-      if (pickedTime != null) {
-        setState(() {
-          selectedDate = DateTime(
-            pickedDate.year,
-            pickedDate.month,
-            pickedDate.day,
-            pickedTime.hour,
-            pickedTime.minute,
-          );
-          item.expiryDate.value.text = DateFormat.yMd().add_jm().format(selectedDate);
-        });
-      }
-    }
   }
 }

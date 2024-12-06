@@ -8,19 +8,15 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
-import '../../../model/product_model.dart';
-import '../../../res/assets/assets_url.dart';
-import '../../../res/colors/app_colors.dart';
-import '../../../utils/utils.dart';
+import '../../../../model/product_model.dart';
+import '../../../../res/assets/assets_url.dart';
+import '../../../../res/colors/app_colors.dart';
+import '../../../../utils/utils.dart';
 
-class SaleInvoiceScreen extends StatefulWidget {
-  const SaleInvoiceScreen({super.key});
 
-  @override
-  State<SaleInvoiceScreen> createState() => _SaleInvoiceScreenState();
-}
-
-class _SaleInvoiceScreenState extends State<SaleInvoiceScreen> {
+class CustomerSpecificSaleInvoiceScreen extends StatelessWidget {
+  const CustomerSpecificSaleInvoiceScreen({this.customerID,super.key});
+  final String? customerID;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +25,7 @@ class _SaleInvoiceScreenState extends State<SaleInvoiceScreen> {
         automaticallyImplyLeading: false,
       ),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("saleInvoice").orderBy("date",descending: false).snapshots(),
+        stream: FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("saleInvoice").where("customerId",isEqualTo: customerID).snapshots(),
         builder: (context,snapshot){
           if(snapshot.hasData){
             if(snapshot.data!.docs.isEmpty){
@@ -57,7 +53,7 @@ class _SaleInvoiceScreenState extends State<SaleInvoiceScreen> {
                 itemBuilder: (context,index){
                   Timestamp timestamp = snapshot.data!.docs[index]['date'];
                   DateTime dateTime = timestamp.toDate();
-                  String formattedDate = DateFormat('dd-MM-yyyy hh:mm a').format(dateTime);
+                  String formattedDate = DateFormat('dd-MMMM-yyyy').format(dateTime);
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
                     child: Container(
@@ -99,7 +95,7 @@ class _SaleInvoiceScreenState extends State<SaleInvoiceScreen> {
                                             ]
                                         );
                                       },
-                                      icon: Icon(Icons.visibility_outlined,color: AppColor.primaryColor,),
+                                      icon: AssetsUrl.categoryEditSvgIcon,
                                     ),
                                     IconButton(
                                       onPressed: () {
@@ -170,12 +166,6 @@ class _SaleInvoiceScreenState extends State<SaleInvoiceScreen> {
             return Center(child: Utils.circular);
           }
         },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: (){
-          Get.toNamed(AppRoutes.saleScreen);
-        },
-        child: Icon(Icons.add),
       ),
     );
   }

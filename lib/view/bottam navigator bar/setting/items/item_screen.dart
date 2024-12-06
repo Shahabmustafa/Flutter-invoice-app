@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../res/assets/assets_url.dart';
 import '../../../../res/colors/app_colors.dart';
+import '../../../../utils/utils.dart';
 
 class ItemScreen extends StatefulWidget {
   const ItemScreen({Key? key}) : super(key: key);
@@ -167,8 +168,6 @@ class _ItemScreenState extends State<ItemScreen> {
                                               item["purchasePrice"].toString(),
                                               item["discount"].toString(),
                                               item["tax"].toString(),
-                                              item["saleDate"],
-                                              item["expiryDate"],
                                             ],
                                           );
                                         },
@@ -237,7 +236,7 @@ class _ItemScreenState extends State<ItemScreen> {
                 },
               );
             } else {
-              return Center(child: CircularProgressIndicator());
+              return Center(child: Utils.circular);
             }
           },
         ),

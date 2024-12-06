@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../utils/utils.dart';
+
 class DashboardHistoryScreen extends StatefulWidget {
   const DashboardHistoryScreen({super.key});
 
@@ -60,7 +62,7 @@ class _DashboardHistoryScreenState extends State<DashboardHistoryScreen> {
               },
             );
           }else{
-            return Center(child: CircularProgressIndicator());
+            return Center(child: Utils.circular);
           }
         },
       ),

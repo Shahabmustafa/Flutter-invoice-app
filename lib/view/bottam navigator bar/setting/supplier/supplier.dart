@@ -3,11 +3,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/res/routes/routes.dart';
+import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/setting/installment/specific_supplier_installment_screen.dart';
 import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/setting/installment/supplier_installment_screen.dart';
+import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/setting/supplier/supplier_specific_order_invoice_screen.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../res/colors/app_colors.dart';
+import '../../../../utils/utils.dart';
 
 class SupplierScreen extends StatefulWidget {
   const SupplierScreen({Key? key}) : super(key: key);
@@ -143,15 +146,15 @@ class _SupplierScreenState extends State<SupplierScreen> {
                                     children: [
                                       IconButton(
                                         onPressed: (){
-                                          Navigator.push(context, MaterialPageRoute(builder: (context) => SupplierInstallmentScreen()));
+                                          Navigator.push(context, MaterialPageRoute(builder: (context) => SpecificSupplierInstallmentScreen(supplierID: snapshot.data!.docs[index]["supplierId"],supplierName: snapshot.data!.docs[index]["supplierName"],)));
                                         },
-                                        icon: Icon(CupertinoIcons.clock),
+                                        icon: Icon(CupertinoIcons.clock,color: AppColor.primaryColor,),
                                       ),
                                       IconButton(
                                         onPressed: (){
-                                          FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("supplier").doc(supplier.id).delete();
+                                          Navigator.push(context, MaterialPageRoute(builder: (context) => SupplierSpecificOrderScreen(supplierID: snapshot.data!.docs[index]["supplierId"],)));
                                         },
-                                        icon: Icon(CupertinoIcons.delete,size: 22,color: AppColor.errorColor,),
+                                        icon: Icon(CupertinoIcons.cube_box,size: 22,color: AppColor.primaryColor,),
                                       ),
                                     ],
                                   ),
@@ -189,7 +192,7 @@ class _SupplierScreenState extends State<SupplierScreen> {
               );
             }
           }else{
-            return Center(child: CircularProgressIndicator());
+            return Center(child: Utils.circular);
           }
         },
       ),

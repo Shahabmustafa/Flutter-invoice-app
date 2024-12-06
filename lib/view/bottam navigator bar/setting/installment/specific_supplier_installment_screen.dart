@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../utils/utils.dart';
+
 class SpecificSupplierInstallmentScreen extends StatefulWidget {
   SpecificSupplierInstallmentScreen({super.key, this.supplierID, this.supplierName});
   final String? supplierID;
@@ -23,15 +25,14 @@ class _SpecificSupplierInstallmentScreenState extends State<SpecificSupplierInst
       body: StreamBuilder(
         stream: FirebaseFirestore.instance.collection("users").
         doc(FirebaseAuth.instance.currentUser!.uid).
-        collection("supplierInstallment").orderBy("date",descending: true).where("supplierId",isEqualTo: widget.supplierID).
-        snapshots(),
+        collection("supplierInstallment").where("supplierId",isEqualTo: widget.supplierID).snapshots(),
         builder: (context,snapshot){
           if(snapshot.hasData){
             return ListView.builder(
               itemCount: snapshot.data!.docs.length,
               itemBuilder: (context,index){
                 DateTime dateTime = snapshot.data!.docs[index]["date"].toDate();
-                String formattedDate = DateFormat('dd-MM-yyyy').format(dateTime);
+                String formattedDate = DateFormat('dd-MM-yyyy hh:mm a').format(dateTime);
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
                   child: Card(
@@ -45,7 +46,7 @@ class _SpecificSupplierInstallmentScreenState extends State<SpecificSupplierInst
               },
             );
           }else{
-            return Center(child: CircularProgressIndicator());
+            return Center(child: Utils.circular);
           }
         },
       ),

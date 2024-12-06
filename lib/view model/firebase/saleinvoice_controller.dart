@@ -68,6 +68,7 @@ class SaleInvoiceController extends GetxController{
         "customer" : selectCustomer.value,
         "received_amount" : payAmount.text,
         "due_amount" : dueAmount,
+        "customerId" : selectCustomerId.value,
       };
       selectCustomerId.value.isEmpty ? dashboardAddCash(totalAmount) : dashboardAddCredit(dueAmount);
       selectCustomerId.value.isEmpty ? cashInHand() : customer(dueAmount);

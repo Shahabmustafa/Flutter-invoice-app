@@ -9,6 +9,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../../../res/app_api/app_api_service.dart';
 import '../../../../res/colors/app_colors.dart';
+import '../../../../utils/utils.dart';
 import '../../../../view model/image_picker/image_picker_service.dart';
 import '../../../../view model/user_service/user_image_service.dart';
 
@@ -177,7 +178,7 @@ class _UserProfileState extends State<UserProfile> {
                 ],
               );
             }else{
-              return Center(child: CircularProgressIndicator());
+              return Center(child: Utils.circular);
             }
           },
         )

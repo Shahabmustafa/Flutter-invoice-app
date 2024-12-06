@@ -3,12 +3,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_invoice_app/res/routes/routes.dart';
-import 'package:flutter_invoice_app/view%20model/swith_service/swith_service.dart';
 import 'package:flutter_invoice_app/view/bottam%20navigator%20bar/setting/installment/specific_customer_installment_screen.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../res/colors/app_colors.dart';
+import '../../../../utils/utils.dart';
+import 'customer_specific_invoice_list_screen.dart';
 
 class CustomerScreen extends StatefulWidget {
   const CustomerScreen({Key? key}) : super(key: key);
@@ -144,16 +145,16 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                   onPressed: () {
                                     Navigator.push(context, MaterialPageRoute(builder: (context) => SpecificCustomerInstallmentScreen(customerID: snapshot.data!.docs[index]["customerId"],customerName: snapshot.data!.docs[index]["customerName"],)));
                                   },
-                                  icon: Icon(CupertinoIcons.clock),
+                                  icon: Icon(CupertinoIcons.clock,color: AppColor.primaryColor,),
                                 ),
                                 IconButton(
                                   onPressed: () {
-                                    FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("customer").doc(customer.id).delete();
+                                    Navigator.push(context, MaterialPageRoute(builder: (context) => CustomerSpecificSaleInvoiceScreen(customerID: snapshot.data!.docs[index]["customerId"])));
                                   },
                                   icon: Icon(
-                                    CupertinoIcons.delete,
+                                    CupertinoIcons.shopping_cart,
                                     size: 22,
-                                    color: AppColor.errorColor,
+                                    color: AppColor.primaryColor,
                                   ),
                                 ),
                               ],
@@ -167,7 +168,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
               );
             }
           } else {
-            return Center(child: CircularProgressIndicator());
+            return Center(child: Utils.circular);
           }
         },
       ),

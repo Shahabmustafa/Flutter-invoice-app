@@ -27,8 +27,6 @@ class ItemController extends GetxController{
   final stock = TextEditingController().obs;
   final categori = TextEditingController().obs;
   final tax = TextEditingController().obs;
-  final saleDate = TextEditingController().obs;
-  final expiryDate = TextEditingController().obs;
 
   final loading = Get.put(LoadingController());
 
@@ -50,8 +48,6 @@ class ItemController extends GetxController{
         category: selectCategory.value,
         tax: int.parse(tax.value.text),
         companyName: selectCompany.value,
-        saleDate: saleDate.value.text,
-        expiryDate: expiryDate.value.text,
       );
       await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("items").doc(itemId.id).set(itemModel.toJson()).then((value){
         loading.setLoading(false);
@@ -77,8 +73,6 @@ class ItemController extends GetxController{
         "category": selectCategory.value,
         "tax": int.parse(tax.value.text),
         "companyName": selectCompany.value,
-        "saleDate": saleDate.value.text,
-        "expiryDate": expiryDate.value.text,
       };
       await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("items").doc(ItemId).update(itemModel).then((value){
         Utils.flutterToast("Update Product");
@@ -104,22 +98,6 @@ class ItemController extends GetxController{
     print(dropdownCompany); // Debug: Check if data is populated
   }
 
-
-  // Future<void> scanQRCode() async {
-  //   try {
-  //     String qrCode = await FlutterBarcodeScanner.scanBarcode(
-  //       "#ff6666", // Color of the scan line
-  //       "Cancel", // Text for the cancel button
-  //       true, // Whether to show the flashlight button
-  //       ScanMode.QR, // Scan mode: QR code
-  //     );
-  //     if (qrCode != "-1") {
-  //         barcode.value.text = qrCode;
-  //     }
-  //   } catch (e) {
-  //     print("Error scanning QR code: $e");
-  //   }
-  // }
 
   @override
   void onInit() {

@@ -186,6 +186,18 @@ class _SettingPageState extends State<SettingPage> {
               padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
               child: Card(
                 child: ListTile(
+                  leading: Icon(CupertinoIcons.up_arrow,size: 27,),
+                  title: Text("Profit and Loss"),
+                  onTap: (){
+                    Get.toNamed(AppRoutes.profitAndLossScreen);
+                  },
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+              child: Card(
+                child: ListTile(
                   leading: Icon(CupertinoIcons.person_badge_minus,size: 30,),
                   title: Text("Delete Account"),
                   onTap: (){

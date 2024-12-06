@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 import '../colors/app_colors.dart';
 
 class AppThemeData{
@@ -143,9 +144,20 @@ class AppThemeData{
     progressIndicatorTheme: ProgressIndicatorThemeData(
       color: AppColor.primaryColor,
     ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        textStyle: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    ),
 
     popupMenuTheme: PopupMenuThemeData(
       color: AppColor.whiteColor,
+    ),
+    iconTheme: IconThemeData(
+      color: AppColor.primaryColor,
     ),
   );
 

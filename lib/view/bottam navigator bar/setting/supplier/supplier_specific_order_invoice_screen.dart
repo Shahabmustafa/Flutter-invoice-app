@@ -8,41 +8,36 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
-import '../../../model/product_model.dart';
-import '../../../res/assets/assets_url.dart';
-import '../../../res/colors/app_colors.dart';
-import '../../../utils/utils.dart';
+import '../../../../model/product_model.dart';
+import '../../../../res/assets/assets_url.dart';
+import '../../../../res/colors/app_colors.dart';
+import '../../../../utils/utils.dart';
 
-class SaleInvoiceScreen extends StatefulWidget {
-  const SaleInvoiceScreen({super.key});
 
-  @override
-  State<SaleInvoiceScreen> createState() => _SaleInvoiceScreenState();
-}
-
-class _SaleInvoiceScreenState extends State<SaleInvoiceScreen> {
+class SupplierSpecificOrderScreen extends StatelessWidget {
+  const SupplierSpecificOrderScreen({this.supplierID,super.key});
+  final String? supplierID;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Sale Invoice"),
-        automaticallyImplyLeading: false,
+        title: Text("Order Invoice"),
       ),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("saleInvoice").orderBy("date",descending: false).snapshots(),
+        stream: FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("orders").where("supplierId",isEqualTo: supplierID).snapshots(),
         builder: (context,snapshot){
           if(snapshot.hasData){
             if(snapshot.data!.docs.isEmpty){
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(CupertinoIcons.doc_text,color: AppColor.primaryColor,size: 100,),
+                  Icon(CupertinoIcons.cube_box,color: AppColor.primaryColor,size: 100,),
                   SizedBox(
                     height: 20,
                   ),
                   Center(
                     child: Text(
-                      "Sale Invoice is Empty",
+                      "Order is Empty",
                       style: TextStyle(
                         fontWeight: FontWeight.w700,
                         fontSize: 18,
@@ -57,7 +52,7 @@ class _SaleInvoiceScreenState extends State<SaleInvoiceScreen> {
                 itemBuilder: (context,index){
                   Timestamp timestamp = snapshot.data!.docs[index]['date'];
                   DateTime dateTime = timestamp.toDate();
-                  String formattedDate = DateFormat('dd-MM-yyyy hh:mm a').format(dateTime);
+                  String formattedDate = DateFormat('dd-MMMM-yyyy').format(dateTime);
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
                     child: Container(
@@ -88,25 +83,31 @@ class _SaleInvoiceScreenState extends State<SaleInvoiceScreen> {
                                     IconButton(
                                       onPressed: (){
                                         Get.toNamed(
-                                            AppRoutes.saleInvoiceDetailScreen,
+                                            AppRoutes.orderInvoiceDetailScreen,
                                             arguments: [
-                                              snapshot.data!.docs[index]["invoiceId"],
                                               snapshot.data!.docs[index]["productList"],
+                                              snapshot.data!.docs[index]["discount"],
                                               snapshot.data!.docs[index]["subTotal"],
+                                              snapshot.data!.docs[index]["tax"],
                                               snapshot.data!.docs[index]["totalAmount"],
-                                              snapshot.data!.docs[index].data().containsKey("customer") ? snapshot.data!.docs[index]["customer"].toString() : "Cash Sale",
+                                              snapshot.data!.docs[index]["invoiceId"],
+                                              snapshot.data!.docs[index].data().containsKey("company") ? snapshot.data!.docs[index]["company"].toString() : "",
                                               snapshot.data!.docs[index]["received_amount"],
+                                              formattedDate,
+                                              snapshot.data!.docs[index]["due_amount"],
                                             ]
                                         );
                                       },
-                                      icon: Icon(Icons.visibility_outlined,color: AppColor.primaryColor,),
+                                      icon: AssetsUrl.categoryEditSvgIcon,
                                     ),
                                     IconButton(
-                                      onPressed: () {
-                                        List<Product> productList = (snapshot.data!.docs[index]["productList"] as List).map((item) => Product.fromMap(item)).toList();
+                                      onPressed: (){
+                                        List<Product> productList = (snapshot.data!.docs[index]["productList"] as List)
+                                            .map((item) => Product.fromMap(item))
+                                            .toList();
                                         SaleInvoicePDFPrint.generateSimpleInvoice(
                                           invoiceId: snapshot.data!.docs[index]["invoiceId"].toString(),
-                                          customerName: snapshot.data!.docs[index].data().containsKey("customer") ? snapshot.data!.docs[index]["customer"].toString() : "Cash Sale",
+                                          customerName: snapshot.data!.docs[index]["company"].toString(),
                                           subtotal: snapshot.data!.docs[index]["subTotal"].toString(),
                                           totalAmount: snapshot.data!.docs[index]["totalAmount"].toString(),
                                           recievedAmount: snapshot.data!.docs[index]["received_amount"].toString(),
@@ -116,7 +117,7 @@ class _SaleInvoiceScreenState extends State<SaleInvoiceScreen> {
                                           product: productList,
                                         );
                                       },
-                                      icon: Icon(CupertinoIcons.printer, color: AppColor.errorColor),
+                                      icon: Icon(CupertinoIcons.printer,color: AppColor.errorColor,),
                                     ),
                                   ],
                                 ),
@@ -133,7 +134,7 @@ class _SaleInvoiceScreenState extends State<SaleInvoiceScreen> {
                                   formattedDate,
                                   style: GoogleFonts.lato(color: AppColor.blackColor),
                                 ),
-                                Text("${snapshot.data!.docs[index].data().containsKey("customer") ? snapshot.data!.docs[index]["customer"].toString() : "Cash Sale"}",style: GoogleFonts.lato(color: Colors.black),),
+                                Text("${snapshot.data!.docs[index].data().containsKey("company") ? snapshot.data!.docs[index]["company"].toString() : ""}",style: GoogleFonts.lato(color: Colors.black),),
                               ],
                             ),
                           ),
@@ -170,12 +171,6 @@ class _SaleInvoiceScreenState extends State<SaleInvoiceScreen> {
             return Center(child: Utils.circular);
           }
         },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: (){
-          Get.toNamed(AppRoutes.saleScreen);
-        },
-        child: Icon(Icons.add),
       ),
     );
   }

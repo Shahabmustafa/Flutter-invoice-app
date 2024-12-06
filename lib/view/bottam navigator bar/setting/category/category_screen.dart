@@ -8,6 +8,8 @@ import 'package:flutter_invoice_app/res/component/app_button.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../../../utils/utils.dart';
+
 class CategoryScreen extends StatefulWidget {
   const CategoryScreen({super.key});
 
@@ -176,7 +178,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
               );
             }
           }else{
-            return Center(child: CircularProgressIndicator());
+            return Center(child: Utils.circular);
           }
         },
       ),

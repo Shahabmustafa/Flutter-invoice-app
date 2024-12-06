@@ -108,7 +108,7 @@ class _SaleInvoiceDetailScreenState extends State<SaleInvoiceDetailScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                "Price: ${product["price"].toStringAsFixed(2)}",
+                                "Sale Price: ${product["salePrice"]}",
                                 style: GoogleFonts.lato(color: Colors.black),
                               ),
                               Text(
@@ -125,7 +125,7 @@ class _SaleInvoiceDetailScreenState extends State<SaleInvoiceDetailScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                "Discount: ${product["discount"].toStringAsFixed(0)}%",
+                                "Discount: ${product["discount"]}%",
                                 style: GoogleFonts.lato(color: Colors.black),
                               ),
                               Text(
@@ -143,7 +143,7 @@ class _SaleInvoiceDetailScreenState extends State<SaleInvoiceDetailScreen> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
+            padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 10),
             child: Column(
               children: [
                 Divider(),

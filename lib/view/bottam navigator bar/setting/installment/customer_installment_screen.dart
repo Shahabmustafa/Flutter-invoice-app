@@ -9,7 +9,9 @@ import 'package:intl/intl.dart';
 
 import '../../../../res/colors/app_colors.dart';
 import '../../../../res/component/app_button.dart';
+import '../../../../res/component/dashboard_summary.dart';
 import '../../../../res/component/invoice_text_field.dart';
+import '../../../../utils/utils.dart';
 import '../../../../view model/firebase/customer_installment_viewmodel.dart';
 
 class CustomerInstallmentScreen extends StatefulWidget {
@@ -21,7 +23,13 @@ class CustomerInstallmentScreen extends StatefulWidget {
 
 class _CustomerInstallmentScreenState extends State<CustomerInstallmentScreen> {
 
+  List<int> days = [1,7,14,30,60];
+  int selectValue = 1;
 
+
+  DateTime get startDate {
+    return DateTime.now().subtract(Duration(days: selectValue));
+  }
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(CustomerInstallmentViewModel());
@@ -32,50 +40,89 @@ class _CustomerInstallmentScreenState extends State<CustomerInstallmentScreen> {
       body: StreamBuilder(
         stream: FirebaseFirestore.instance.collection("users").
         doc(FirebaseAuth.instance.currentUser!.uid).
-        collection("customerInstallment").orderBy("date",descending: true).snapshots(),
+        collection("customerInstallment").where("date", isGreaterThanOrEqualTo: Timestamp.fromDate(startDate)).
+        orderBy("date", descending: true).snapshots(),
         builder: (context,snapshot){
-          if(snapshot.hasData){
-            if(snapshot.data!.docs.isEmpty){
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(CupertinoIcons.money_dollar_circle,color: AppColor.primaryColor,size: 100,),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Center(
-                    child: Text(
-                      "Customer Installment is Empty",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 18,
-                      ),
-                    ),
-                  ),
-                ],
-              );
-            }else{
-              return ListView.builder(
-                itemCount: snapshot.data!.docs.length,
-                itemBuilder: (context,index){
-                  DateTime dateTime = snapshot.data!.docs[index]["date"].toDate();
-                  String formattedDate = DateFormat('dd-MM-yyyy').format(dateTime);
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
-                    child: Card(
-                      child: ListTile(
-                        leading: Text("${index + 1}"),
-                        title: Text(snapshot.data!.docs[index]["customerName"]),
-                        subtitle: Text(formattedDate),
-                        trailing: Text(snapshot.data!.docs[index]["payBalance"]),
-                      ),
-                    ),
-                  );
-                },
-              );
+          if (snapshot.hasData) {
+            double totalInstallment = 0.0;
+            for (var doc in snapshot.data!.docs) {
+              totalInstallment += double.parse(doc["payBalance"].toString());
             }
-          }else{
-            return Center(child: CircularProgressIndicator());
+            return Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: DashboardSummary(
+                          imageAssets: Icon(CupertinoIcons.calendar),
+                          title: "Installment",
+                          subtitle: "${totalInstallment.toStringAsFixed(0)}",
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 60,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: days.length,
+                    itemBuilder: (context, index) {
+                      return Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: selectValue == days[index]
+                                  ? Colors.blue
+                                  : Colors.grey[300],
+                              foregroundColor: selectValue == days[index]
+                                  ? Colors.white
+                                  : Colors.black,
+                              minimumSize: Size(80, 40),
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                selectValue = days[index];
+                              });
+                            },
+                            child: Text("${days[index]} Days"),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (context, index) {
+                      DateTime dateTime =
+                      snapshot.data!.docs[index]["date"].toDate();
+                      String formattedDate =
+                      DateFormat("dd-MM-yyyy hh:mm a").format(dateTime);
+                      return Padding(
+                        padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        child: Card(
+                          child: ListTile(
+                            title: Text(snapshot.data!.docs[index]["customerName"]),
+                            subtitle: Text(formattedDate),
+                            trailing: Text(
+                              "Rs. ${snapshot.data!.docs[index]["payBalance"]}",
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            );
+          } else {
+            return Center(child: Utils.circular);
           }
         },
       ),
@@ -112,6 +159,9 @@ class _CustomerInstallmentScreenState extends State<CustomerInstallmentScreen> {
                                     title: Text(item),
                                   );
                                 },
+                                constraints: BoxConstraints(
+                                  maxHeight: (controller.dropdownCustomer.value.length > 5) ? 300.0 : 150.0,
+                                ),
                               ),
                               onChanged: (value) {
                                 if (controller.dropdownCustomer.isNotEmpty && controller.dropdownCustomerIds.isNotEmpty) {
@@ -141,11 +191,13 @@ class _CustomerInstallmentScreenState extends State<CustomerInstallmentScreen> {
                           InvoiceTextField(
                             title: "Customer Amount",
                             controller: TextEditingController(text: controller.selectCustomerPayment.value),
+                            enabled: false,
                           ),
                           SizedBox(height: 10,),
                           InvoiceTextField(
                             title: "Receive Cash",
                             controller: controller.recivedAmount,
+                            onlyNumber: true,
                           ),
                           SizedBox(height: 20,),
                           Row(

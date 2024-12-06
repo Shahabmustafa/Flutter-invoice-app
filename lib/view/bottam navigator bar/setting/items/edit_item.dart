@@ -29,8 +29,6 @@ class _EditItemState extends State<EditItem> {
     controller.cost.value = TextEditingController(text: itemId[4]);
     controller.discount.value = TextEditingController(text: itemId[5]);
     controller.tax.value = TextEditingController(text: itemId[6]);
-    controller.saleDate.value = TextEditingController(text: itemId[7]);
-    controller.expiryDate.value = TextEditingController(text: itemId[8]);
     return Scaffold(
       appBar: AppBar(
         title: Text("Edit Item"),
@@ -140,6 +138,9 @@ class _EditItemState extends State<EditItem> {
                           title: Text(item),
                         );
                       },
+                      constraints: BoxConstraints(
+                        maxHeight: (controller.dropdownCategory.value.length > 5) ? 300.0 : 150.0,
+                      ),
                     ),
                     onChanged: (value){
                       controller.selectCategory.value = value!;
@@ -161,36 +162,13 @@ class _EditItemState extends State<EditItem> {
                           title: Text(item),
                         );
                       },
+                      constraints: BoxConstraints(
+                        maxHeight: (controller.dropdownCategory.value.length > 5) ? 300.0 : 150.0,
+                      ),
                     ),
                     onChanged: (value) {
                       controller.selectCompany.value = value!;
                     },
-                  ),
-                  SizedBox(
-                    height: size.height * 0.02,
-                  ),
-                  Row(
-                    children: [
-                      Flexible(
-                        child: InvoiceTextField(
-                          title: "Start Date",
-                          keyboardType: TextInputType.datetime,
-                          readOnly: true,
-                          controller: controller.saleDate.value,
-                          onTap: () => _dateNow(context),
-                        ),
-                      ),
-                      SizedBox(width: size.width * 0.04,),
-                      Flexible(
-                        child: InvoiceTextField(
-                          title: "Expiry Date",
-                          keyboardType: TextInputType.datetime,
-                          readOnly: true,
-                          controller: controller.expiryDate.value,
-                          onTap: () => _dateExpiry(context),
-                        ),
-                      ),
-                    ],
                   ),
                   SizedBox(
                     height: size.height * 0.02,
@@ -215,57 +193,5 @@ class _EditItemState extends State<EditItem> {
         }),
       ),
     );
-  }
-  Future<void> _dateNow(BuildContext context) async {
-    DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: selectedDate,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
-    );
-    if (pickedDate != null) {
-      TimeOfDay? pickedTime = await showTimePicker(
-        context: context,
-        initialTime: TimeOfDay.fromDateTime(selectedDate),
-      );
-      if (pickedTime != null) {
-        setState(() {
-          selectedDate = DateTime(
-            pickedDate.year,
-            pickedDate.month,
-            pickedDate.day,
-            pickedTime.hour,
-            pickedTime.minute,
-          );
-          // updateStartDate = DateFormat.yMd().add_jm().format(selectedDate);
-        });
-      }
-    }
-  }
-  Future<void> _dateExpiry(BuildContext context) async {
-    DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: selectedDate,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
-    );
-    if (pickedDate != null) {
-      TimeOfDay? pickedTime = await showTimePicker(
-        context: context,
-        initialTime: TimeOfDay.fromDateTime(selectedDate),
-      );
-      if (pickedTime != null) {
-        setState(() {
-          selectedDate = DateTime(
-            pickedDate.year,
-            pickedDate.month,
-            pickedDate.day,
-            pickedTime.hour,
-            pickedTime.minute,
-          );
-          // updateEndDate = DateFormat.yMd().add_jm().format(selectedDate);
-        });
-      }
-    }
   }
 }

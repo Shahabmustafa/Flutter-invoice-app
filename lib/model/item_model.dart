@@ -11,8 +11,6 @@ class ItemModel {
   String? category;
   int? tax;
   String? companyName;
-  String? saleDate;
-  String? expiryDate;
 
   ItemModel(
       {
@@ -26,8 +24,7 @@ class ItemModel {
         this.category,
         this.tax,
         this.companyName,
-        this.saleDate,
-        this.expiryDate});
+       });
 
   factory ItemModel.fromSnap(DocumentSnapshot json) =>
       ItemModel(
@@ -41,8 +38,6 @@ class ItemModel {
         category: json['category'],
         tax: json['tax'],
         companyName: json['companyName'],
-        saleDate: json['saleDate'],
-        expiryDate: json['expiryDate'],
       );
 
 
@@ -58,8 +53,6 @@ class ItemModel {
     data['category'] = this.category;
     data['tax'] = this.tax;
     data['companyName'] = this.companyName;
-    data['saleDate'] = this.saleDate;
-    data['expiryDate'] = this.expiryDate;
     return data;
   }
 }

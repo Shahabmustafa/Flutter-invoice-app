@@ -1,4 +1,5 @@
 import 'package:flutter_invoice_app/res/colors/app_colors.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class Utils{
@@ -13,4 +14,15 @@ class Utils{
         fontSize: 16.0
     );
   }
+
+  static const circular = SpinKitFadingFour(
+    color: AppColor.primaryColor,
+    size: 50.0,
+  );
+
+  static const circularForButton = SpinKitFadingFour(
+    color: AppColor.whiteColor,
+    size: 20.0,
+  );
+
 }

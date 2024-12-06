@@ -8,6 +8,7 @@ import 'package:flutter_invoice_app/res/colors/app_colors.dart';
 import 'package:flutter_invoice_app/res/component/app_button.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../../../utils/utils.dart';
 import 'add_to_card_order_screen.dart';
 
 
@@ -41,7 +42,7 @@ class _OrderScreenState extends State<OrderScreen> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => AddToCardOrderScreen(orderProduct: orderAddProduct)),
+                      MaterialPageRoute(builder: (context) => AddToCardOrderScreen(orderProduct: orderAddProduct,)),
                     );
                   },
                   icon: Icon(
@@ -135,8 +136,8 @@ class _OrderScreenState extends State<OrderScreen> {
                                       Product product = Product(
                                         productId: snapshot.data!.docs[index]["itemId"],
                                         product: snapshot.data!.docs[index]["itemName"],
-                                        price: (snapshot.data!.docs[index]["purchasePrice"] as num).toDouble(),
-                                        stock: 1,
+                                        salePrice: (snapshot.data!.docs[index]["salePrice"] as num).toDouble(),
+                                        purchasePrice: (snapshot.data!.docs[index]["purchasePrice"] as num).toDouble(),                                        stock: 1,
                                         tax: (snapshot.data!.docs[index]["tax"] as num).toDouble(),
                                         discount: (snapshot.data!.docs[index]["discount"] as num).toDouble(),
                                       );
@@ -165,7 +166,7 @@ class _OrderScreenState extends State<OrderScreen> {
                 );
               }
             }else{
-              return Center(child: CircularProgressIndicator());
+              return Center(child: Utils.circular);
             }
           },
         )

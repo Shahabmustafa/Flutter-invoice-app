@@ -136,7 +136,8 @@ class _SalesPageState extends State<SalesPage> {
                                       Product product = Product(
                                         productId: snapshot.data!.docs[index]["itemId"],
                                         product: snapshot.data!.docs[index]["itemName"],
-                                        price: (snapshot.data!.docs[index]["salePrice"] as num).toDouble(),
+                                        salePrice: (snapshot.data!.docs[index]["salePrice"] as num).toDouble(),
+                                        purchasePrice: (snapshot.data!.docs[index]["purchasePrice"] as num).toDouble(),
                                         stock: 1,
                                         tax: (snapshot.data!.docs[index]["tax"] as num).toDouble(),
                                         discount: (snapshot.data!.docs[index]["discount"] as num).toDouble(),
@@ -170,7 +171,7 @@ class _SalesPageState extends State<SalesPage> {
               );
             }
           }else{
-            return Center(child: CircularProgressIndicator());
+            return Center(child: Utils.circular);
           }
         },
       )

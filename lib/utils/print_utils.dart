@@ -56,7 +56,7 @@ class SaleInvoicePDFPrint {
                     <String>['Product', 'Price', 'Stock', 'Discount', 'Tax'],
                     ...product.map((product) => [
                       product.product.toString(),
-                      product.price.toString(),
+                      product.purchasePrice.toString(),
                       product.stock.toString(),
                       product.discount.toString(),
                       product.tax.toString(),
