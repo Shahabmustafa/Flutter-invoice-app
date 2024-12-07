@@ -188,7 +188,7 @@ class _WithDrawScreenState extends State<WithDrawScreen> {
               ),
             );
           }else{
-            return Center(child: CircularProgressIndicator());
+            return Center(child: Utils.circular);
           }
         },
       ),

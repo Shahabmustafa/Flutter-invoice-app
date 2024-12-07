@@ -203,6 +203,7 @@ class _LoginPageState extends State<LoginPage> {
                           FirebaseFirestore.instance.collection("users").doc(value.user!.uid).set(userModel.toJson()).then((value){
                             Get.toNamed(AppRoutes.homeScreen);
                           });
+                          loginService.addDashboardIfNotExists(value.user!.uid);
                         }).onError((error, stackTrace){
                           Utils.flutterToast(error.toString());
                           print(error);

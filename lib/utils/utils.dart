@@ -22,7 +22,7 @@ class Utils{
 
   static const circularForButton = SpinKitFadingFour(
     color: AppColor.whiteColor,
-    size: 20.0,
+    size: 25.0,
   );
 
 }
