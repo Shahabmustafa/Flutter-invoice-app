@@ -39,8 +39,30 @@ class _WithDrawScreenState extends State<WithDrawScreen> {
      });
      AppApiService.firestore.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).
      collection("withdrawHistory").add({
-       "withDrawAmount" : recievedAmount.text,
+       "withDrawAndAddAmount" : recievedAmount.text,
        "date" : DateTime.now(),
+       "type" : "withDraw",
+     });
+     setLoading(false);
+     Get.back();
+     recievedAmount.clear();
+   }catch(e){
+     setLoading(false);
+   }
+  }
+
+  addAmount()async{
+   try{
+     setLoading(true);
+     var draw = await AppApiService.firestore.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).get();
+     await AppApiService.firestore.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).update({
+       "cashInHand" : draw.data()?['cashInHand'] + int.parse(recievedAmount.text) ?? 0,
+     });
+     AppApiService.firestore.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).
+     collection("withdrawHistory").add({
+       "withDrawAndAddAmount" : recievedAmount.text,
+       "date" : DateTime.now(),
+       "type" : "addAmount",
      });
      setLoading(false);
      Get.back();
@@ -62,7 +84,7 @@ class _WithDrawScreenState extends State<WithDrawScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("With Draw"),
+        title: Text("Add Amount & With Draw"),
       ),
       body: StreamBuilder(
         stream: AppApiService.firestore.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).snapshots(),
@@ -87,10 +109,10 @@ class _WithDrawScreenState extends State<WithDrawScreen> {
                       orderBy("date", descending: true).snapshots(),
                       builder: (context,snapshot){
                         if(snapshot.hasData){
-                          double cashInHand = 0.0;
-                          for (var doc in snapshot.data!.docs) {
-                            cashInHand += double.parse(doc["withDrawAmount"].toString());
-                          }
+                          // double cashInHand = 0.0;
+                          // for (var doc in snapshot.data!.docs) {
+                          //   cashInHand += double.parse(doc["withDrawAndAddAmount"].toString());
+                          // }
                           if(snapshot.data!.docs.isEmpty){
                             return Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -113,51 +135,51 @@ class _WithDrawScreenState extends State<WithDrawScreen> {
                           }else{
                             return Column(
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        child: DashboardSummary(
-                                          imageAssets: Icon(CupertinoIcons.calendar),
-                                          title: "Total Cash In Hand",
-                                          subtitle: "${cashInHand.toStringAsFixed(0)}",
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 60,
-                                  child: ListView.builder(
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: days.length,
-                                    itemBuilder: (context, index) {
-                                      return Center(
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(10),
-                                          child: ElevatedButton(
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor: selectValue == days[index]
-                                                  ? Colors.blue
-                                                  : Colors.grey[300],
-                                              foregroundColor: selectValue == days[index]
-                                                  ? Colors.white
-                                                  : Colors.black,
-                                              minimumSize: Size(80, 40),
-                                            ),
-                                            onPressed: () {
-                                              setState(() {
-                                                selectValue = days[index];
-                                              });
-                                            },
-                                            child: Text("${days[index]} Days"),
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
+                                // Padding(
+                                //   padding: const EdgeInsets.all(10.0),
+                                //   child: Row(
+                                //     children: [
+                                //       Expanded(
+                                //         child: DashboardSummary(
+                                //           imageAssets: Icon(CupertinoIcons.calendar),
+                                //           title: "Total Cash In Hand",
+                                //           subtitle: "${cashInHand.toStringAsFixed(0)}",
+                                //         ),
+                                //       ),
+                                //     ],
+                                //   ),
+                                // ),
+                                // SizedBox(
+                                //   height: 60,
+                                //   child: ListView.builder(
+                                //     scrollDirection: Axis.horizontal,
+                                //     itemCount: days.length,
+                                //     itemBuilder: (context, index) {
+                                //       return Center(
+                                //         child: Padding(
+                                //           padding: const EdgeInsets.all(10),
+                                //           child: ElevatedButton(
+                                //             style: ElevatedButton.styleFrom(
+                                //               backgroundColor: selectValue == days[index]
+                                //                   ? Colors.blue
+                                //                   : Colors.grey[300],
+                                //               foregroundColor: selectValue == days[index]
+                                //                   ? Colors.white
+                                //                   : Colors.black,
+                                //               minimumSize: Size(80, 40),
+                                //             ),
+                                //             onPressed: () {
+                                //               setState(() {
+                                //                 selectValue = days[index];
+                                //               });
+                                //             },
+                                //             child: Text("${days[index]} Days"),
+                                //           ),
+                                //         ),
+                                //       );
+                                //     },
+                                //   ),
+                                // ),
                                 Expanded(
                                   child: ListView.builder(
                                       itemCount: snapshot.data!.docs.length,
@@ -167,9 +189,14 @@ class _WithDrawScreenState extends State<WithDrawScreen> {
                                         String formattedDate = DateFormat('dd-MM-yyyy hh:mm a').format(dateTime);
                                         return Card(
                                           child: ListTile(
-                                            leading: Text("${index + 1}"),
+                                            leading: Icon(snapshot.data!.docs[index]["type"] == "addAmount" ?
+                                            CupertinoIcons.arrow_down_left :
+                                            CupertinoIcons.arrow_up_right,
+                                              color: snapshot.data!.docs[index]["type"] == "addAmount" ? Colors.green : Colors.redAccent,
+                                            ),
                                             title: Text(formattedDate.toString(),style: GoogleFonts.lato(fontSize: 14,fontWeight: FontWeight.normal,color: AppColor.grayColor)),
-                                            subtitle: Text("Rs. " + snapshot.data!.docs[index]["withDrawAmount"].toString(),style: GoogleFonts.lato(fontSize: 16,fontWeight: FontWeight.bold,color: AppColor.blackColor),),
+                                            trailing: Text("Rs. " + snapshot.data!.docs[index]["withDrawAndAddAmount"].toString(),style: GoogleFonts.lato(fontSize: 16,fontWeight: FontWeight.bold,color: AppColor.blackColor),),
+                                            subtitle: Text(snapshot.data!.docs[index]["type"] == "addAmount" ? "Add Amount" : "WithDraw Amount"),
                                           ),
                                         );
                                       }
@@ -198,41 +225,43 @@ class _WithDrawScreenState extends State<WithDrawScreen> {
             context: context,
             builder: (context){
               return AlertDialog(
-                title: Text("With Draw"),
+                title: Text("Add Amount & With Draw"),
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     InvoiceTextField(
-                      title: "With Draw Payment",
+                      title: "Add Payment",
                       hintText: "Enter Amount",
                       controller: recievedAmount,
                       onlyNumber: true,
                     ),
                     SizedBox(height: 20,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        AppButton(
-                          title: "Cancel",
-                          height: 40,
-                          width: 100,
-                          color: AppColor.whiteColor,
-                          textColor: AppColor.primaryColor,
-                          onTap: (){
-                            Get.back();
-                          },
-                        ),
-                        Obx((){
-                          return AppButton(
+                    Obx((){
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          AppButton(
+                            title: "Add Amount",
+                            height: 40,
+                            width: 100,
+                            color: AppColor.whiteColor,
+                            textColor: AppColor.primaryColor,
+                            loading: loading.value,
+                            onTap: () => addAmount(),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          AppButton(
                             title: "WithDraw",
                             height: 40,
                             width: 100,
                             loading: loading.value,
                             onTap: () => withDraw(),
-                          );
-                        }),
-                      ],
-                    ),
+                          )
+                        ],
+                      );
+                    }),
                   ],
                 ),
               );
@@ -240,7 +269,7 @@ class _WithDrawScreenState extends State<WithDrawScreen> {
           );
         },
         label: Text("With Draw"),
-      )
+      ),
     );
   }
 }

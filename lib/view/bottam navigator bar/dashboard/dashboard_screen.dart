@@ -69,7 +69,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             child: DashboardSummary(
                               imageAssets: AssetsUrl.creditSaleSvgIcon,
                               title: "Credit Sale",
-                              subtitle: data["creditSale"].toString(),
+                              subtitle: (data["creditSale"] - data["totalInstallment"]).toString(),
                             ),
                           ),
                           SizedBox(width: 10,),

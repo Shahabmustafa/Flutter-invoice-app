@@ -377,9 +377,6 @@ class _CountTextFieldState extends State<CountTextField> {
       child: TextField(
         controller: _controller,
         keyboardType: TextInputType.number,
-        inputFormatters:  <TextInputFormatter>[
-          FilteringTextInputFormatter.digitsOnly,
-        ],
         cursorColor: AppColor.primaryColor,
         cursorHeight: 18,
         onChanged: (value) {
